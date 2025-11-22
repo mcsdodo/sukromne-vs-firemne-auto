@@ -3,15 +3,19 @@
     <h1>Sukromne vs Firemne Auto</h1>
     <p class="subtitle">Porovnanie nakladov na auto z pohladu majitela firmy</p>
 
+    <IncomeInput v-model="annualIncome" />
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
 
     <ResultsSummary
-      :totalPrivate="totalPrivate"
-      :totalCompany="totalCompany"
+      :annualIncome="annualIncome"
+      :privateScenario="privateScenario"
+      :companyScenario="companyScenario"
       :savings="savings"
       :cheaperOption="cheaperOption"
       :years="years"
+      :companyTaxRate="companyTax"
+      :dividendTaxRate="dividendTax"
     />
 
     <CostChart :yearlyData="yearlyData" />
@@ -34,6 +38,7 @@
 
 <script setup>
 import { useCalculator } from './composables/useCalculator'
+import IncomeInput from './components/IncomeInput.vue'
 import KmSlider from './components/KmSlider.vue'
 import YearsInput from './components/YearsInput.vue'
 import ResultsSummary from './components/ResultsSummary.vue'
@@ -41,6 +46,7 @@ import CostChart from './components/CostChart.vue'
 import AdvancedSettings from './components/AdvancedSettings.vue'
 
 const {
+  annualIncome,
   kmPerYear,
   years,
   kmRate,
@@ -54,8 +60,8 @@ const {
   companyTax,
   dividendTax,
   depreciationRate,
-  totalPrivate,
-  totalCompany,
+  privateScenario,
+  companyScenario,
   savings,
   cheaperOption,
   yearlyData
