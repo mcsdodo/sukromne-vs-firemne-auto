@@ -28,12 +28,12 @@ const chartData = computed(() => ({
   datasets: [
     {
       label: 'Sukromne auto',
-      data: props.yearlyData.map(d => d.privateCumulative),
+      data: props.yearlyData.map(d => d.privateNet),
       backgroundColor: '#94a3b8'
     },
     {
       label: 'Firemne auto',
-      data: props.yearlyData.map(d => d.companyCumulative),
+      data: props.yearlyData.map(d => d.companyNet),
       backgroundColor: '#10b981'
     }
   ]
@@ -45,6 +45,10 @@ const chartOptions = {
   plugins: {
     legend: {
       position: 'top'
+    },
+    title: {
+      display: true,
+      text: 'Kumulativny cisty vynos'
     },
     tooltip: {
       callbacks: {
