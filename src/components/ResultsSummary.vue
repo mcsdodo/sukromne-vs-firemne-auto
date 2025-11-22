@@ -1,25 +1,131 @@
 <template>
   <div class="results-summary">
     <div class="cards">
+      <!-- Private Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'private' }">
         <h3>Sukromne auto</h3>
-        <p class="amount">{{ formatCurrency(totalPrivate) }}</p>
-        <p class="period">za {{ years }} {{ yearsLabel }}</p>
+        <div class="breakdown">
+          <div class="row">
+            <span>Prijem firmy</span>
+            <span>{{ formatCurrency(annualIncome) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Nahrady</span>
+            <span>- {{ formatCurrency(privateScenario.reimbursements) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Zdanitelny zisk</span>
+            <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Dan z prijmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(privateScenario.companyTaxAmount) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Zisk po dani</span>
+            <span>{{ formatCurrency(privateScenario.afterTaxProfit) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Dan z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(privateScenario.dividendTaxAmount) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Dividendy</span>
+            <span>{{ formatCurrency(privateScenario.dividends) }}</span>
+          </div>
+          <div class="row addition">
+            <span>+ Nahrady</span>
+            <span>+ {{ formatCurrency(privateScenario.reimbursements) }}</span>
+          </div>
+          <div class="row highlight">
+            <span>= Rocne v hotovosti</span>
+            <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
+          </div>
+        </div>
+
+        <div class="multi-year">
+          <div class="row">
+            <span>Za {{ years }} {{ yearsLabel }}</span>
+            <span>{{ formatCurrency(privateScenario.totalCashOverYears) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Kupa auta</span>
+            <span>- {{ formatCurrency(privateScenario.personalCarPurchase) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Prevadzkove naklady</span>
+            <span>- {{ formatCurrency(privateScenario.personalRunningCosts) }}</span>
+          </div>
+        </div>
+
+        <div class="total">
+          <span>CISTY VYNOS</span>
+          <span>{{ formatCurrency(privateScenario.netToOwner) }}</span>
+        </div>
       </div>
+
+      <!-- Company Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'company' }">
         <h3>Firemne auto</h3>
-        <p class="amount">{{ formatCurrency(totalCompany) }}</p>
-        <p class="period">za {{ years }} {{ yearsLabel }}</p>
+        <div class="breakdown">
+          <div class="row">
+            <span>Prijem firmy</span>
+            <span>{{ formatCurrency(annualIncome) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Naklady auta</span>
+            <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Zdanitelny zisk</span>
+            <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Dan z prijmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(companyScenario.companyTaxAmount) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Zisk po dani</span>
+            <span>{{ formatCurrency(companyScenario.afterTaxProfit) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Dan z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
+          </div>
+          <div class="row highlight">
+            <span>= Rocne v hotovosti</span>
+            <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
+          </div>
+        </div>
+
+        <div class="multi-year">
+          <div class="row">
+            <span>Za {{ years }} {{ yearsLabel }}</span>
+            <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
+          </div>
+          <div class="row">
+            <span>- Osobne naklady</span>
+            <span>{{ formatCurrency(0) }}</span>
+          </div>
+        </div>
+
+        <div class="total">
+          <span>CISTY VYNOS</span>
+          <span>{{ formatCurrency(companyScenario.netToOwner) }}</span>
+        </div>
       </div>
     </div>
+
     <div class="verdict">
       <template v-if="savings > 0">
         <strong>Firemne auto</strong> usetri
         <strong>{{ formatCurrency(savings) }}</strong>
+        za {{ years }} {{ yearsLabel }}
       </template>
       <template v-else-if="savings < 0">
         <strong>Sukromne auto</strong> usetri
         <strong>{{ formatCurrency(Math.abs(savings)) }}</strong>
+        za {{ years }} {{ yearsLabel }}
       </template>
       <template v-else>
         Obe moznosti stoja rovnako
@@ -32,11 +138,14 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  totalPrivate: { type: Number, required: true },
-  totalCompany: { type: Number, required: true },
+  annualIncome: { type: Number, required: true },
+  privateScenario: { type: Object, required: true },
+  companyScenario: { type: Object, required: true },
   savings: { type: Number, required: true },
   cheaperOption: { type: String, required: true },
-  years: { type: Number, required: true }
+  years: { type: Number, required: true },
+  companyTaxRate: { type: Number, required: true },
+  dividendTaxRate: { type: Number, required: true }
 })
 
 const yearsLabel = computed(() => {
@@ -67,12 +176,17 @@ const formatCurrency = (value) => {
   margin-bottom: 16px;
 }
 
+@media (max-width: 800px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .card {
   background: #f8fafc;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  padding: 24px;
-  text-align: center;
+  padding: 20px;
 }
 
 .card.winner {
@@ -81,22 +195,70 @@ const formatCurrency = (value) => {
 }
 
 .card h3 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
-  color: #64748b;
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #1e293b;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.card .amount {
-  font-size: 28px;
+.breakdown {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+.row.deduction {
+  color: #dc2626;
+}
+
+.row.addition {
+  color: #16a34a;
+}
+
+.row.subtotal {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.row.highlight {
+  font-weight: 600;
+  color: #1e293b;
+  background: #e2e8f0;
+  margin: 8px -8px 0;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.multi-year {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0;
+  padding: 8px;
+  background: #e2e8f0;
+  border-radius: 6px;
 }
 
-.card .period {
-  font-size: 14px;
-  color: #94a3b8;
-  margin: 4px 0 0 0;
+.card.winner .total {
+  background: #10b981;
+  color: white;
 }
 
 .verdict {
