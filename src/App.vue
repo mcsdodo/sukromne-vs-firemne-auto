@@ -12,6 +12,8 @@
       :cheaperOption="cheaperOption"
       :years="years"
     />
+
+    <CostChart :yearlyData="yearlyData" />
   </div>
 </template>
 
@@ -20,6 +22,7 @@ import { useCalculator } from './composables/useCalculator'
 import KmSlider from './components/KmSlider.vue'
 import YearsInput from './components/YearsInput.vue'
 import ResultsSummary from './components/ResultsSummary.vue'
+import CostChart from './components/CostChart.vue'
 
 const {
   kmPerYear,
@@ -27,7 +30,8 @@ const {
   totalPrivate,
   totalCompany,
   savings,
-  cheaperOption
+  cheaperOption,
+  yearlyData
 } = useCalculator()
 </script>
 
