@@ -5,8 +5,13 @@
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
 
-    <p>Private total: {{ totalPrivate.toFixed(2) }} EUR</p>
-    <p>Company total: {{ totalCompany.toFixed(2) }} EUR</p>
+    <ResultsSummary
+      :totalPrivate="totalPrivate"
+      :totalCompany="totalCompany"
+      :savings="savings"
+      :cheaperOption="cheaperOption"
+      :years="years"
+    />
   </div>
 </template>
 
@@ -14,8 +19,16 @@
 import { useCalculator } from './composables/useCalculator'
 import KmSlider from './components/KmSlider.vue'
 import YearsInput from './components/YearsInput.vue'
+import ResultsSummary from './components/ResultsSummary.vue'
 
-const { kmPerYear, years, totalPrivate, totalCompany } = useCalculator()
+const {
+  kmPerYear,
+  years,
+  totalPrivate,
+  totalCompany,
+  savings,
+  cheaperOption
+} = useCalculator()
 </script>
 
 <style>
@@ -24,5 +37,11 @@ const { kmPerYear, years, totalPrivate, totalCompany } = useCalculator()
   margin: 0 auto;
   padding: 20px;
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 32px;
 }
 </style>
