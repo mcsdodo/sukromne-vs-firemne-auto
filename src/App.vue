@@ -21,6 +21,7 @@
     <CostChart :yearlyData="yearlyData" />
 
     <AdvancedSettings
+      v-model:annualIncome="annualIncome"
       v-model:kmRate="kmRate"
       v-model:fuelPrice="fuelPrice"
       v-model:carPrice="carPrice"
