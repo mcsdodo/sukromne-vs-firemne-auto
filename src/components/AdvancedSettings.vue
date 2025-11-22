@@ -37,7 +37,7 @@
         </div>
         <div class="setting">
           <label>Uprava spotreby (%)</label>
-          <input type="number" step="1" :value="consumptionAdjustment * 100" @input="emit('update:consumptionAdjustment', Number($event.target.value) / 100)" />
+          <input type="number" step="1" :value="Math.round(consumptionAdjustment * 100)" @input="emit('update:consumptionAdjustment', Number($event.target.value) / 100)" />
         </div>
       </div>
 
@@ -45,19 +45,19 @@
         <h4>Dane</h4>
         <div class="setting">
           <label>DPH (%)</label>
-          <input type="number" step="1" :value="vatRate * 100" @input="emit('update:vatRate', Number($event.target.value) / 100)" />
+          <input type="number" step="1" :value="Math.round(vatRate * 100)" @input="emit('update:vatRate', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
           <label>Dan z prijmu firmy (%)</label>
-          <input type="number" step="1" :value="companyTax * 100" @input="emit('update:companyTax', Number($event.target.value) / 100)" />
+          <input type="number" step="1" :value="Math.round(companyTax * 100)" @input="emit('update:companyTax', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
           <label>Dan z dividend (%)</label>
-          <input type="number" step="1" :value="dividendTax * 100" @input="emit('update:dividendTax', Number($event.target.value) / 100)" />
+          <input type="number" step="1" :value="Math.round(dividendTax * 100)" @input="emit('update:dividendTax', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
           <label>Odpisy (%/rok)</label>
-          <input type="number" step="1" :value="depreciationRate * 100" @input="emit('update:depreciationRate', Number($event.target.value) / 100)" />
+          <input type="number" step="1" :value="Math.round(depreciationRate * 100)" @input="emit('update:depreciationRate', Number($event.target.value) / 100)" />
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>Sukromne vs Firemne Auto</h1>
+    <p class="subtitle">Porovnanie nakladov na auto z pohladu majitela firmy</p>
 
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
@@ -62,6 +63,15 @@ const {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f1f5f9;
+}
+
 .app {
   max-width: 900px;
   margin: 0 auto;
@@ -72,6 +82,22 @@ const {
 h1 {
   text-align: center;
   color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #64748b;
   margin-bottom: 32px;
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
 }
 </style>
