@@ -1,6 +1,9 @@
 <template>
   <div class="app">
     <h1>Sukromne vs Firemne Auto</h1>
+
+    <KmSlider v-model="kmPerYear" />
+
     <p>Private total: {{ totalPrivate.toFixed(2) }} EUR</p>
     <p>Company total: {{ totalCompany.toFixed(2) }} EUR</p>
   </div>
@@ -8,8 +11,9 @@
 
 <script setup>
 import { useCalculator } from './composables/useCalculator'
+import KmSlider from './components/KmSlider.vue'
 
-const { totalPrivate, totalCompany } = useCalculator()
+const { kmPerYear, totalPrivate, totalCompany } = useCalculator()
 </script>
 
 <style>
