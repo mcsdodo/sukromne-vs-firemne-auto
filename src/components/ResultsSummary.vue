@@ -78,6 +78,12 @@
             <span>- Naklady auta</span>
             <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
           </div>
+          <div class="cost-breakdown">
+            <span>odpisy {{ formatCurrency(companyScenario.costBreakdown.depreciation / years) }}</span>
+            <span>poistenie {{ formatCurrency(companyScenario.costBreakdown.insurance / years) }}</span>
+            <span>udrzba {{ formatCurrency(companyScenario.costBreakdown.maintenance / years) }}</span>
+            <span>palivo {{ formatCurrency(companyScenario.costBreakdown.fuel / years) }}</span>
+          </div>
           <div class="row subtotal">
             <span>= Zdanitelny zisk</span>
             <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
@@ -105,17 +111,9 @@
             <span>Za {{ years }} {{ yearsLabel }}</span>
             <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
           </div>
-          <div class="row subtle">
-            <span>Naklady auta (odpocitane)</span>
-            <span>{{ formatCurrency(companyScenario.costBreakdown.depreciation + companyScenario.costBreakdown.insurance + companyScenario.costBreakdown.maintenance + companyScenario.costBreakdown.fuel) }}</span>
-          </div>
-          <div class="cost-breakdown">
-            <span>odpisy {{ formatCurrency(companyScenario.costBreakdown.depreciation) }}</span>
-            <span>poistenie {{ formatCurrency(companyScenario.costBreakdown.insurance) }}</span>
-            <span>udrzba {{ formatCurrency(companyScenario.costBreakdown.maintenance) }}</span>
-            <span>palivo {{ formatCurrency(companyScenario.costBreakdown.fuel) }}</span>
-          </div>
         </div>
+
+        <div class="spacer"></div>
 
         <div class="total">
           <span>CISTY VYNOS</span>
@@ -195,6 +193,12 @@ const yearsLabel = computed(() => {
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer {
+  flex: 1;
 }
 
 .card.winner {
