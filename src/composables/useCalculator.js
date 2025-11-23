@@ -13,7 +13,7 @@ export function useCalculator() {
   // Car costs (with VAT where applicable)
   const carPrice = ref(50000)
   const insurance = ref(1500)  // NO VAT on insurance
-  const maintenance = ref(400)  // with VAT
+  const maintenance = ref(600)  // with VAT
   const fuelConsumption = ref(5.1)
   const consumptionAdjustment = ref(0.10)
 
@@ -64,6 +64,8 @@ export function useCalculator() {
     return {
       // Annual breakdown
       reimbursements: totalReimbursements,
+      kmReimbursement,
+      fuelReimbursement,
       taxableProfit,
       companyTaxAmount,
       afterTaxProfit,

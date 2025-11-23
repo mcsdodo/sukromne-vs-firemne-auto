@@ -13,6 +13,10 @@
             <span>- Náhrady</span>
             <span>- {{ formatCurrency(privateScenario.reimbursements) }}</span>
           </div>
+          <div class="cost-breakdown">
+            <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
+            <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+          </div>
           <div class="row subtotal">
             <span>= Zdaniteľný zisk</span>
             <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
@@ -37,6 +41,10 @@
             <span>+ Náhrady</span>
             <span>+ {{ formatCurrency(privateScenario.reimbursements) }}</span>
           </div>
+          <div class="cost-breakdown">
+            <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
+            <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+          </div>
           <div class="row highlight">
             <span>= Ročne v hotovosti</span>
             <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
@@ -53,7 +61,7 @@
             <span>- {{ formatCurrency(privateScenario.personalCarPurchase + privateScenario.personalRunningCosts) }}</span>
           </div>
           <div class="cost-breakdown">
-            <span>odpisy {{ formatCurrency(privateScenario.costBreakdown.depreciation) }}</span>
+            <span>cena auta {{ formatCurrency(privateScenario.costBreakdown.depreciation) }}</span>
             <span>poistenie {{ formatCurrency(privateScenario.costBreakdown.insurance) }}</span>
             <span>údržba {{ formatCurrency(privateScenario.costBreakdown.maintenance) }}</span>
             <span>palivo {{ formatCurrency(privateScenario.costBreakdown.fuel) }}</span>

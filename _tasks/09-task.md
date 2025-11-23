@@ -1,0 +1,2 @@
+when using private car the owner is reimbursed per km (as already implemented) but for fuel price as well (up to 10% over-consumption). The fuel price reimbursement is write-off expense for the company.
+Include this to the car reimbursement calculation in private use-case. Keep it separate from the km reimbursement.
