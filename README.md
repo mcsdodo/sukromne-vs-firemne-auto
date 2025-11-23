@@ -1,6 +1,6 @@
 # Sukromne vs Firemne Auto
 
-Car cost comparison calculator for Slovak company owners comparing private vs company car ownership.
+Car cost comparison calculator for Slovak company owners comparing private vs company car ownership. Available at: https://mcsdodo.github.io/sukromne-vs-firemne-auto/
 
 ## Overview
 
