@@ -1,20 +1,20 @@
 <template>
   <div class="advanced-settings">
     <button class="toggle" @click="isOpen = !isOpen">
-      {{ isOpen ? '▼' : '▶' }} Pokrocile nastavenia
+      {{ isOpen ? '▼' : '▶' }} Pokročilé nastavenia
     </button>
 
     <div v-if="isOpen" class="settings-panel">
       <div class="settings-group">
-        <h4>Prijem</h4>
+        <h4>Príjem</h4>
         <div class="setting">
-          <label>Rocny prijem firmy (EUR)</label>
+          <label>Ročný príjem firmy (EUR)</label>
           <input type="number" step="1000" :value="annualIncome" @input="emit('update:annualIncome', Number($event.target.value))" />
         </div>
       </div>
 
       <div class="settings-group">
-        <h4>Nahrady</h4>
+        <h4>Náhrady</h4>
         <div class="setting">
           <label>Sadzba za km (EUR)</label>
           <input type="number" step="0.001" :value="kmRate" @input="emit('update:kmRate', Number($event.target.value))" />
@@ -26,7 +26,7 @@
       </div>
 
       <div class="settings-group">
-        <h4>Naklady na auto</h4>
+        <h4>Náklady na auto</h4>
         <div class="setting">
           <label>Cena auta s DPH (EUR)</label>
           <input type="number" step="100" :value="carPrice" @input="emit('update:carPrice', Number($event.target.value))" />
@@ -36,7 +36,7 @@
           <input type="number" step="10" :value="insurance" @input="emit('update:insurance', Number($event.target.value))" />
         </div>
         <div class="setting">
-          <label>Udrzba s DPH (EUR/rok)</label>
+          <label>Údržba s DPH (EUR/rok)</label>
           <input type="number" step="10" :value="maintenance" @input="emit('update:maintenance', Number($event.target.value))" />
         </div>
         <div class="setting">
@@ -44,7 +44,7 @@
           <input type="number" step="0.1" :value="fuelConsumption" @input="emit('update:fuelConsumption', Number($event.target.value))" />
         </div>
         <div class="setting">
-          <label>Uprava spotreby (%)</label>
+          <label>Úprava spotreby (%)</label>
           <input type="number" step="1" :value="Math.round(consumptionAdjustment * 100)" @input="emit('update:consumptionAdjustment', Number($event.target.value) / 100)" />
         </div>
       </div>
@@ -56,11 +56,11 @@
           <input type="number" step="1" :value="Math.round(vatRate * 100)" @input="emit('update:vatRate', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
-          <label>Dan z prijmu firmy (%)</label>
+          <label>Daň z príjmu firmy (%)</label>
           <input type="number" step="1" :value="Math.round(companyTax * 100)" @input="emit('update:companyTax', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
-          <label>Dan z dividend (%)</label>
+          <label>Daň z dividend (%)</label>
           <input type="number" step="1" :value="Math.round(dividendTax * 100)" @input="emit('update:dividendTax', Number($event.target.value) / 100)" />
         </div>
       </div>

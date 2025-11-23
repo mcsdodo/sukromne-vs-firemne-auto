@@ -1,7 +1,7 @@
 <template>
   <div class="years-input">
     <label>
-      <span class="label-text">Pocet rokov</span>
+      <span class="label-text">Počet rokov</span>
       <span class="value">{{ modelValue }}</span>
     </label>
     <input

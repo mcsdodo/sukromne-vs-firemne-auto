@@ -3,22 +3,22 @@
     <div class="cards">
       <!-- Private Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'private' }">
-        <h3>Sukromne auto</h3>
+        <h3>Súkromné auto</h3>
         <div class="breakdown">
           <div class="row">
-            <span>Prijem firmy</span>
+            <span>Príjem firmy</span>
             <span>{{ formatCurrency(annualIncome) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Nahrady</span>
+            <span>- Náhrady</span>
             <span>- {{ formatCurrency(privateScenario.reimbursements) }}</span>
           </div>
           <div class="row subtotal">
-            <span>= Zdanitelny zisk</span>
+            <span>= Zdaniteľný zisk</span>
             <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Dan z prijmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+            <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(privateScenario.companyTaxAmount) }}</span>
           </div>
           <div class="row subtotal">
@@ -26,7 +26,7 @@
             <span>{{ formatCurrency(privateScenario.afterTaxProfit) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Dan z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+            <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(privateScenario.dividendTaxAmount) }}</span>
           </div>
           <div class="row subtotal">
@@ -34,11 +34,11 @@
             <span>{{ formatCurrency(privateScenario.dividends) }}</span>
           </div>
           <div class="row addition">
-            <span>+ Nahrady</span>
+            <span>+ Náhrady</span>
             <span>+ {{ formatCurrency(privateScenario.reimbursements) }}</span>
           </div>
           <div class="row highlight">
-            <span>= Rocne v hotovosti</span>
+            <span>= Ročne v hotovosti</span>
             <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
           </div>
         </div>
@@ -49,47 +49,47 @@
             <span>{{ formatCurrency(privateScenario.totalCashOverYears) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Naklady na auto</span>
+            <span>- Náklady na auto</span>
             <span>- {{ formatCurrency(privateScenario.personalCarPurchase + privateScenario.personalRunningCosts) }}</span>
           </div>
           <div class="cost-breakdown">
             <span>odpisy {{ formatCurrency(privateScenario.costBreakdown.depreciation) }}</span>
             <span>poistenie {{ formatCurrency(privateScenario.costBreakdown.insurance) }}</span>
-            <span>udrzba {{ formatCurrency(privateScenario.costBreakdown.maintenance) }}</span>
+            <span>údržba {{ formatCurrency(privateScenario.costBreakdown.maintenance) }}</span>
             <span>palivo {{ formatCurrency(privateScenario.costBreakdown.fuel) }}</span>
           </div>
         </div>
 
         <div class="total">
-          <span>CISTY VYNOS</span>
+          <span>ČISTÝ VÝNOS</span>
           <span>{{ formatCurrency(privateScenario.netToOwner) }}</span>
         </div>
       </div>
 
       <!-- Company Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'company' }">
-        <h3>Firemne auto</h3>
+        <h3>Firemné auto</h3>
         <div class="breakdown">
           <div class="row">
-            <span>Prijem firmy</span>
+            <span>Príjem firmy</span>
             <span>{{ formatCurrency(annualIncome) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Naklady auta</span>
+            <span>- Náklady auta</span>
             <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
           </div>
           <div class="cost-breakdown">
             <span>odpisy {{ formatCurrency(companyScenario.costBreakdown.depreciation / years) }}</span>
             <span>poistenie {{ formatCurrency(companyScenario.costBreakdown.insurance / years) }}</span>
-            <span>udrzba {{ formatCurrency(companyScenario.costBreakdown.maintenance / years) }}</span>
+            <span>údržba {{ formatCurrency(companyScenario.costBreakdown.maintenance / years) }}</span>
             <span>palivo {{ formatCurrency(companyScenario.costBreakdown.fuel / years) }}</span>
           </div>
           <div class="row subtotal">
-            <span>= Zdanitelny zisk</span>
+            <span>= Zdaniteľný zisk</span>
             <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Dan z prijmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+            <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(companyScenario.companyTaxAmount) }}</span>
           </div>
           <div class="row subtotal">
@@ -97,11 +97,11 @@
             <span>{{ formatCurrency(companyScenario.afterTaxProfit) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Dan z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+            <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
           </div>
           <div class="row highlight">
-            <span>= Rocne v hotovosti</span>
+            <span>= Ročne v hotovosti</span>
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
           </div>
         </div>
@@ -116,7 +116,7 @@
         <div class="spacer"></div>
 
         <div class="total">
-          <span>CISTY VYNOS</span>
+          <span>ČISTÝ VÝNOS</span>
           <span>{{ formatCurrency(companyScenario.netToOwner) }}</span>
         </div>
       </div>
@@ -124,17 +124,17 @@
 
     <div class="verdict">
       <template v-if="savings > 0">
-        <strong>Firemne auto</strong> usetri
+        <strong>Firemné auto</strong> ušetrí
         <strong>{{ formatCurrency(savings) }}</strong>
         za {{ years }} {{ yearsLabel }}
       </template>
       <template v-else-if="savings < 0">
-        <strong>Sukromne auto</strong> usetri
+        <strong>Súkromné auto</strong> ušetrí
         <strong>{{ formatCurrency(Math.abs(savings)) }}</strong>
         za {{ years }} {{ yearsLabel }}
       </template>
       <template v-else>
-        Obe moznosti stoja rovnako
+        Obe možnosti stoja rovnako
       </template>
     </div>
   </div>

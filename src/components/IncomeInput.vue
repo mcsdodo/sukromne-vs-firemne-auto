@@ -1,7 +1,7 @@
 <template>
   <div class="income-input">
     <label>
-      <span class="label-text">Rocny prijem firmy</span>
+      <span class="label-text">Ročný príjem firmy</span>
       <span class="value">{{ formatCurrency(modelValue) }}</span>
     </label>
     <input

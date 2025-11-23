@@ -1,7 +1,7 @@
 <template>
   <div class="app">
-    <h1>Sukromne vs Firemne Auto</h1>
-    <p class="subtitle">Porovnanie nakladov na auto z pohladu majitela firmy</p>
+    <h1>Súkromné vs Firemné Auto</h1>
+    <p class="subtitle">Porovnanie nákladov na auto z pohľadu majiteľa firmy</p>
 
     <IncomeInput v-model="annualIncome" />
     <KmSlider v-model="kmPerYear" />
