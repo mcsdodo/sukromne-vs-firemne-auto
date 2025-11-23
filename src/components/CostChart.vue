@@ -1,11 +1,13 @@
 <template>
   <div class="cost-chart">
-    <Bar :data="chartData" :options="chartOptions" />
+    <div class="chart-container">
+      <Bar :data="chartData" :options="chartOptions" :key="chartKey" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -21,6 +23,26 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps({
   yearlyData: { type: Array, required: true }
+})
+
+// Force chart re-render on window resize to fix Chart.js not growing issue
+const chartKey = ref(0)
+let resizeTimeout = null
+
+const handleResize = () => {
+  clearTimeout(resizeTimeout)
+  resizeTimeout = setTimeout(() => {
+    chartKey.value++
+  }, 100)
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  clearTimeout(resizeTimeout)
 })
 
 const chartData = computed(() => ({
@@ -82,5 +104,10 @@ const chartOptions = {
   padding: 16px;
   background: #f8fafc;
   border-radius: 12px;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
 }
 </style>
