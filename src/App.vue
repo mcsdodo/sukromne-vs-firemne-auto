@@ -15,8 +15,6 @@
       :savings="savings"
       :cheaperOption="cheaperOption"
       :years="years"
-      :depreciationYears="depreciationYears"
-      :carPrice="carPrice"
       :companyTaxRate="companyTax"
       :dividendTaxRate="dividendTax"
     />

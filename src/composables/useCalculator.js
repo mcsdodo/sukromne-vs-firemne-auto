@@ -74,7 +74,14 @@ export function useCalculator() {
       totalCashOverYears,
       personalCarPurchase,
       personalRunningCosts,
-      netToOwner
+      netToOwner,
+      // Cost breakdown (for display)
+      costBreakdown: {
+        depreciation: personalCarPurchase,
+        insurance: personalInsurance,
+        maintenance: personalMaintenance,
+        fuel: personalFuel
+      }
     }
   })
 
@@ -118,6 +125,13 @@ export function useCalculator() {
     // Use year 1 values for annual display
     const year1 = yearlyBreakdown[0]
 
+    // Total costs over ownership period (for breakdown display)
+    const depreciationYearsUsed = Math.min(years.value, depreciationYears.value)
+    const totalDepreciation = annualDepreciation * depreciationYearsUsed
+    const totalInsurance = insuranceCost * years.value
+    const totalMaintenance = maintenanceCost * years.value
+    const totalFuel = fuelCostNoVat * years.value
+
     return {
       // Annual breakdown (year 1 representative)
       carCosts: annualDeductionsWithDep,
@@ -132,7 +146,14 @@ export function useCalculator() {
       personalCosts: 0,
       netToOwner: totalDividends,
       // Detailed
-      yearlyBreakdown
+      yearlyBreakdown,
+      // Cost breakdown (for display)
+      costBreakdown: {
+        depreciation: totalDepreciation,
+        insurance: totalInsurance,
+        maintenance: totalMaintenance,
+        fuel: totalFuel
+      }
     }
   })
 

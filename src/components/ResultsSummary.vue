@@ -49,12 +49,14 @@
             <span>{{ formatCurrency(privateScenario.totalCashOverYears) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Kupa auta <span v-if="isProportionalCost" class="note">{{ proportionalNote }}</span></span>
-            <span>- {{ formatCurrency(privateScenario.personalCarPurchase) }}</span>
+            <span>- Naklady na auto</span>
+            <span>- {{ formatCurrency(privateScenario.personalCarPurchase + privateScenario.personalRunningCosts) }}</span>
           </div>
-          <div class="row deduction">
-            <span>- Prevadzkove naklady</span>
-            <span>- {{ formatCurrency(privateScenario.personalRunningCosts) }}</span>
+          <div class="cost-breakdown">
+            <span>odpisy {{ formatCurrency(privateScenario.costBreakdown.depreciation) }}</span>
+            <span>poistenie {{ formatCurrency(privateScenario.costBreakdown.insurance) }}</span>
+            <span>udrzba {{ formatCurrency(privateScenario.costBreakdown.maintenance) }}</span>
+            <span>palivo {{ formatCurrency(privateScenario.costBreakdown.fuel) }}</span>
           </div>
         </div>
 
@@ -103,9 +105,15 @@
             <span>Za {{ years }} {{ yearsLabel }}</span>
             <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
           </div>
-          <div class="row">
-            <span>- Osobne naklady</span>
-            <span>{{ formatCurrency(0) }}</span>
+          <div class="row subtle">
+            <span>Naklady auta (odpocitane)</span>
+            <span>{{ formatCurrency(companyScenario.costBreakdown.depreciation + companyScenario.costBreakdown.insurance + companyScenario.costBreakdown.maintenance + companyScenario.costBreakdown.fuel) }}</span>
+          </div>
+          <div class="cost-breakdown">
+            <span>odpisy {{ formatCurrency(companyScenario.costBreakdown.depreciation) }}</span>
+            <span>poistenie {{ formatCurrency(companyScenario.costBreakdown.insurance) }}</span>
+            <span>udrzba {{ formatCurrency(companyScenario.costBreakdown.maintenance) }}</span>
+            <span>palivo {{ formatCurrency(companyScenario.costBreakdown.fuel) }}</span>
           </div>
         </div>
 
@@ -144,8 +152,6 @@ const props = defineProps({
   savings: { type: Number, required: true },
   cheaperOption: { type: String, required: true },
   years: { type: Number, required: true },
-  depreciationYears: { type: Number, required: true },
-  carPrice: { type: Number, required: true },
   companyTaxRate: { type: Number, required: true },
   dividendTaxRate: { type: Number, required: true }
 })
@@ -158,12 +164,6 @@ const formatCurrency = (value) => {
     maximumFractionDigits: 0
   })
 }
-
-const isProportionalCost = computed(() => props.years < props.depreciationYears)
-const proportionalNote = computed(() => {
-  if (!isProportionalCost.value) return ''
-  return `(${props.years}/${props.depreciationYears} z ${formatCurrency(props.carPrice)})`
-})
 
 const yearsLabel = computed(() => {
   if (props.years === 1) return 'rok'
@@ -286,5 +286,23 @@ const yearsLabel = computed(() => {
   font-size: 11px;
   color: #94a3b8;
   font-weight: 400;
+}
+
+.row.subtle {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.cost-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 8px 0;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.cost-breakdown span {
+  white-space: nowrap;
 }
 </style>
