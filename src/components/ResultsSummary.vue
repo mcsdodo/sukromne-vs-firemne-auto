@@ -46,7 +46,7 @@
             <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
           </div>
           <div class="row highlight">
-            <span>= Ročne v hotovosti</span>
+            <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
           </div>
         </div>
@@ -109,7 +109,7 @@
             <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
           </div>
           <div class="row highlight">
-            <span>= Ročne v hotovosti</span>
+            <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
           </div>
         </div>
