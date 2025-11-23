@@ -4,47 +4,50 @@
       <!-- Private Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'private' }">
         <h3>Súkromné auto</h3>
-        <div class="breakdown">
-          <div class="row">
-            <span>Príjem firmy</span>
-            <span>{{ formatCurrency(annualIncome) }}</span>
+        <div class="annual-section">
+          <div class="breakdown">
+            <div class="row">
+              <span>Príjem firmy</span>
+              <span>{{ formatCurrency(annualIncome) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Náhrady</span>
+              <span>- {{ formatCurrency(privateScenario.reimbursements) }}</span>
+            </div>
+            <div class="cost-breakdown">
+              <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
+              <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Zdaniteľný zisk</span>
+              <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+              <span>- {{ formatCurrency(privateScenario.companyTaxAmount) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Zisk po dani</span>
+              <span>{{ formatCurrency(privateScenario.afterTaxProfit) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+              <span>- {{ formatCurrency(privateScenario.dividendTaxAmount) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Dividendy</span>
+              <span>{{ formatCurrency(privateScenario.dividends) }}</span>
+            </div>
+            <div class="row addition">
+              <span>+ Náhrady</span>
+              <span>+ {{ formatCurrency(privateScenario.reimbursements) }}</span>
+            </div>
+            <div class="cost-breakdown">
+              <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
+              <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+            </div>
           </div>
-          <div class="row deduction">
-            <span>- Náhrady</span>
-            <span>- {{ formatCurrency(privateScenario.reimbursements) }}</span>
-          </div>
-          <div class="cost-breakdown">
-            <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
-            <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
-          </div>
-          <div class="row subtotal">
-            <span>= Zdaniteľný zisk</span>
-            <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
-          </div>
-          <div class="row deduction">
-            <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
-            <span>- {{ formatCurrency(privateScenario.companyTaxAmount) }}</span>
-          </div>
-          <div class="row subtotal">
-            <span>= Zisk po dani</span>
-            <span>{{ formatCurrency(privateScenario.afterTaxProfit) }}</span>
-          </div>
-          <div class="row deduction">
-            <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
-            <span>- {{ formatCurrency(privateScenario.dividendTaxAmount) }}</span>
-          </div>
-          <div class="row subtotal">
-            <span>= Dividendy</span>
-            <span>{{ formatCurrency(privateScenario.dividends) }}</span>
-          </div>
-          <div class="row addition">
-            <span>+ Náhrady</span>
-            <span>+ {{ formatCurrency(privateScenario.reimbursements) }}</span>
-          </div>
-          <div class="cost-breakdown">
-            <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
-            <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
-          </div>
+
           <div class="row highlight">
             <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
@@ -77,38 +80,51 @@
       <!-- Company Car Card -->
       <div class="card" :class="{ winner: cheaperOption === 'company' }">
         <h3>Firemné auto</h3>
-        <div class="breakdown">
-          <div class="row">
-            <span>Príjem firmy</span>
-            <span>{{ formatCurrency(annualIncome) }}</span>
+        <div class="annual-section">
+          <div class="breakdown">
+            <div class="row">
+              <span>Príjem firmy</span>
+              <span>{{ formatCurrency(annualIncome) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Náklady auta</span>
+              <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
+            </div>
+            <div class="cost-breakdown">
+              <span>odpisy {{ formatCurrency(companyScenario.annualCostBreakdown.depreciation) }}</span>
+              <span>poistenie {{ formatCurrency(companyScenario.annualCostBreakdown.insurance) }}</span>
+              <span>údržba {{ formatCurrency(companyScenario.annualCostBreakdown.maintenance) }}</span>
+              <span>palivo {{ formatCurrency(companyScenario.annualCostBreakdown.fuel) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Zdaniteľný zisk</span>
+              <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
+              <span>- {{ formatCurrency(companyScenario.companyTaxAmount) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Zisk po dani</span>
+              <span>{{ formatCurrency(companyScenario.afterTaxProfit) }}</span>
+            </div>
+            <div class="row deduction">
+              <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+              <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
+            </div>
+            <div class="row subtotal">
+              <span>= Dividendy</span>
+              <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
+            </div>
+            <div class="row placeholder">
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+            </div>
+            <div class="cost-breakdown placeholder">
+              <span>&nbsp;</span>
+            </div>
           </div>
-          <div class="row deduction">
-            <span>- Náklady auta</span>
-            <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
-          </div>
-          <div class="cost-breakdown">
-            <span>odpisy {{ formatCurrency(companyScenario.annualCostBreakdown.depreciation) }}</span>
-            <span>poistenie {{ formatCurrency(companyScenario.annualCostBreakdown.insurance) }}</span>
-            <span>údržba {{ formatCurrency(companyScenario.annualCostBreakdown.maintenance) }}</span>
-            <span>palivo {{ formatCurrency(companyScenario.annualCostBreakdown.fuel) }}</span>
-          </div>
-          <div class="row subtotal">
-            <span>= Zdaniteľný zisk</span>
-            <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
-          </div>
-          <div class="row deduction">
-            <span>- Daň z príjmu ({{ Math.round(companyTaxRate * 100) }}%)</span>
-            <span>- {{ formatCurrency(companyScenario.companyTaxAmount) }}</span>
-          </div>
-          <div class="row subtotal">
-            <span>= Zisk po dani</span>
-            <span>{{ formatCurrency(companyScenario.afterTaxProfit) }}</span>
-          </div>
-          <div class="row deduction">
-            <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
-            <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
-          </div>
-          <div class="breakdown-spacer"></div>
+
           <div class="row highlight">
             <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
@@ -121,8 +137,6 @@
             <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
           </div>
         </div>
-
-        <div class="spacer"></div>
 
         <div class="total">
           <span>ČISTÝ VÝNOS</span>
@@ -189,6 +203,7 @@ const yearsLabel = computed(() => {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
+  align-items: stretch;
 }
 
 @media (max-width: 800px) {
@@ -202,8 +217,8 @@ const yearsLabel = computed(() => {
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
 }
 
 .spacer {
@@ -224,16 +239,17 @@ const yearsLabel = computed(() => {
   letter-spacing: 1px;
 }
 
+.annual-section {
+}
+
+.placeholder {
+  visibility: hidden;
+}
+
 .breakdown {
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 12px;
   margin-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-}
-
-.breakdown-spacer {
-  flex: 1;
 }
 
 .row {
@@ -261,7 +277,7 @@ const yearsLabel = computed(() => {
   font-weight: 600;
   color: #1e293b;
   background: #e2e8f0;
-  margin: 8px -8px 0;
+  margin: 0 -8px 12px;
   padding: 8px;
   border-radius: 4px;
 }
