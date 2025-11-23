@@ -87,10 +87,10 @@
             <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
           </div>
           <div class="cost-breakdown">
-            <span>odpisy {{ formatCurrency(companyScenario.costBreakdown.depreciation / years) }}</span>
-            <span>poistenie {{ formatCurrency(companyScenario.costBreakdown.insurance / years) }}</span>
-            <span>údržba {{ formatCurrency(companyScenario.costBreakdown.maintenance / years) }}</span>
-            <span>palivo {{ formatCurrency(companyScenario.costBreakdown.fuel / years) }}</span>
+            <span>odpisy {{ formatCurrency(companyScenario.annualCostBreakdown.depreciation) }}</span>
+            <span>poistenie {{ formatCurrency(companyScenario.annualCostBreakdown.insurance) }}</span>
+            <span>údržba {{ formatCurrency(companyScenario.annualCostBreakdown.maintenance) }}</span>
+            <span>palivo {{ formatCurrency(companyScenario.annualCostBreakdown.fuel) }}</span>
           </div>
           <div class="row subtotal">
             <span>= Zdaniteľný zisk</span>

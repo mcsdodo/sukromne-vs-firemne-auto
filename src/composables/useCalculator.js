@@ -149,12 +149,19 @@ export function useCalculator() {
       netToOwner: totalDividends,
       // Detailed
       yearlyBreakdown,
-      // Cost breakdown (for display)
+      // Cost breakdown (for display) - totals over period
       costBreakdown: {
         depreciation: totalDepreciation,
         insurance: totalInsurance,
         maintenance: totalMaintenance,
         fuel: totalFuel
+      },
+      // Annual cost breakdown (for year 1 display)
+      annualCostBreakdown: {
+        depreciation: annualDepreciation,
+        insurance: insuranceCost,
+        maintenance: maintenanceCost,
+        fuel: fuelCostNoVat
       }
     }
   })
