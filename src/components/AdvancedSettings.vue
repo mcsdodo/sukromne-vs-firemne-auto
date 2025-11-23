@@ -63,10 +63,6 @@
           <label>Dan z dividend (%)</label>
           <input type="number" step="1" :value="Math.round(dividendTax * 100)" @input="emit('update:dividendTax', Number($event.target.value) / 100)" />
         </div>
-        <div class="setting">
-          <label>Odpisy (%/rok)</label>
-          <input type="number" step="1" :value="Math.round(depreciationRate * 100)" @input="emit('update:depreciationRate', Number($event.target.value) / 100)" />
-        </div>
       </div>
     </div>
   </div>
@@ -88,8 +84,7 @@ defineProps({
   consumptionAdjustment: Number,
   vatRate: Number,
   companyTax: Number,
-  dividendTax: Number,
-  depreciationRate: Number
+  dividendTax: Number
 })
 
 const emit = defineEmits([
@@ -103,8 +98,7 @@ const emit = defineEmits([
   'update:consumptionAdjustment',
   'update:vatRate',
   'update:companyTax',
-  'update:dividendTax',
-  'update:depreciationRate'
+  'update:dividendTax'
 ])
 </script>
 

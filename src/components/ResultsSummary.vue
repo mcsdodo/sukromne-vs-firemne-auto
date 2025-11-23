@@ -49,7 +49,7 @@
             <span>{{ formatCurrency(privateScenario.totalCashOverYears) }}</span>
           </div>
           <div class="row deduction">
-            <span>- Kupa auta</span>
+            <span>- Kupa auta <span v-if="isProportionalCost" class="note">{{ proportionalNote }}</span></span>
             <span>- {{ formatCurrency(privateScenario.personalCarPurchase) }}</span>
           </div>
           <div class="row deduction">
@@ -144,14 +144,10 @@ const props = defineProps({
   savings: { type: Number, required: true },
   cheaperOption: { type: String, required: true },
   years: { type: Number, required: true },
+  depreciationYears: { type: Number, required: true },
+  carPrice: { type: Number, required: true },
   companyTaxRate: { type: Number, required: true },
   dividendTaxRate: { type: Number, required: true }
-})
-
-const yearsLabel = computed(() => {
-  if (props.years === 1) return 'rok'
-  if (props.years >= 2 && props.years <= 4) return 'roky'
-  return 'rokov'
 })
 
 const formatCurrency = (value) => {
@@ -162,6 +158,18 @@ const formatCurrency = (value) => {
     maximumFractionDigits: 0
   })
 }
+
+const isProportionalCost = computed(() => props.years < props.depreciationYears)
+const proportionalNote = computed(() => {
+  if (!isProportionalCost.value) return ''
+  return `(${props.years}/${props.depreciationYears} z ${formatCurrency(props.carPrice)})`
+})
+
+const yearsLabel = computed(() => {
+  if (props.years === 1) return 'rok'
+  if (props.years >= 2 && props.years <= 4) return 'roky'
+  return 'rokov'
+})
 </script>
 
 <style scoped>
@@ -272,5 +280,11 @@ const formatCurrency = (value) => {
 
 .verdict strong {
   color: #10b981;
+}
+
+.note {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 400;
 }
 </style>

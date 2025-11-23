@@ -21,7 +21,7 @@ export function useCalculator() {
   const vatRate = ref(0.23)
   const companyTax = ref(0.10)
   const dividendTax = ref(0.07)
-  const depreciationRate = ref(0.25)
+  const depreciationYears = ref(4)
 
   // Helper: remove VAT
   const withoutVat = (amount) => amount / (1 + vatRate.value)
@@ -49,7 +49,9 @@ export function useCalculator() {
     const annualCash = dividends + totalReimbursements
 
     // Personal car costs (paid from dividends, over full period)
-    const personalCarPurchase = carPrice.value  // with VAT
+    // Proportional car cost based on ownership vs depreciation period
+    const ownershipRatio = Math.min(years.value, depreciationYears.value) / depreciationYears.value
+    const personalCarPurchase = carPrice.value * ownershipRatio  // with VAT, proportional
     const personalInsurance = insurance.value * years.value  // no VAT on insurance
     const personalMaintenance = maintenance.value * years.value  // with VAT
     const personalFuel = fuelCost.value * years.value  // with VAT
@@ -80,7 +82,7 @@ export function useCalculator() {
   const companyScenario = computed(() => {
     // Calculate annual costs for company (first year with depreciation)
     const carPriceNoVat = withoutVat(carPrice.value)
-    const annualDepreciation = carPriceNoVat * depreciationRate.value
+    const annualDepreciation = carPriceNoVat / depreciationYears.value
     const insuranceCost = insurance.value  // NO VAT recovery on insurance
     const maintenanceCost = withoutVat(maintenance.value)  // VAT recovered
     const fuelCostNoVat = withoutVat(fuelCost.value)  // VAT recovered
@@ -94,7 +96,7 @@ export function useCalculator() {
     const yearlyBreakdown = []
 
     for (let y = 1; y <= years.value; y++) {
-      const deductions = y <= 4 ? annualDeductionsWithDep : annualDeductionsNoDep
+      const deductions = y <= depreciationYears.value ? annualDeductionsWithDep : annualDeductionsNoDep
       const taxableProfit = annualIncome.value - deductions
       const companyTaxAmount = taxableProfit * companyTax.value
       const afterTaxProfit = taxableProfit - companyTaxAmount
@@ -182,7 +184,7 @@ export function useCalculator() {
     vatRate,
     companyTax,
     dividendTax,
-    depreciationRate,
+    depreciationYears,
     // Scenario outputs
     privateScenario,
     companyScenario,

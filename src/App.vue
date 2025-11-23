@@ -5,6 +5,7 @@
 
     <IncomeInput v-model="annualIncome" />
     <KmSlider v-model="kmPerYear" />
+    <DepreciationInput v-model="depreciationYears" />
     <YearsInput v-model="years" />
 
     <ResultsSummary
@@ -14,6 +15,8 @@
       :savings="savings"
       :cheaperOption="cheaperOption"
       :years="years"
+      :depreciationYears="depreciationYears"
+      :carPrice="carPrice"
       :companyTaxRate="companyTax"
       :dividendTaxRate="dividendTax"
     />
@@ -32,7 +35,6 @@
       v-model:vatRate="vatRate"
       v-model:companyTax="companyTax"
       v-model:dividendTax="dividendTax"
-      v-model:depreciationRate="depreciationRate"
     />
   </div>
 </template>
@@ -41,6 +43,7 @@
 import { useCalculator } from './composables/useCalculator'
 import IncomeInput from './components/IncomeInput.vue'
 import KmSlider from './components/KmSlider.vue'
+import DepreciationInput from './components/DepreciationInput.vue'
 import YearsInput from './components/YearsInput.vue'
 import ResultsSummary from './components/ResultsSummary.vue'
 import CostChart from './components/CostChart.vue'
@@ -60,7 +63,7 @@ const {
   vatRate,
   companyTax,
   dividendTax,
-  depreciationRate,
+  depreciationYears,
   privateScenario,
   companyScenario,
   savings,
