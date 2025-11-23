@@ -1,17 +1,4 @@
 
-╭─── Claude Code v2.0.50 ──────────────────────────────────────────────────────╮
-│                                 │ Tips for getting started                   │
-│    Welcome back Jozef Lačný!    │ Run /init to create a CLAUDE.md file with… │
-│                                 │ ────────────────────────────────────────── │
-│             ▐▛███▜▌             │ Recent activity                            │
-│            ▝▜█████▛▘            │ No recent activity                         │
-│              ▘▘ ▝▝              │                                            │
-│                                 │                                            │
-│     Sonnet 4.5 · Claude Max     │                                            │
-│   C:\_dev\sukromne-vs-firemne   │                                            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-══════════════════ Conversation compacted · ctrl+o for history ═════════════════
-
 > /compact 
   ⎿  Compacted (ctrl+o to see full summary)
   ⎿  Referenced file _tasks\05-PLAN-v2.md
