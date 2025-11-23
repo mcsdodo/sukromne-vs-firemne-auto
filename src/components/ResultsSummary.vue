@@ -108,6 +108,7 @@
             <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(companyScenario.dividendTaxAmount) }}</span>
           </div>
+          <div class="breakdown-spacer"></div>
           <div class="row highlight">
             <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
@@ -227,6 +228,12 @@ const yearsLabel = computed(() => {
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 12px;
   margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.breakdown-spacer {
+  flex: 1;
 }
 
 .row {
