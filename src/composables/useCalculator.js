@@ -26,14 +26,24 @@ export function useCalculator() {
   // Helper: remove VAT
   const withoutVat = (amount) => amount / (1 + vatRate.value)
 
-  // Helper: calculate residual value (linear interpolation)
-  // Anchors: 2y=80%, 4y=60%, 6y=40% -> -10% per year
-  const residualValuePercent = computed(() => {
-    const percent = 1.0 - (years.value * 0.10)
-    return Math.max(0.20, Math.min(0.90, percent))  // clamp 20%-90%
-  })
+  // Configurable depreciation curve (realistic defaults: steeper early, slower later)
+  const depreciationCurve = ref([
+    0.80,  // Year 1: 80%
+    0.65,  // Year 2: 65%
+    0.55,  // Year 3: 55%
+    0.48,  // Year 4: 48%
+    0.42,  // Year 5: 42%
+    0.37,  // Year 6: 37%
+    0.33,  // Year 7: 33%
+    0.30   // Year 8: 30%
+  ])
 
-  const salePrice = computed(() => carPrice.value * residualValuePercent.value)
+  // Sale price uses curve value for selected year
+  const salePrice = computed(() => {
+    const yearIndex = years.value - 1  // 0-indexed
+    const residualPercent = depreciationCurve.value[yearIndex] || 0.20
+    return carPrice.value * residualPercent
+  })
 
   // Helper: calculate fuel cost
   const fuelCost = computed(() => {
@@ -249,6 +259,7 @@ export function useCalculator() {
     companyTax,
     dividendTax,
     depreciationYears,
+    depreciationCurve,
     // Scenario outputs
     privateScenario,
     companyScenario,
