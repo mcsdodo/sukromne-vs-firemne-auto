@@ -71,6 +71,13 @@
           </div>
         </div>
 
+        <div class="sale-section">
+          <div class="row addition">
+            <span>+ Predaj auta</span>
+            <span>+ {{ formatCurrency(privateScenario.salePrice) }}</span>
+          </div>
+        </div>
+
         <div class="total">
           <span>ČISTÝ VÝNOS</span>
           <span>{{ formatCurrency(privateScenario.netToOwner) }}</span>
@@ -135,6 +142,29 @@
           <div class="row">
             <span>Za {{ years }} {{ yearsLabel }}</span>
             <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
+          </div>
+        </div>
+
+        <div class="sale-section">
+          <div class="row addition">
+            <span>+ Predaj auta</span>
+            <span>+ {{ formatCurrency(companyScenario.salePrice) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Daň z predaja ({{ Math.round(companyTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(companyScenario.saleTax) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Čistý príjem z predaja</span>
+            <span>{{ formatCurrency(companyScenario.netSaleIncome) }}</span>
+          </div>
+          <div class="row deduction">
+            <span>- Daň z dividend ({{ Math.round(dividendTaxRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(companyScenario.netSaleIncome * dividendTaxRate) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Príjem majiteľa z predaja</span>
+            <span>{{ formatCurrency(companyScenario.saleIncomeAfterDividendTax) }}</span>
           </div>
         </div>
 
@@ -286,6 +316,12 @@ const yearsLabel = computed(() => {
   padding-bottom: 12px;
   margin-bottom: 12px;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.sale-section {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
 }
 
 .total {
