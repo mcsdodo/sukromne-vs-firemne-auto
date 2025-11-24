@@ -49,9 +49,8 @@ export function useCalculator() {
     const annualCash = dividends + totalReimbursements
 
     // Personal car costs (paid from dividends, over full period)
-    // Proportional car cost based on ownership vs depreciation period
-    const ownershipRatio = Math.min(years.value, depreciationYears.value) / depreciationYears.value
-    const personalCarPurchase = carPrice.value * ownershipRatio  // with VAT, proportional
+    // Full car price - depreciation is a tax concept, doesn't apply to private ownership
+    const personalCarPurchase = carPrice.value
     const personalInsurance = insurance.value * years.value  // no VAT on insurance
     const personalMaintenance = maintenance.value * years.value  // with VAT
     const personalFuel = fuelCost.value * years.value  // with VAT
