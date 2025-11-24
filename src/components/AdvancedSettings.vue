@@ -6,14 +6,6 @@
 
     <div v-if="isOpen" class="settings-panel">
       <div class="settings-group">
-        <h4>Príjem</h4>
-        <div class="setting">
-          <label>Ročný príjem firmy (EUR)</label>
-          <input type="number" step="1000" :value="annualIncome" @input="emit('update:annualIncome', Number($event.target.value))" />
-        </div>
-      </div>
-
-      <div class="settings-group">
         <h4>Náhrady</h4>
         <div class="setting">
           <label>Sadzba za km (EUR)</label>
@@ -27,10 +19,6 @@
 
       <div class="settings-group">
         <h4>Náklady na auto</h4>
-        <div class="setting">
-          <label>Cena auta s DPH (EUR)</label>
-          <input type="number" step="100" :value="carPrice" @input="emit('update:carPrice', Number($event.target.value))" />
-        </div>
         <div class="setting">
           <label>Poistenie (EUR/rok)</label>
           <input type="number" step="10" :value="insurance" @input="emit('update:insurance', Number($event.target.value))" />
@@ -81,10 +69,8 @@ import { ref } from 'vue'
 const isOpen = ref(false)
 
 defineProps({
-  annualIncome: Number,
   kmRate: Number,
   fuelPrice: Number,
-  carPrice: Number,
   insurance: Number,
   maintenance: Number,
   fuelConsumption: Number,
@@ -96,10 +82,8 @@ defineProps({
 })
 
 const emit = defineEmits([
-  'update:annualIncome',
   'update:kmRate',
   'update:fuelPrice',
-  'update:carPrice',
   'update:insurance',
   'update:maintenance',
   'update:fuelConsumption',

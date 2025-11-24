@@ -4,6 +4,7 @@
     <p class="subtitle">Porovnanie nákladov na auto z pohľadu majiteľa firmy</p>
 
     <IncomeInput v-model="annualIncome" />
+    <CarPriceInput v-model="carPrice" />
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
 
@@ -21,10 +22,8 @@
     <CostChart :yearlyData="yearlyData" />
 
     <AdvancedSettings
-      v-model:annualIncome="annualIncome"
       v-model:kmRate="kmRate"
       v-model:fuelPrice="fuelPrice"
-      v-model:carPrice="carPrice"
       v-model:insurance="insurance"
       v-model:maintenance="maintenance"
       v-model:fuelConsumption="fuelConsumption"
@@ -40,6 +39,7 @@
 <script setup>
 import { useCalculator } from './composables/useCalculator'
 import IncomeInput from './components/IncomeInput.vue'
+import CarPriceInput from './components/CarPriceInput.vue'
 import KmSlider from './components/KmSlider.vue'
 import YearsInput from './components/YearsInput.vue'
 import ResultsSummary from './components/ResultsSummary.vue'
