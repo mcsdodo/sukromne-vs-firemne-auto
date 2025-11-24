@@ -22,7 +22,7 @@
 <script setup>
 defineProps({
   modelValue: { type: Number, required: true },
-  min: { type: Number, default: 1 },
+  min: { type: Number, default: 2 },
   max: { type: Number, default: 8 }
 })
 

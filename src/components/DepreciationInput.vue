@@ -6,14 +6,14 @@
     </label>
     <input
       type="range"
-      :min="1"
+      :min="2"
       :max="8"
       :step="1"
       :value="modelValue"
       @input="$emit('update:modelValue', Number($event.target.value))"
     />
     <div class="range-labels">
-      <span>1</span>
+      <span>2</span>
       <span>8</span>
     </div>
   </div>
