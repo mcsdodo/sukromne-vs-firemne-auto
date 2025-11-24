@@ -6,22 +6,24 @@
     </label>
     <input
       type="range"
-      :min="2"
-      :max="8"
+      :min="min"
+      :max="max"
       :step="1"
       :value="modelValue"
       @input="$emit('update:modelValue', Number($event.target.value))"
     />
     <div class="range-labels">
-      <span>2</span>
-      <span>8</span>
+      <span>{{ min }}</span>
+      <span>{{ max }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 defineProps({
-  modelValue: { type: Number, required: true }
+  modelValue: { type: Number, required: true },
+  min: { type: Number, default: 2 },
+  max: { type: Number, default: 8 }
 })
 
 defineEmits(['update:modelValue'])
