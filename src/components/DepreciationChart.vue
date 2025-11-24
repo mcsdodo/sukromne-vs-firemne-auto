@@ -27,6 +27,7 @@ import {
   Legend
 } from 'chart.js'
 import ChartJSDragDataPlugin from 'chartjs-plugin-dragdata'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 ChartJS.register(
   CategoryScale,
@@ -36,7 +37,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartJSDragDataPlugin
+  ChartJSDragDataPlugin,
+  ChartDataLabels
 )
 
 const props = defineProps({
@@ -94,6 +96,17 @@ const chartOptions = computed(() => ({
       callbacks: {
         label: (context) => `${Math.round(context.raw)}%`
       }
+    },
+    datalabels: {
+      display: true,
+      align: 'top',
+      offset: 6,
+      color: '#1e293b',
+      font: {
+        weight: 'bold',
+        size: 11
+      },
+      formatter: (value) => `${Math.round(value)}%`
     },
     dragData: {
       round: 1,
