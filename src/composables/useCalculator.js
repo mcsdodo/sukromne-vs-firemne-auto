@@ -26,6 +26,15 @@ export function useCalculator() {
   // Helper: remove VAT
   const withoutVat = (amount) => amount / (1 + vatRate.value)
 
+  // Helper: calculate residual value (linear interpolation)
+  // Anchors: 2y=80%, 4y=60%, 6y=40% -> -10% per year
+  const residualValuePercent = computed(() => {
+    const percent = 1.0 - (years.value * 0.10)
+    return Math.max(0.20, Math.min(0.90, percent))  // clamp 20%-90%
+  })
+
+  const salePrice = computed(() => carPrice.value * residualValuePercent.value)
+
   // Helper: calculate fuel cost
   const fuelCost = computed(() => {
     const adjustedConsumption = fuelConsumption.value * (1 + consumptionAdjustment.value)
@@ -58,7 +67,12 @@ export function useCalculator() {
 
     // Multi-year totals
     const totalCashOverYears = annualCash * years.value
-    const netToOwner = totalCashOverYears - personalCarPurchase - personalRunningCosts
+
+    // Sale income (private owner gets full amount, no corporate taxes)
+    const saleIncome = salePrice.value
+
+    // Net to owner now includes sale income
+    const netToOwner = totalCashOverYears - personalCarPurchase - personalRunningCosts + saleIncome
 
     return {
       // Annual breakdown
@@ -76,6 +90,9 @@ export function useCalculator() {
       personalCarPurchase,
       personalRunningCosts,
       netToOwner,
+      // Sale data
+      salePrice: salePrice.value,
+      saleIncome,
       // Cost breakdown (for display)
       costBreakdown: {
         depreciation: personalCarPurchase,
@@ -133,6 +150,15 @@ export function useCalculator() {
     const totalMaintenance = maintenanceCost * years.value
     const totalFuel = fuelCostNoVat * years.value
 
+    // Sale calculations (tax on full sale price)
+    const companySalePrice = salePrice.value
+    const saleTax = companySalePrice * companyTax.value
+    const netSaleIncome = companySalePrice - saleTax
+    const saleIncomeAfterDividendTax = netSaleIncome * (1 - dividendTax.value)
+
+    // Update net to owner to include sale income
+    const netToOwnerWithSale = totalDividends + saleIncomeAfterDividendTax
+
     return {
       // Annual breakdown (year 1 representative)
       carCosts: annualDeductionsWithDep,
@@ -145,7 +171,12 @@ export function useCalculator() {
       // Multi-year
       totalCashOverYears: totalDividends,
       personalCosts: 0,
-      netToOwner: totalDividends,
+      netToOwner: netToOwnerWithSale,
+      // Sale data
+      salePrice: companySalePrice,
+      saleTax,
+      netSaleIncome,
+      saleIncomeAfterDividendTax,
       // Detailed
       yearlyBreakdown,
       // Cost breakdown (for display) - totals over period
@@ -183,10 +214,14 @@ export function useCalculator() {
       // Private: accumulate cash, subtract car cost in year 1, subtract running costs each year
       privateCumulative += privateAnnual - privateRunningPerYear
       if (y === 1) privateCumulative -= privateCarCost
+      // Add sale income in final year
+      if (y === years.value) privateCumulative += privateScenario.value.saleIncome
 
       // Company: accumulate dividends
       const companyYear = companyScenario.value.yearlyBreakdown[y - 1]
       companyCumulative += companyYear.dividends
+      // Add sale income in final year
+      if (y === years.value) companyCumulative += companyScenario.value.saleIncomeAfterDividendTax
 
       data.push({
         year: y,
