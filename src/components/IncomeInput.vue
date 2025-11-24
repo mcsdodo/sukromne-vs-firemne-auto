@@ -24,7 +24,7 @@ defineProps({
   modelValue: { type: Number, required: true },
   min: { type: Number, default: 20000 },
   max: { type: Number, default: 500000 },
-  step: { type: Number, default: 10000 }
+  step: { type: Number, default: 5000 }
 })
 
 defineEmits(['update:modelValue'])
