@@ -7,6 +7,7 @@
     <CarPriceInput v-model="carPrice" />
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
+    <DepreciationChart v-model="depreciationCurve" :years="years" />
 
     <ResultsSummary
       :annualIncome="annualIncome"
@@ -45,6 +46,7 @@ import YearsInput from './components/YearsInput.vue'
 import ResultsSummary from './components/ResultsSummary.vue'
 import CostChart from './components/CostChart.vue'
 import AdvancedSettings from './components/AdvancedSettings.vue'
+import DepreciationChart from './components/DepreciationChart.vue'
 
 const {
   annualIncome,
@@ -61,6 +63,7 @@ const {
   companyTax,
   dividendTax,
   depreciationYears,
+  depreciationCurve,
   privateScenario,
   companyScenario,
   savings,
