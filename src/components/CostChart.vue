@@ -49,12 +49,12 @@ const chartData = computed(() => ({
   labels: props.yearlyData.map(d => `Rok ${d.year}`),
   datasets: [
     {
-      label: 'Sukromne auto',
+      label: 'Súkromné auto',
       data: props.yearlyData.map(d => d.privateNet),
       backgroundColor: '#94a3b8'
     },
     {
-      label: 'Firemne auto',
+      label: 'Firemné auto',
       data: props.yearlyData.map(d => d.companyNet),
       backgroundColor: '#10b981'
     }
@@ -70,7 +70,7 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'Kumulativny cisty vynos'
+      text: 'Kumulatívny čistý výnos'
     },
     tooltip: {
       callbacks: {

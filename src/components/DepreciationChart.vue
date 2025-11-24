@@ -5,14 +5,13 @@
       <Line
         :data="chartData"
         :options="chartOptions"
-        ref="chartRef"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -43,8 +42,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-
-const chartRef = ref(null)
 
 const chartData = computed(() => ({
   labels: Array.from({ length: props.years }, (_, i) => `Rok ${i + 1}`),
@@ -115,7 +112,9 @@ const chartOptions = computed(() => ({
     mode: 'point'
   },
   onHover: (event, elements) => {
-    event.native.target.style.cursor = elements.length ? 'grab' : 'default'
+    if (event.native?.target) {
+      event.native.target.style.cursor = elements.length ? 'grab' : 'default'
+    }
   }
 }))
 </script>
