@@ -63,6 +63,13 @@
           <label>Daň z dividend (%)</label>
           <input type="number" step="1" :value="Math.round(dividendTax * 100)" @input="emit('update:dividendTax', Number($event.target.value) / 100)" />
         </div>
+        <div class="setting">
+          <label>Odpisy (roky)</label>
+          <select :value="depreciationYears" @change="emit('update:depreciationYears', Number($event.target.value))">
+            <option :value="2">2 roky (EV)</option>
+            <option :value="4">4 roky (ICE)</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -84,7 +91,8 @@ defineProps({
   consumptionAdjustment: Number,
   vatRate: Number,
   companyTax: Number,
-  dividendTax: Number
+  dividendTax: Number,
+  depreciationYears: Number
 })
 
 const emit = defineEmits([
@@ -98,7 +106,8 @@ const emit = defineEmits([
   'update:consumptionAdjustment',
   'update:vatRate',
   'update:companyTax',
-  'update:dividendTax'
+  'update:dividendTax',
+  'update:depreciationYears'
 ])
 </script>
 
@@ -158,6 +167,21 @@ const emit = defineEmits([
 }
 
 .setting input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.setting select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.setting select:focus {
   outline: none;
   border-color: #2563eb;
 }
