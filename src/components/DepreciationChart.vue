@@ -1,6 +1,9 @@
 <template>
   <div class="depreciation-chart">
-    <label class="chart-label">Zostatková hodnota auta</label>
+    <div class="chart-header">
+      <label class="chart-label">Zostatková hodnota auta</label>
+      <button class="reset-btn" @click="resetToDefaults">Reset</button>
+    </div>
     <div class="chart-container">
       <Line
         :data="chartData"
@@ -43,6 +46,12 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+const DEFAULT_CURVE = [0.80, 0.65, 0.55, 0.48, 0.42, 0.37, 0.33, 0.30]
+
+const resetToDefaults = () => {
+  emit('update:modelValue', [...DEFAULT_CURVE])
+}
+
 const chartData = computed(() => ({
   labels: Array.from({ length: props.years }, (_, i) => `Rok ${i + 1}`),
   datasets: [{
@@ -72,6 +81,7 @@ const chartOptions = computed(() => ({
         text: '%'
       },
       ticks: {
+        stepSize: 20,
         callback: (value) => `${value}%`
       }
     }
@@ -131,10 +141,30 @@ const chartOptions = computed(() => ({
   margin-bottom: 24px;
 }
 
-.chart-label {
-  display: block;
-  font-weight: 500;
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
+}
+
+.chart-label {
+  font-weight: 500;
+}
+
+.reset-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #64748b;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background: #cbd5e1;
+  color: #1e293b;
 }
 
 .chart-container {
