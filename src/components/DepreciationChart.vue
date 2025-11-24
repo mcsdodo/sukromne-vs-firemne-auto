@@ -113,13 +113,26 @@ const chartOptions = computed(() => ({
       onDragEnd: (e, datasetIndex, index, value) => {
         const curve = props.modelValue
         const prevValue = index > 0 ? curve[index - 1] * 100 : 100
-        const nextValue = index < curve.length - 1 ? curve[index + 1] * 100 : 0
+        const currentValue = curve[index] * 100
 
-        // Enforce decreasing constraint (same as onDrag)
-        const clamped = Math.min(prevValue - 1, Math.max(nextValue + 1, value))
+        // Enforce max constraint (can't go above previous year)
+        const clamped = Math.min(prevValue - 1, Math.max(1, value))
+
+        // Calculate the change amount
+        const delta = clamped - currentValue
 
         const newCurve = [...props.modelValue]
         newCurve[index] = clamped / 100
+
+        // If dragging down, cascade the change to all subsequent years
+        if (delta < 0) {
+          for (let i = index + 1; i < newCurve.length; i++) {
+            const newVal = (newCurve[i] * 100 + delta) / 100
+            // Ensure minimum of 1% and must be less than previous year
+            newCurve[i] = Math.max(0.01, Math.min(newCurve[i - 1] - 0.01, newVal))
+          }
+        }
+
         emit('update:modelValue', newCurve)
       }
     }
