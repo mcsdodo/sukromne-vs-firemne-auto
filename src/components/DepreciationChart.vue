@@ -101,8 +101,15 @@ const chartOptions = computed(() => ({
         return clamped
       },
       onDragEnd: (e, datasetIndex, index, value) => {
+        const curve = props.modelValue
+        const prevValue = index > 0 ? curve[index - 1] * 100 : 100
+        const nextValue = index < curve.length - 1 ? curve[index + 1] * 100 : 0
+
+        // Enforce decreasing constraint (same as onDrag)
+        const clamped = Math.min(prevValue - 1, Math.max(nextValue + 1, value))
+
         const newCurve = [...props.modelValue]
-        newCurve[index] = value / 100
+        newCurve[index] = clamped / 100
         emit('update:modelValue', newCurve)
       }
     }
