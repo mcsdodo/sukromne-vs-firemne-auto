@@ -129,12 +129,13 @@
               <span>= Dividendy</span>
               <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
             </div>
-            <div class="row placeholder">
-              <span>&nbsp;</span>
-              <span>&nbsp;</span>
+            <div class="row addition placeholder">
+              <span>+ Náhrady</span>
+              <span>+ 0 €</span>
             </div>
             <div class="cost-breakdown placeholder">
-              <span>&nbsp;</span>
+              <span>km 0 €</span>
+              <span>palivo 0 €</span>
             </div>
           </div>
 
@@ -287,6 +288,12 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 }
 
 .annual-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.annual-section .breakdown {
+  flex: 1;
 }
 
 .placeholder {
@@ -327,6 +334,7 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   margin: 0 -8px 12px;
   padding: 8px;
   border-radius: 4px;
+  margin-top: auto;
 }
 
 .multi-year {
