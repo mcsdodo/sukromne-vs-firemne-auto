@@ -97,8 +97,16 @@
               <span>- Náklady auta</span>
               <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
             </div>
+            <div class="depreciation-calc">
+              <span class="calc-label">odpisy:</span>
+              <span v-if="is50Percent" class="calc-formula">
+                ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r × 50% = {{ formatCurrency(annualWriteOff) }}
+              </span>
+              <span v-else class="calc-formula">
+                ({{ formatCurrency(carPrice) }} − DPH {{ formatCurrency(vatAmount) }}) ÷ {{ Math.min(years, 4) }}r = {{ formatCurrency(annualWriteOff) }}
+              </span>
+            </div>
             <div class="cost-breakdown">
-              <span>odpisy {{ formatCurrency(companyScenario.annualCostBreakdown.depreciation) }}</span>
               <span>poistenie {{ formatCurrency(companyScenario.annualCostBreakdown.insurance) }}</span>
               <span>údržba {{ formatCurrency(companyScenario.annualCostBreakdown.maintenance) }}</span>
               <span>palivo {{ formatCurrency(companyScenario.annualCostBreakdown.fuel) }}</span>
@@ -139,25 +147,8 @@
 
         </div>
 
-        <div class="tax-benefits">
-          <div class="row subtle">
-            <span>Cena auta</span>
-            <span>{{ formatCurrency(carPrice) }}</span>
-          </div>
-          <div class="row subtle">
-            <span>Vrátené DPH</span>
-            <span v-if="is50Percent">{{ formatCurrency(vatAmount) }} × 50% = {{ formatCurrency(vatReclaim) }}</span>
-            <span v-else>{{ formatCurrency(vatReclaim) }}</span>
-          </div>
-          <div class="row subtle">
-            <span>Daňová úspora z odpisov</span>
-            <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase * Math.min(years, 4) * companyTaxRate) }} × 50% = {{ formatCurrency(totalWriteOff * companyTaxRate) }}</span>
-            <span v-else>{{ formatCurrency(totalWriteOff * companyTaxRate) }}</span>
-          </div>
-          <div class="row subtle highlight-subtle">
-            <span>Čistá cena auta</span>
-            <span>{{ formatCurrency(netCarCost) }}</span>
-          </div>
+        <div class="net-car-info">
+          <span>Čistá cena auta po DPH a odpisoch: {{ formatCurrency(netCarCost) }}</span>
         </div>
 
         <div class="multi-year">
@@ -409,20 +400,34 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   white-space: nowrap;
 }
 
-.tax-benefits {
-  padding: 12px 0;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
+.depreciation-calc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0;
+  font-size: 11px;
+  color: #64748b;
   background: #f8fafc;
-  margin: 0 -20px;
-  padding: 12px 20px;
+  margin: 4px -8px;
+  padding: 6px 8px;
+  border-radius: 4px;
 }
 
-.row.highlight-subtle {
-  font-weight: 600;
-  color: #1e293b;
-  margin-top: 4px;
-  padding-top: 8px;
-  border-top: 1px dashed #e2e8f0;
+.depreciation-calc .calc-label {
+  font-weight: 500;
+  color: #475569;
+}
+
+.depreciation-calc .calc-formula {
+  font-family: monospace;
+}
+
+.net-car-info {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
 }
 </style>
