@@ -183,8 +183,15 @@ export function useCalculator() {
     const netSaleIncome = companySalePrice - saleTax
     const saleIncomeAfterDividendTax = netSaleIncome * (1 - dividendTax.value)
 
-    // Update net to owner to include sale income
-    const netToOwnerWithSale = totalDividends + saleIncomeAfterDividendTax
+    // At less than 100% business usage:
+    // - Company pays (carPrice - vatReclaim) for the car
+    // - But only (totalWriteOff) is tax-deductible
+    // - The difference is a non-deductible cost that reduces owner's net
+    const netCarPurchase = carPrice.value - vatReclaim.value
+    const nonDeductibleCost = netCarPurchase - totalWriteOff.value
+
+    // Update net to owner: dividends + sale income - non-deductible car cost
+    const netToOwnerWithSale = totalDividends + saleIncomeAfterDividendTax - nonDeductibleCost
 
     return {
       // Annual breakdown (year 1 representative)
@@ -247,6 +254,13 @@ export function useCalculator() {
       // Company: accumulate dividends
       const companyYear = companyScenario.value.yearlyBreakdown[y - 1]
       companyCumulative += companyYear.dividends
+      // Subtract non-deductible car cost in year 1
+      // (car purchase minus VAT reclaim minus total write-off that will be deducted)
+      if (y === 1) {
+        const netCarPurchase = carPrice.value - vatReclaim.value
+        const nonDeductibleCost = netCarPurchase - totalWriteOff.value
+        companyCumulative -= nonDeductibleCost
+      }
       // Add sale income in final year
       if (y === years.value) companyCumulative += companyScenario.value.saleIncomeAfterDividendTax
 
