@@ -137,13 +137,6 @@
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
           </div>
 
-          <div class="writeoff-breakdown">
-            <div class="row subtle">
-              <span>Ročný odpis</span>
-              <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase) }} × 50% = {{ formatCurrency(annualWriteOff) }}</span>
-              <span v-else>{{ formatCurrency(annualWriteOff) }}</span>
-            </div>
-          </div>
         </div>
 
         <div class="tax-benefits">
@@ -414,12 +407,6 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 
 .cost-breakdown span {
   white-space: nowrap;
-}
-
-.writeoff-breakdown {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
 }
 
 .tax-benefits {
