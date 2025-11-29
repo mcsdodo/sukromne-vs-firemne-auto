@@ -28,6 +28,7 @@
       :companyTaxRate="companyTax"
       :dividendTaxRate="dividendTax"
       :businessUsagePercent="businessUsagePercent"
+      :carPrice="carPrice"
       :vatAmount="vatAmount"
       :vatReclaim="vatReclaim"
       :annualWriteOffBase="annualWriteOffBase"

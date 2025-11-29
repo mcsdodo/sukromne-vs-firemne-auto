@@ -148,6 +148,10 @@
 
         <div class="tax-benefits">
           <div class="row subtle">
+            <span>Cena auta</span>
+            <span>{{ formatCurrency(carPrice) }}</span>
+          </div>
+          <div class="row subtle">
             <span>Vrátené DPH</span>
             <span v-if="is50Percent">{{ formatCurrency(vatAmount) }} × 50% = {{ formatCurrency(vatReclaim) }}</span>
             <span v-else>{{ formatCurrency(vatReclaim) }}</span>
@@ -231,6 +235,7 @@ const props = defineProps({
   companyTaxRate: { type: Number, required: true },
   dividendTaxRate: { type: Number, required: true },
   businessUsagePercent: { type: Number, required: true },
+  carPrice: { type: Number, required: true },
   vatAmount: { type: Number, required: true },
   vatReclaim: { type: Number, required: true },
   annualWriteOffBase: { type: Number, required: true },
