@@ -266,8 +266,8 @@ export function useCalculator() {
 
       data.push({
         year: y,
-        privateNet: privateCumulative,
-        companyNet: companyCumulative
+        privateNet: Math.round(privateCumulative),
+        companyNet: Math.round(companyCumulative)
       })
     }
 
