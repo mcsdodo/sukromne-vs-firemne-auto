@@ -150,9 +150,9 @@
             <span v-else>{{ formatCurrency(vatReclaim) }}</span>
           </div>
           <div class="row subtle">
-            <span>Celkový odpis</span>
-            <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase * Math.min(years, 4)) }} × 50% = {{ formatCurrency(totalWriteOff) }}</span>
-            <span v-else>{{ formatCurrency(totalWriteOff) }}</span>
+            <span>Daňová úspora z odpisov</span>
+            <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase * Math.min(years, 4) * companyTaxRate) }} × 50% = {{ formatCurrency(totalWriteOff * companyTaxRate) }}</span>
+            <span v-else>{{ formatCurrency(totalWriteOff * companyTaxRate) }}</span>
           </div>
           <div class="row subtle highlight-subtle">
             <span>Čistá cena auta</span>
