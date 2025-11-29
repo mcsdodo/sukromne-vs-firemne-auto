@@ -47,11 +47,11 @@
               <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
             </div>
           </div>
+        </div>
 
-          <div class="row highlight">
-            <span>= Ročne v čistom</span>
-            <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
-          </div>
+        <div class="row highlight">
+          <span>= Ročne v čistom</span>
+          <span>{{ formatCurrency(privateScenario.annualCash) }}</span>
         </div>
 
         <div class="multi-year">
@@ -139,11 +139,11 @@
             </div>
           </div>
 
-          <div class="row highlight">
-            <span>= Ročne v čistom</span>
-            <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
-          </div>
+        </div>
 
+        <div class="row highlight">
+          <span>= Ročne v čistom</span>
+          <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
         </div>
 
         <div class="multi-year">
@@ -249,9 +249,9 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto auto auto auto;
   gap: 16px;
   margin-bottom: 16px;
-  align-items: stretch;
 }
 
 @media (max-width: 800px) {
@@ -266,7 +266,8 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   border-radius: 12px;
   padding: 20px;
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: subgrid;
+  grid-row: span 6;
 }
 
 .spacer {
@@ -290,11 +291,9 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .annual-section {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
 }
 
-.annual-section .breakdown {
-  flex: 1;
-}
 
 .placeholder {
   visibility: hidden;
@@ -334,7 +333,6 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   margin: 0 -8px 12px;
   padding: 8px;
   border-radius: 4px;
-  margin-top: auto;
 }
 
 .multi-year {
