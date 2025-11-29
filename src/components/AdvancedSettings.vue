@@ -104,13 +104,13 @@ const emit = defineEmits([
   background: none;
   border: none;
   font-size: 16px;
-  color: #64748b;
+  color: #94a3b8;
   cursor: pointer;
   padding: 8px 0;
 }
 
 .toggle:hover {
-  color: #1e293b;
+  color: #f1f5f9;
 }
 
 .settings-panel {
@@ -119,13 +119,14 @@ const emit = defineEmits([
   gap: 24px;
   margin-top: 16px;
   padding: 24px;
-  background: #f8fafc;
+  background: #1f2937;
+  border: 1px solid #374151;
   border-radius: 12px;
 }
 
 .settings-group h4 {
   margin: 0 0 16px 0;
-  color: #1e293b;
+  color: #f1f5f9;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -138,35 +139,38 @@ const emit = defineEmits([
 .setting label {
   display: block;
   font-size: 13px;
-  color: #64748b;
+  color: #94a3b8;
   margin-bottom: 4px;
 }
 
 .setting input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #374151;
   border-radius: 6px;
   font-size: 14px;
+  background: #111827;
+  color: #f9fafb;
 }
 
 .setting input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #3b82f6;
 }
 
 .setting select {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #374151;
   border-radius: 6px;
   font-size: 14px;
-  background: white;
+  background: #111827;
+  color: #f9fafb;
   cursor: pointer;
 }
 
 .setting select:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #3b82f6;
 }
 </style>

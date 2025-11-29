@@ -66,11 +66,15 @@ const chartOptions = {
   maintainAspectRatio: true,
   plugins: {
     legend: {
-      position: 'top'
+      position: 'top',
+      labels: {
+        color: '#cbd5e1'
+      }
     },
     title: {
       display: true,
-      text: 'Kumulatívny čistý výnos'
+      text: 'Kumulatívny čistý výnos',
+      color: '#f1f5f9'
     },
     tooltip: {
       callbacks: {
@@ -83,15 +87,36 @@ const chartOptions = {
           return `${context.dataset.label}: ${value}`
         }
       }
+    },
+    datalabels: {
+      color: '#fff',
+      font: {
+        size: 10
+      },
+      formatter: (value) => {
+        return value.toLocaleString('sk-SK', { maximumFractionDigits: 0 }) + ' €'
+      }
     }
   },
   scales: {
+    x: {
+      ticks: {
+        color: '#9ca3af'
+      },
+      grid: {
+        color: '#374151'
+      }
+    },
     y: {
       beginAtZero: true,
       ticks: {
+        color: '#9ca3af',
         callback: (value) => {
-          return value.toLocaleString('sk-SK') + ' €'
+          return value.toLocaleString('sk-SK', { maximumFractionDigits: 0 }) + ' €'
         }
+      },
+      grid: {
+        color: '#374151'
       }
     }
   }
@@ -102,7 +127,8 @@ const chartOptions = {
 .cost-chart {
   margin: 32px 0;
   padding: 16px;
-  background: #f8fafc;
+  background: #1f2937;
+  border: 1px solid #374151;
   border-radius: 12px;
 }
 

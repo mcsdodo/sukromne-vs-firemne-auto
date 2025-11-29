@@ -40,18 +40,19 @@ defineEmits(['update:modelValue'])
   justify-content: space-between;
   margin-bottom: 8px;
   font-weight: 500;
+  color: #cbd5e1;
 }
 
 .km-slider .value {
   font-weight: 700;
-  color: #2563eb;
+  color: #60a5fa;
 }
 
 .km-slider input[type="range"] {
   width: 100%;
   height: 8px;
   border-radius: 4px;
-  background: #e2e8f0;
+  background: #374151;
   outline: none;
   cursor: pointer;
 }
@@ -61,7 +62,7 @@ defineEmits(['update:modelValue'])
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #2563eb;
+  background: #3b82f6;
   cursor: pointer;
 }
 
@@ -69,7 +70,7 @@ defineEmits(['update:modelValue'])
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: #64748b;
+  color: #94a3b8;
   margin-top: 4px;
 }
 </style>

@@ -298,8 +298,8 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 }
 
 .card {
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background: #1f2937;
+  border: 1px solid #374151;
   border-radius: 12px;
   padding: 20px;
 }
@@ -309,14 +309,14 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 }
 
 .card.winner {
-  background: #ecfdf5;
-  border-color: #10b981;
+  background: #1f2937;
+  border: 2px solid #10b981;
 }
 
 .card h3 {
   margin: 0 0 16px 0;
   font-size: 18px;
-  color: #1e293b;
+  color: #f1f5f9;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -333,7 +333,7 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 }
 
 .breakdown {
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #374151;
   padding-bottom: 12px;
   margin-bottom: 12px;
 }
@@ -343,26 +343,26 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   justify-content: space-between;
   padding: 4px 0;
   font-size: 14px;
-  color: #475569;
+  color: #94a3b8;
 }
 
 .row.deduction {
-  color: #dc2626;
+  color: #f87171;
 }
 
 .row.addition {
-  color: #16a34a;
+  color: #4ade80;
 }
 
 .row.subtotal {
   font-weight: 500;
-  color: #1e293b;
+  color: #e2e8f0;
 }
 
 .row.highlight {
   font-weight: 600;
-  color: #1e293b;
-  background: #e2e8f0;
+  color: #f9fafb;
+  background: #374151;
   margin: 0 -8px 12px;
   padding: 8px;
   border-radius: 4px;
@@ -371,12 +371,12 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .multi-year {
   padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #374151;
 }
 
 .sale-section {
   padding: 12px 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #374151;
   margin-bottom: 12px;
 }
 
@@ -385,9 +385,9 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   justify-content: space-between;
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: #f9fafb;
   padding: 8px;
-  background: #e2e8f0;
+  background: #374151;
   border-radius: 6px;
 }
 
@@ -399,14 +399,15 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .verdict {
   text-align: center;
   font-size: 18px;
-  color: #1e293b;
+  color: #e5e7eb;
   padding: 16px;
-  background: #f1f5f9;
+  background: #1f2937;
+  border: 1px solid #374151;
   border-radius: 8px;
 }
 
 .verdict strong {
-  color: #10b981;
+  color: #4ade80;
 }
 
 .note {

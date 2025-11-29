@@ -103,7 +103,7 @@ const {
 
 body {
   margin: 0;
-  background: #f1f5f9;
+  background: #111827;
 }
 
 .app {
@@ -115,13 +115,13 @@ body {
 
 h1 {
   text-align: center;
-  color: #1e293b;
+  color: #f1f5f9;
   margin-bottom: 8px;
 }
 
 .subtitle {
   text-align: center;
-  color: #64748b;
+  color: #94a3b8;
   margin-bottom: 32px;
 }
 
@@ -139,23 +139,23 @@ h1 {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: white;
+  background: #1f2937;
   padding: 16px 20px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #374151;
   margin-bottom: 16px;
 }
 
 .toggle-label {
   font-size: 14px;
-  color: #475569;
+  color: #cbd5e1;
   font-weight: 500;
 }
 
 .toggle-buttons {
   display: flex;
   gap: 4px;
-  background: #f1f5f9;
+  background: #111827;
   padding: 4px;
   border-radius: 8px;
 }
@@ -165,7 +165,7 @@ h1 {
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: #64748b;
+  color: #94a3b8;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -173,7 +173,7 @@ h1 {
 }
 
 .toggle-buttons button:hover {
-  color: #1e293b;
+  color: #f1f5f9;
 }
 
 .toggle-buttons button.active {

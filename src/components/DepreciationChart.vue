@@ -75,16 +75,29 @@ const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   scales: {
+    x: {
+      ticks: {
+        color: '#9ca3af'
+      },
+      grid: {
+        color: '#374151'
+      }
+    },
     y: {
       min: 0,
       max: 100,
       title: {
         display: true,
-        text: '%'
+        text: '%',
+        color: '#9ca3af'
       },
       ticks: {
         stepSize: 20,
+        color: '#9ca3af',
         callback: (value) => `${value}%`
+      },
+      grid: {
+        color: '#374151'
       }
     }
   },
@@ -101,7 +114,7 @@ const chartOptions = computed(() => ({
       display: true,
       align: 'top',
       offset: 6,
-      color: '#1e293b',
+      color: '#f1f5f9',
       font: {
         weight: 'bold',
         size: 11
@@ -176,26 +189,28 @@ const chartOptions = computed(() => ({
 
 .chart-label {
   font-weight: 500;
+  color: #cbd5e1;
 }
 
 .reset-btn {
   padding: 4px 12px;
   font-size: 12px;
-  color: #64748b;
-  background: #e2e8f0;
+  color: #9ca3af;
+  background: #374151;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .reset-btn:hover {
-  background: #cbd5e1;
-  color: #1e293b;
+  background: #4b5563;
+  color: #f9fafb;
 }
 
 .chart-container {
   height: 200px;
-  background: #f8fafc;
+  background: #1f2937;
+  border: 1px solid #374151;
   border-radius: 8px;
   padding: 16px;
 }
