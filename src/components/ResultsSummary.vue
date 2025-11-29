@@ -106,6 +106,9 @@
               <span>údržba {{ formatCurrency(companyScenario.annualCostBreakdown.maintenance) }}</span>
               <span>palivo {{ formatCurrency(companyScenario.annualCostBreakdown.fuel) }}</span>
             </div>
+            <div class="cost-breakdown net-note">
+              <em>pozn.: čistá cena auta po DPH a odpisoch: {{ formatCurrency(netCarCost) }}</em>
+            </div>
             <div class="row subtotal">
               <span>= Zdaniteľný zisk</span>
               <span>{{ formatCurrency(companyScenario.taxableProfit) }}</span>
@@ -140,10 +143,6 @@
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
           </div>
 
-        </div>
-
-        <div class="net-car-info">
-          <em>čistá cena auta po DPH a odpisoch: {{ formatCurrency(netCarCost) }}</em>
         </div>
 
         <div class="multi-year">
@@ -395,12 +394,9 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   white-space: nowrap;
 }
 
-.net-car-info {
-  font-size: 11px;
-  color: #94a3b8;
-  text-align: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #e2e8f0;
-  margin-bottom: 12px;
+.cost-breakdown.net-note {
+  padding-top: 4px;
+  margin-top: 4px;
+  border-top: 1px dashed #e2e8f0;
 }
 </style>
