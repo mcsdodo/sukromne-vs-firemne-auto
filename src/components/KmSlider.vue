@@ -10,6 +10,7 @@
       :max="max"
       :step="step"
       :value="modelValue"
+      :style="sliderStyle"
       @input="$emit('update:modelValue', Number($event.target.value))"
     />
     <div class="range-labels">
@@ -20,7 +21,9 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   modelValue: { type: Number, required: true },
   min: { type: Number, default: 5000 },
   max: { type: Number, default: 60000 },
@@ -28,6 +31,13 @@ defineProps({
 })
 
 defineEmits(['update:modelValue'])
+
+const sliderStyle = computed(() => {
+  const percent = ((props.modelValue - props.min) / (props.max - props.min)) * 100
+  return {
+    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${percent}%, #374151 ${percent}%, #374151 100%)`
+  }
+})
 </script>
 
 <style scoped>
