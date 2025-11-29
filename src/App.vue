@@ -5,6 +5,15 @@
 
     <IncomeInput v-model="annualIncome" />
     <CarPriceInput v-model="carPrice" />
+
+    <div class="usage-toggle">
+      <span class="toggle-label">Podnikateľské využitie:</span>
+      <div class="toggle-buttons">
+        <button :class="{ active: businessUsagePercent === 1.0 }" @click="businessUsagePercent = 1.0">100%</button>
+        <button :class="{ active: businessUsagePercent === 0.5 }" @click="businessUsagePercent = 0.5">50%</button>
+      </div>
+    </div>
+
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
     <DepreciationChart v-model="depreciationCurve" :years="years" />
@@ -18,6 +27,13 @@
       :years="years"
       :companyTaxRate="companyTax"
       :dividendTaxRate="dividendTax"
+      :businessUsagePercent="businessUsagePercent"
+      :vatAmount="vatAmount"
+      :vatReclaim="vatReclaim"
+      :annualWriteOffBase="annualWriteOffBase"
+      :annualWriteOff="annualWriteOff"
+      :totalWriteOff="totalWriteOff"
+      :netCarCost="netCarCost"
     />
 
     <CostChart :yearlyData="yearlyData" />
@@ -64,6 +80,13 @@ const {
   dividendTax,
   depreciationYears,
   depreciationCurve,
+  businessUsagePercent,
+  vatAmount,
+  vatReclaim,
+  annualWriteOffBase,
+  annualWriteOff,
+  totalWriteOff,
+  netCarCost,
   privateScenario,
   companyScenario,
   savings,
@@ -109,5 +132,51 @@ h1 {
   h1 {
     font-size: 24px;
   }
+}
+
+.usage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 4px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.toggle-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-buttons button:hover {
+  color: #1e293b;
+}
+
+.toggle-buttons button.active {
+  background: #3b82f6;
+  color: white;
 }
 </style>

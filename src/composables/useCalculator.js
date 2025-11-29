@@ -23,6 +23,9 @@ export function useCalculator() {
   const dividendTax = ref(0.07)
   const depreciationYears = ref(4)
 
+  // Business usage (1.0 = 100%, 0.5 = 50% for personal usage declaration)
+  const businessUsagePercent = ref(1.0)
+
   // Helper: remove VAT
   const withoutVat = (amount) => amount / (1 + vatRate.value)
 
@@ -43,6 +46,21 @@ export function useCalculator() {
     const yearIndex = years.value - 1  // 0-indexed
     const residualPercent = depreciationCurve.value[yearIndex] || 0.20
     return carPrice.value * residualPercent
+  })
+
+  // VAT and write-off breakdown (for display)
+  const carPriceNoVat = computed(() => withoutVat(carPrice.value))
+  const vatAmount = computed(() => carPrice.value - carPriceNoVat.value)
+  const vatReclaim = computed(() => vatAmount.value * businessUsagePercent.value)
+  const annualWriteOffBase = computed(() => carPriceNoVat.value / depreciationYears.value)
+  const annualWriteOff = computed(() => annualWriteOffBase.value * businessUsagePercent.value)
+  const totalWriteOff = computed(() => {
+    const yearsUsed = Math.min(years.value, depreciationYears.value)
+    return annualWriteOff.value * yearsUsed
+  })
+  const netCarCost = computed(() => {
+    const taxSavings = totalWriteOff.value * companyTax.value
+    return carPrice.value - vatReclaim.value - taxSavings
   })
 
   // Helper: calculate fuel cost
@@ -116,14 +134,13 @@ export function useCalculator() {
   // ============ COMPANY CAR SCENARIO ============
   const companyScenario = computed(() => {
     // Calculate annual costs for company (first year with depreciation)
-    const carPriceNoVat = withoutVat(carPrice.value)
-    const annualDepreciation = carPriceNoVat / depreciationYears.value
+    // Use annualWriteOff which already accounts for businessUsagePercent
     const insuranceCost = insurance.value  // NO VAT recovery on insurance
     const maintenanceCost = withoutVat(maintenance.value)  // VAT recovered
     const fuelCostNoVat = withoutVat(fuelCost.value)  // VAT recovered
 
     // Annual deductions (year 1-4 includes depreciation)
-    const annualDeductionsWithDep = annualDepreciation + insuranceCost + maintenanceCost + fuelCostNoVat
+    const annualDeductionsWithDep = annualWriteOff.value + insuranceCost + maintenanceCost + fuelCostNoVat
     const annualDeductionsNoDep = insuranceCost + maintenanceCost + fuelCostNoVat
 
     // Calculate dividends for each year and sum
@@ -155,7 +172,7 @@ export function useCalculator() {
 
     // Total costs over ownership period (for breakdown display)
     const depreciationYearsUsed = Math.min(years.value, depreciationYears.value)
-    const totalDepreciation = annualDepreciation * depreciationYearsUsed
+    const totalDepreciation = annualWriteOff.value * depreciationYearsUsed
     const totalInsurance = insuranceCost * years.value
     const totalMaintenance = maintenanceCost * years.value
     const totalFuel = fuelCostNoVat * years.value
@@ -198,7 +215,7 @@ export function useCalculator() {
       },
       // Annual cost breakdown (for year 1 display)
       annualCostBreakdown: {
-        depreciation: annualDepreciation,
+        depreciation: annualWriteOff.value,
         insurance: insuranceCost,
         maintenance: maintenanceCost,
         fuel: fuelCostNoVat
@@ -260,6 +277,14 @@ export function useCalculator() {
     dividendTax,
     depreciationYears,
     depreciationCurve,
+    businessUsagePercent,
+    // VAT and write-off breakdown
+    vatAmount,
+    vatReclaim,
+    annualWriteOffBase,
+    annualWriteOff,
+    totalWriteOff,
+    netCarCost,
     // Scenario outputs
     privateScenario,
     companyScenario,

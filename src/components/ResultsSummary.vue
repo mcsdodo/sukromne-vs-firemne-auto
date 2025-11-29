@@ -136,6 +136,31 @@
             <span>= Ročne v čistom</span>
             <span>{{ formatCurrency(companyScenario.annualCash) }}</span>
           </div>
+
+          <div class="writeoff-breakdown">
+            <div class="row subtle">
+              <span>Ročný odpis</span>
+              <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase) }} × 50% = {{ formatCurrency(annualWriteOff) }}</span>
+              <span v-else>{{ formatCurrency(annualWriteOff) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tax-benefits">
+          <div class="row subtle">
+            <span>Vrátené DPH</span>
+            <span v-if="is50Percent">{{ formatCurrency(vatAmount) }} × 50% = {{ formatCurrency(vatReclaim) }}</span>
+            <span v-else>{{ formatCurrency(vatReclaim) }}</span>
+          </div>
+          <div class="row subtle">
+            <span>Celkový odpis</span>
+            <span v-if="is50Percent">{{ formatCurrency(annualWriteOffBase * Math.min(years, 4)) }} × 50% = {{ formatCurrency(totalWriteOff) }}</span>
+            <span v-else>{{ formatCurrency(totalWriteOff) }}</span>
+          </div>
+          <div class="row subtle highlight-subtle">
+            <span>Čistá cena auta</span>
+            <span>{{ formatCurrency(netCarCost) }}</span>
+          </div>
         </div>
 
         <div class="multi-year">
@@ -204,7 +229,14 @@ const props = defineProps({
   cheaperOption: { type: String, required: true },
   years: { type: Number, required: true },
   companyTaxRate: { type: Number, required: true },
-  dividendTaxRate: { type: Number, required: true }
+  dividendTaxRate: { type: Number, required: true },
+  businessUsagePercent: { type: Number, required: true },
+  vatAmount: { type: Number, required: true },
+  vatReclaim: { type: Number, required: true },
+  annualWriteOffBase: { type: Number, required: true },
+  annualWriteOff: { type: Number, required: true },
+  totalWriteOff: { type: Number, required: true },
+  netCarCost: { type: Number, required: true }
 })
 
 const formatCurrency = (value) => {
@@ -221,6 +253,8 @@ const yearsLabel = computed(() => {
   if (props.years >= 2 && props.years <= 4) return 'roky'
   return 'rokov'
 })
+
+const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 </script>
 
 <style scoped>
@@ -375,5 +409,28 @@ const yearsLabel = computed(() => {
 
 .cost-breakdown span {
   white-space: nowrap;
+}
+
+.writeoff-breakdown {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.tax-benefits {
+  padding: 12px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  margin: 0 -20px;
+  padding: 12px 20px;
+}
+
+.row.highlight-subtle {
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
 }
 </style>
