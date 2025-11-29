@@ -18,6 +18,14 @@
               <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
               <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
             </div>
+            <div class="cost-breakdown placeholder">
+              <span>poistenie 0 €</span>
+              <span>údržba 0 €</span>
+              <span>palivo 0 €</span>
+            </div>
+            <div class="cost-breakdown net-note placeholder">
+              <em>pozn.: placeholder</em>
+            </div>
             <div class="row subtotal">
               <span>= Zdaniteľný zisk</span>
               <span>{{ formatCurrency(privateScenario.taxableProfit) }}</span>
@@ -75,6 +83,22 @@
           <div class="row addition">
             <span>+ Predaj auta</span>
             <span>+ {{ formatCurrency(privateScenario.salePrice) }}</span>
+          </div>
+          <div class="row deduction placeholder">
+            <span>- Daň z predaja</span>
+            <span>- 0 €</span>
+          </div>
+          <div class="row subtotal placeholder">
+            <span>= Čistý príjem z predaja</span>
+            <span>0 €</span>
+          </div>
+          <div class="row deduction placeholder">
+            <span>- Daň z dividend</span>
+            <span>- 0 €</span>
+          </div>
+          <div class="row subtotal placeholder">
+            <span>= Príjem majiteľa z predaja</span>
+            <span>0 €</span>
           </div>
         </div>
 
@@ -150,6 +174,16 @@
           <div class="row">
             <span>Za {{ years }} {{ yearsLabel }}</span>
             <span>{{ formatCurrency(companyScenario.totalCashOverYears) }}</span>
+          </div>
+          <div class="row deduction placeholder">
+            <span>- Náklady na auto</span>
+            <span>- 0 €</span>
+          </div>
+          <div class="cost-breakdown placeholder">
+            <span>cena auta 0 €</span>
+            <span>poistenie 0 €</span>
+            <span>údržba 0 €</span>
+            <span>palivo 0 €</span>
           </div>
         </div>
 
@@ -249,14 +283,17 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr auto auto auto auto;
   gap: 16px;
   margin-bottom: 16px;
+  align-items: start;
 }
 
 @media (max-width: 800px) {
   .cards {
     grid-template-columns: 1fr;
+  }
+  .placeholder {
+    display: none !important;
   }
 }
 
@@ -265,9 +302,6 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px;
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 6;
 }
 
 .spacer {
@@ -291,7 +325,6 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 .annual-section {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
 }
 
 
