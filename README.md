@@ -1,132 +1,223 @@
 # Sukromne vs Firemne Auto
 
-Car cost comparison calculator for Slovak company owners comparing private vs company car ownership. Available at: https://mcsdodo.github.io/sukromne-vs-firemne-auto/
+Car cost comparison calculator for Slovak company owners comparing private vs company car ownership.
+
+**Live demo:** https://mcsdodo.github.io/sukromne-vs-firemne-auto/
 
 ## Overview
 
 This calculator helps Slovak company owners (VAT payers) determine whether it's more financially beneficial to:
+
 1. **Buy a car privately** and receive reimbursements from the company for business use
 2. **Buy a car through the company** and deduct all costs as business expenses
 
-## Business Logic
+The calculator computes the **net cash to owner** over a configurable ownership period (2-8 years), accounting for taxes, VAT recovery, depreciation, running costs, and eventual car sale.
 
-### Key Assumptions
+## Key Parameters
 
-- Company owner is a VAT payer (23% VAT rate)
-- Company tax rate: 10%
-- Dividend tax rate: 7%
-- Car depreciation: configurable (default 4 years, 2 years for electric vehicles)
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| Annual company income | 100,000 EUR | Gross revenue before any deductions |
+| Car price (with VAT) | 50,000 EUR | Purchase price including 23% VAT |
+| Business usage | 100% or 50% | Affects VAT recovery and write-off deductions |
+| Km per year | 25,000 km | Annual business mileage |
+| Ownership period | 4 years | How long you plan to keep the car |
+| Depreciation years | 4 years | Tax write-off period (2 years for EVs) |
+
+### Tax Rates (Slovak Republic)
+
+- **VAT:** 23%
+- **Corporate tax:** 10%
+- **Dividend tax:** 7%
+
+### Reimbursement Rates
+
+- **Km rate:** 0.256 EUR/km (Slovak standard)
+- **Fuel reimbursement:** Actual consumption + 10% adjustment
+
+## Calculation Logic
 
 ### Private Car Scenario
 
-When the owner buys a car privately and uses it for business:
+When you buy a car personally and use it for business:
 
-1. **Company pays reimbursements** (tax-deductible):
-   - Km rate: 0.256 EUR/km
-   - Fuel costs: actual consumption + 10% adjustment
+**Annual Cash Flow:**
+```
+1. Company pays you reimbursements:
+   - Km reimbursement = km/year × 0.256 EUR
+   - Fuel reimbursement = (km/year ÷ 100) × consumption × fuel price × 1.10
 
-2. **Company financials (annual)**:
-   ```
-   Taxable profit = Annual income - Reimbursements
-   Company tax = Taxable profit * 10%
-   After-tax profit = Taxable profit - Company tax
-   Dividend tax = After-tax profit * 7%
+2. Company taxes:
+   Taxable profit = Income - Reimbursements
+   Corporate tax = Taxable profit × 10%
+   After-tax profit = Taxable profit - Corporate tax
+   Dividend tax = After-tax profit × 7%
    Dividends = After-tax profit - Dividend tax
-   Annual cash to owner = Dividends + Reimbursements
-   ```
 
-3. **Personal costs** (paid from dividends):
-   - Car purchase (with VAT) - proportional to ownership period
-   - Insurance (NO VAT)
-   - Maintenance (with VAT)
-   - Fuel (with VAT)
+3. Your annual cash = Dividends + Reimbursements
+```
 
-4. **Net to owner**:
-   ```
-   Personal car cost = Car price * min(years, depreciation_years) / depreciation_years
-   Net = (Annual cash * years) - Personal car cost - Running costs
-   ```
+**Multi-Year Calculation:**
+```
+Total cash over N years = Annual cash × N
+
+Personal costs (paid from your pocket):
+- Car purchase: Full price with VAT
+- Insurance: Per year × N years (no VAT on insurance)
+- Maintenance: Per year × N years (with VAT)
+- Fuel: Calculated fuel cost × N years (with VAT)
+
+Sale income = Car sale price (based on depreciation curve)
+
+NET TO OWNER = Total cash - Car purchase - Running costs + Sale income
+```
+
+**Key point:** You pay VAT on everything but get tax-free reimbursements.
 
 ### Company Car Scenario
 
 When the company buys the car:
 
-1. **Company deductions** (VAT recovered except insurance):
-   - Depreciation: Car price (ex-VAT) / depreciation_years
-   - Insurance: full cost (NO VAT recovery)
-   - Maintenance: cost ex-VAT
-   - Fuel: cost ex-VAT
+**VAT and Depreciation:**
+```
+Car price (no VAT) = Car price ÷ 1.23
+VAT amount = Car price - Car price (no VAT)
+VAT reclaim = VAT amount × Business usage %
 
-2. **Company financials (per year)**:
-   ```
-   Deductions = Depreciation (if within period) + Insurance + Maintenance + Fuel
-   Taxable profit = Annual income - Deductions
-   Company tax = Taxable profit * 10%
-   After-tax profit = Taxable profit - Company tax
-   Dividend tax = After-tax profit * 7%
-   Dividends = After-tax profit - Dividend tax
-   ```
+Annual write-off = Car price (no VAT) ÷ Depreciation years × Business usage %
+Total write-off = Annual write-off × min(Ownership years, Depreciation years)
+```
 
-3. **Net to owner**:
-   ```
-   Net = Sum of dividends over all years (no personal costs)
-   ```
+**Annual Cash Flow (per year):**
+```
+Deductible costs:
+- Depreciation (if within depreciation period)
+- Insurance (no VAT recovery - exempt)
+- Maintenance (VAT recovered)
+- Fuel (VAT recovered)
 
-### Key Differences
+Taxable profit = Income - Deductible costs
+Corporate tax = Taxable profit × 10%
+After-tax profit = Taxable profit - Corporate tax
+Dividend tax = After-tax profit × 7%
+Dividends = After-tax profit - Dividend tax
+```
 
-| Aspect | Private Car | Company Car |
-|--------|-------------|-------------|
-| Car VAT | Paid, not recovered | Recovered |
-| Insurance VAT | N/A (exempt) | N/A (exempt) |
-| Running costs VAT | Paid, not recovered | Recovered |
-| Tax benefit | Reimbursements deductible | All costs deductible |
-| Depreciation | Proportional personal cost | Tax deduction |
+**Multi-Year Calculation:**
+```
+Total dividends = Sum of yearly dividends (varies based on depreciation period)
 
-### When Private Wins
+Sale calculations:
+- Sale price (based on depreciation curve)
+- Sale tax = Sale price × 10%
+- Net sale income = Sale price - Sale tax
+- After dividend tax = Net sale income × (1 - 7%)
 
-- High km/year (more reimbursements)
-- Low car price
+Non-deductible cost = (Car price - VAT reclaim) - Total write-off
+(Only relevant when business usage < 100%)
+
+NET TO OWNER = Total dividends + Sale income after taxes - Non-deductible cost
+```
+
+**Key point:** Company recovers VAT (except on insurance) and deducts all costs from taxable income.
+
+## Car Depreciation Curve
+
+The calculator uses a realistic market depreciation curve for residual car value:
+
+| Year | Residual Value |
+|------|----------------|
+| 1 | 80% |
+| 2 | 65% |
+| 3 | 55% |
+| 4 | 48% |
+| 5 | 42% |
+| 6 | 37% |
+| 7 | 33% |
+| 8 | 30% |
+
+This curve is **user-adjustable** via an interactive chart.
+
+## Business Usage: 100% vs 50%
+
+Selecting **50% business usage** simulates declaring personal use of a company car:
+
+- VAT recovery reduced to 50%
+- Tax write-off deductions reduced to 50%
+- Non-deductible portion of car cost applies
+
+This typically makes the company car option less favorable.
+
+## When Each Option Wins
+
+### Private Car Wins When:
+- High annual mileage (more reimbursements)
+- Lower car price
 - Short ownership period
+- 50% business usage declared
 
-### When Company Wins
+### Company Car Wins When:
+- Lower annual mileage
+- Expensive car (VAT recovery matters more)
+- Longer ownership period
+- Electric vehicle (2-year depreciation)
+- 100% business usage
 
-- Low km/year
-- Expensive car
-- Long ownership period
-- Electric cars (faster 2-year depreciation)
+## Features
+
+- **Real-time calculations** - All values update instantly as you adjust inputs
+- **Side-by-side comparison** - Clear breakdown of both scenarios
+- **Cumulative chart** - Visual comparison of net cash over time
+- **Depreciation chart** - Interactive curve for car residual value
+- **Advanced settings** - Configure tax rates, fuel prices, consumption
+- **Dark theme** - Easy on the eyes
+- **Responsive design** - Works on mobile and desktop
 
 ## Tech Stack
 
-- Vue 3 (Composition API with `<script setup>`)
-- Vite 5
-- Chart.js via vue-chartjs
-
-## Development
-
-```bash
-npm install
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-```
+- **Vue 3** (Composition API with `<script setup>`)
+- **Vite 5** (build tool)
+- **Chart.js** via vue-chartjs (charts)
+- **Pure CSS** (no framework, Tailwind-inspired color palette)
 
 ## Project Structure
 
 ```
 src/
-  composables/
-    useCalculator.js    # Core calculation logic
-  components/
-    IncomeInput.vue     # Annual income slider
-    KmSlider.vue        # Km/year slider
-    DepreciationInput.vue # Depreciation years slider
-    YearsInput.vue      # Ownership period slider
-    ResultsSummary.vue  # Side-by-side comparison cards
-    CostChart.vue       # Cumulative net cash chart
-    AdvancedSettings.vue # Configurable parameters
-  App.vue               # Main app layout
+├── composables/
+│   └── useCalculator.js      # Core calculation logic (reactive state + computeds)
+├── components/
+│   ├── IncomeInput.vue       # Annual income slider
+│   ├── CarPriceInput.vue     # Car price slider
+│   ├── KmSlider.vue          # Km/year slider
+│   ├── YearsInput.vue        # Ownership period slider
+│   ├── DepreciationChart.vue # Interactive depreciation curve
+│   ├── ResultsSummary.vue    # Side-by-side comparison cards
+│   ├── CostChart.vue         # Cumulative net cash chart
+│   └── AdvancedSettings.vue  # Configurable tax/cost parameters
+└── App.vue                   # Main layout + business usage toggle
 ```
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Deployment
+
+The app is deployed to GitHub Pages. Build output goes to `dist/` folder.
+
+## License
+
+MIT
