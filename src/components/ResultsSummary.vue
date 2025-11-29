@@ -97,14 +97,9 @@
               <span>- Náklady auta</span>
               <span>- {{ formatCurrency(companyScenario.carCosts) }}</span>
             </div>
-            <div class="depreciation-calc">
-              <span class="calc-label">odpisy:</span>
-              <span v-if="is50Percent" class="calc-formula">
-                ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r × 50% = {{ formatCurrency(annualWriteOff) }}
-              </span>
-              <span v-else class="calc-formula">
-                ({{ formatCurrency(carPrice) }} − DPH {{ formatCurrency(vatAmount) }}) ÷ {{ Math.min(years, 4) }}r = {{ formatCurrency(annualWriteOff) }}
-              </span>
+            <div class="cost-breakdown">
+              <span v-if="is50Percent">odpisy ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r × 50% = {{ formatCurrency(annualWriteOff) }}</span>
+              <span v-else>odpisy ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r = {{ formatCurrency(annualWriteOff) }}</span>
             </div>
             <div class="cost-breakdown">
               <span>poistenie {{ formatCurrency(companyScenario.annualCostBreakdown.insurance) }}</span>
@@ -148,7 +143,7 @@
         </div>
 
         <div class="net-car-info">
-          <span>Čistá cena auta po DPH a odpisoch: {{ formatCurrency(netCarCost) }}</span>
+          <em>čistá cena auta po DPH a odpisoch: {{ formatCurrency(netCarCost) }}</em>
         </div>
 
         <div class="multi-year">
@@ -398,28 +393,6 @@ const is50Percent = computed(() => props.businessUsagePercent === 0.5)
 
 .cost-breakdown span {
   white-space: nowrap;
-}
-
-.depreciation-calc {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 4px 0;
-  font-size: 11px;
-  color: #64748b;
-  background: #f8fafc;
-  margin: 4px -8px;
-  padding: 6px 8px;
-  border-radius: 4px;
-}
-
-.depreciation-calc .calc-label {
-  font-weight: 500;
-  color: #475569;
-}
-
-.depreciation-calc .calc-formula {
-  font-family: monospace;
 }
 
 .net-car-info {
