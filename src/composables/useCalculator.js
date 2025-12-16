@@ -7,7 +7,7 @@ export function useCalculator() {
   const years = ref(4)
 
   // Reimbursement rates
-  const kmRate = ref(0.256)
+  const kmRate = ref(0.313)
   const fuelPrice = ref(1.5)
 
   // Car costs (with VAT where applicable)

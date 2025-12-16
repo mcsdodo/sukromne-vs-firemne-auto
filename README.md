@@ -32,7 +32,7 @@ The calculator computes the **net cash to owner** over a configurable ownership 
 
 ### Reimbursement Rates
 
-- **Km rate:** 0.256 EUR/km (Slovak standard)
+- **Km rate:** 0.313 EUR/km (Slovak standard)
 - **Fuel reimbursement:** Actual consumption + 10% adjustment
 
 ## Calculation Logic
@@ -44,7 +44,7 @@ When you buy a car personally and use it for business:
 **Annual Cash Flow:**
 ```
 1. Company pays you reimbursements:
-   - Km reimbursement = km/year × 0.256 EUR
+   - Km reimbursement = km/year × 0.313 EUR
    - Fuel reimbursement = (km/year ÷ 100) × consumption × fuel price × 1.10
 
 2. Company taxes:

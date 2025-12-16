@@ -4,3 +4,4 @@ dist/
 *.local
 .playwright-mcp/
 _conversations/
+_other_sources/
