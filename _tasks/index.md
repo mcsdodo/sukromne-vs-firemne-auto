@@ -4,7 +4,7 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 21 | [Add all settings to URL hash](21-url-all-settings/01-task.md) | 🟡 In Progress |
+| 22 | [Car sale / ownership period analysis](22-car-sale-ownership-analysis/01-task.md) | 📋 Planning |
 
 ## Completed Tasks
 
@@ -19,3 +19,4 @@
 | 16-18 | 50% business usage toggle | [task](_done/16-task.md), [design](_done/17-design.md), [plan](_done/18-plan.md) |
 | 19 | Shareable URL with settings | [task](_done/19-shareable-url/01-task.md) |
 | 20 | Automatic company tax rate | [task](_done/20-auto-company-tax/01-task.md) |
+| 21 | All settings in URL hash | [task](_done/21-url-all-settings/01-task.md) |
