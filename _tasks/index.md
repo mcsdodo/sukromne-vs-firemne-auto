@@ -2,7 +2,9 @@
 
 ## Active Tasks
 
-None.
+| # | Task | Status |
+|---|------|--------|
+| 21 | [Add all settings to URL hash](21-url-all-settings/01-task.md) | 🟡 In Progress |
 
 ## Completed Tasks
 
