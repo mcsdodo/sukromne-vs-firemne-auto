@@ -27,7 +27,7 @@ The calculator computes the **net cash to owner** over a configurable ownership 
 ### Tax Rates (Slovak Republic)
 
 - **VAT:** 23%
-- **Corporate tax:** 10%
+- **Corporate tax:** 10% (income ≤ €100k) / 21% (income > €100k) — auto-selected, both configurable
 - **Dividend tax:** 7%
 
 ### Reimbursement Rates
@@ -49,7 +49,7 @@ When you buy a car personally and use it for business:
 
 2. Company taxes:
    Taxable profit = Income - Reimbursements
-   Corporate tax = Taxable profit × 10%
+   Corporate tax = Taxable profit × 10%/21% (based on income tier)
    After-tax profit = Taxable profit - Corporate tax
    Dividend tax = After-tax profit × 7%
    Dividends = After-tax profit - Dividend tax
@@ -97,7 +97,7 @@ Deductible costs:
 - Fuel (VAT recovered)
 
 Taxable profit = Income - Deductible costs
-Corporate tax = Taxable profit × 10%
+Corporate tax = Taxable profit × 10%/21% (based on income tier)
 After-tax profit = Taxable profit - Corporate tax
 Dividend tax = After-tax profit × 7%
 Dividends = After-tax profit - Dividend tax
@@ -109,8 +109,10 @@ Total dividends = Sum of yearly dividends (varies based on depreciation period)
 
 Sale calculations:
 - Sale price (based on depreciation curve)
-- Sale tax = Sale price × 10%
-- Net sale income = Sale price - Sale tax
+- Sale VAT = Sale price - (Sale price ÷ 1.23)
+- Sale price after VAT = Sale price - Sale VAT
+- Sale tax = Sale price after VAT × 10%/21%
+- Net sale income = Sale price after VAT - Sale tax
 - After dividend tax = Net sale income × (1 - 7%)
 
 Non-deductible cost = (Car price - VAT reclaim) - Total write-off
@@ -170,6 +172,8 @@ This typically makes the company car option less favorable.
 - **Cumulative chart** - Visual comparison of net cash over time
 - **Depreciation chart** - Interactive curve for car residual value
 - **Advanced settings** - Configure tax rates, fuel prices, consumption
+- **Shareable URLs** - All settings encoded in URL hash (`#income=80000&car=35000&...`), defaults omitted for clean links
+- **Share button** - One-click copy of current calculation URL to clipboard
 - **Dark theme** - Easy on the eyes
 - **Responsive design** - Works on mobile and desktop
 
@@ -185,7 +189,8 @@ This typically makes the company car option less favorable.
 ```
 src/
 ├── composables/
-│   └── useCalculator.js      # Core calculation logic (reactive state + computeds)
+│   ├── useCalculator.js      # Core calculation logic (reactive state + computeds)
+│   └── useUrlSync.js         # Bidirectional URL hash ↔ reactive refs sync
 ├── components/
 │   ├── IncomeInput.vue       # Annual income slider
 │   ├── CarPriceInput.vue     # Car price slider
