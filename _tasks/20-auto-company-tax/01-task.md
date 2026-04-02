@@ -1,24 +1,28 @@
 # Automatic Company Tax Rate Based on Income
 
-**Status:** 📋 Planning
+**Status:** ✅ Complete
 
 ## Problem
 
-The company tax rate (`companyTax`) is currently a static 10% default in advanced settings. In reality, Slovak corporate tax is tiered:
+The company tax rate (`companyTax`) was a single static 10% default in advanced settings. In reality, Slovak corporate tax is tiered:
 
 - **10%** for taxable income up to **€100,000** (inclusive)
 - **21%** for taxable income above **€100,000**
 
-Users must manually adjust this, which most won't do — leading to incorrect results for higher incomes.
+Users had to manually adjust this, which most wouldn't do — leading to incorrect results for higher incomes.
 
 ## Requirements
 
-- Compute `companyTax` automatically based on `annualIncome`
-  - `annualIncome <= 100_000` → `companyTax = 0.10`
-  - `annualIncome > 100_000` → `companyTax = 0.21`
-- Remove `companyTax` as an editable input from advanced settings
-- Show a read-only note in the advanced settings section explaining the current rate and why (e.g. "Daň z príjmu PO: 10% (príjem do 100 000 €)" or "21% (príjem nad 100 000 €)")
-- The tax rate should update reactively when income changes
+- ~~Compute `companyTax` automatically based on `annualIncome`~~ Done
+- ~~Two configurable rate inputs in advanced settings~~ Done: `companyTaxLow` (default 10%) and `companyTaxHigh` (default 21%)
+- ~~Auto-select based on income~~ Done: `companyTax = computed(() => income > 100k ? high : low)`
+- ~~Visual indicator showing which rate is active~~ Done: green "aktívna" label next to the currently applied rate
+
+## Implementation
+
+- `useCalculator.js`: `companyTaxLow` ref (0.10), `companyTaxHigh` ref (0.21), `companyTax` computed from income
+- `AdvancedSettings.vue`: Two separate inputs ("do 100k" / "nad 100k") with green "aktívna" badge on the active one
+- `App.vue`: Passes both rates as v-model, `companyTax` as read-only prop
 
 ## Notes
 

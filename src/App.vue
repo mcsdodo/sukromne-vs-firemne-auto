@@ -1,11 +1,11 @@
 <template>
   <div class="app">
-    <h1>Súkromné vs Firemné Auto</h1>
-    <p class="subtitle">Porovnanie nákladov na auto z pohľadu majiteľa firmy</p>
-
-    <div class="share-bar">
+    <div class="header">
+      <h1>Súkromné vs Firemné Auto</h1>
+      <p class="subtitle">Porovnanie nákladov na auto z pohľadu majiteľa firmy</p>
       <button class="share-btn" @click="shareUrl">
-        {{ showCopied ? 'Skopirované!' : 'Zdieľať nastavenia' }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        {{ showCopied ? 'Skopirované!' : 'Zdieľať výpočet' }}
       </button>
     </div>
 
@@ -54,6 +54,8 @@
       v-model:fuelConsumption="fuelConsumption"
       v-model:consumptionAdjustment="consumptionAdjustment"
       v-model:vatRate="vatRate"
+      v-model:companyTaxLow="companyTaxLow"
+      v-model:companyTaxHigh="companyTaxHigh"
       :companyTax="companyTax"
       v-model:dividendTax="dividendTax"
       v-model:depreciationYears="depreciationYears"
@@ -86,6 +88,8 @@ const {
   fuelConsumption,
   consumptionAdjustment,
   vatRate,
+  companyTaxLow,
+  companyTaxHigh,
   companyTax,
   dividendTax,
   depreciationYears,
@@ -131,6 +135,11 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+.header {
+  position: relative;
+  margin-bottom: 32px;
+}
+
 h1 {
   text-align: center;
   color: #f1f5f9;
@@ -140,7 +149,30 @@ h1 {
 .subtitle {
   text-align: center;
   color: #94a3b8;
-  margin-bottom: 32px;
+  margin: 0;
+}
+
+.share-btn {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.share-btn:hover {
+  background: #374151;
+  color: #f1f5f9;
 }
 
 @media (max-width: 600px) {
@@ -151,27 +183,12 @@ h1 {
   h1 {
     font-size: 24px;
   }
-}
 
-.share-bar {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.share-btn {
-  padding: 8px 20px;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  background: #1f2937;
-  color: #94a3b8;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.share-btn:hover {
-  background: #374151;
-  color: #f1f5f9;
+  .share-btn {
+    position: static;
+    display: flex;
+    margin: 8px auto 0;
+  }
 }
 
 .usage-toggle {

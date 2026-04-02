@@ -44,8 +44,12 @@
           <input type="number" step="1" :value="Math.round(vatRate * 100)" @input="emit('update:vatRate', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
-          <label>Daň z príjmu firmy</label>
-          <div class="auto-value">{{ Math.round(companyTax * 100) }}% <span class="auto-note">({{ companyTax <= 0.10 ? 'príjem do 100 000 €' : 'príjem nad 100 000 €' }})</span></div>
+          <label>Daň z príjmu firmy do 100k (%) <span v-if="companyTax === companyTaxLow" class="active-rate">aktívna</span></label>
+          <input type="number" step="1" :value="Math.round(companyTaxLow * 100)" @input="emit('update:companyTaxLow', Number($event.target.value) / 100)" />
+        </div>
+        <div class="setting">
+          <label>Daň z príjmu firmy nad 100k (%) <span v-if="companyTax === companyTaxHigh" class="active-rate">aktívna</span></label>
+          <input type="number" step="1" :value="Math.round(companyTaxHigh * 100)" @input="emit('update:companyTaxHigh', Number($event.target.value) / 100)" />
         </div>
         <div class="setting">
           <label>Daň z dividend (%)</label>
@@ -76,6 +80,8 @@ defineProps({
   fuelConsumption: Number,
   consumptionAdjustment: Number,
   vatRate: Number,
+  companyTaxLow: Number,
+  companyTaxHigh: Number,
   companyTax: Number,
   dividendTax: Number,
   depreciationYears: Number
@@ -89,6 +95,8 @@ const emit = defineEmits([
   'update:fuelConsumption',
   'update:consumptionAdjustment',
   'update:vatRate',
+  'update:companyTaxLow',
+  'update:companyTaxHigh',
   'update:dividendTax',
   'update:depreciationYears'
 ])
@@ -173,17 +181,9 @@ const emit = defineEmits([
   border-color: #3b82f6;
 }
 
-.auto-value {
-  padding: 8px 12px;
-  border: 1px solid #374151;
-  border-radius: 6px;
-  font-size: 14px;
-  background: #111827;
-  color: #f9fafb;
-}
-
-.auto-note {
-  color: #94a3b8;
-  font-size: 12px;
+.active-rate {
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 400;
 }
 </style>

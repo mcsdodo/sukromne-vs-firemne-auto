@@ -4,8 +4,8 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 19 | [Shareable URL with settings](19-shareable-url/01-task.md) | 📋 Planning |
-| 20 | [Automatic company tax rate based on income](20-auto-company-tax/01-task.md) | 📋 Planning |
+| 19 | [Shareable URL with settings](19-shareable-url/01-task.md) | ✅ Complete |
+| 20 | [Automatic company tax rate based on income](20-auto-company-tax/01-task.md) | ✅ Complete |
 
 ## Completed Tasks
 

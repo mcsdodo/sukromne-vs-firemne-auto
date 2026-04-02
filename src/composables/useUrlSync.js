@@ -38,9 +38,11 @@ export function useUrlSync(refs) {
   }
 
   // Update hash when refs change
-  const watchSources = PARAMS.map(p => refs[p.ref])
-  watch(watchSources, () => {
-    const hash = buildHash(refs)
-    history.replaceState(null, '', hash || window.location.pathname + window.location.search)
-  })
+  watch(
+    () => PARAMS.map(p => refs[p.ref].value),
+    () => {
+      const hash = buildHash(refs)
+      history.replaceState(null, '', hash || window.location.pathname + window.location.search)
+    }
+  )
 }

@@ -19,7 +19,9 @@ export function useCalculator() {
 
   // Tax rates
   const vatRate = ref(0.23)
-  const companyTax = computed(() => annualIncome.value > 100000 ? 0.21 : 0.10)
+  const companyTaxLow = ref(0.10)
+  const companyTaxHigh = ref(0.21)
+  const companyTax = computed(() => annualIncome.value > 100000 ? companyTaxHigh.value : companyTaxLow.value)
   const dividendTax = ref(0.07)
   const depreciationYears = ref(4)
 
@@ -291,6 +293,8 @@ export function useCalculator() {
     fuelConsumption,
     consumptionAdjustment,
     vatRate,
+    companyTaxLow,
+    companyTaxHigh,
     companyTax,
     dividendTax,
     depreciationYears,
