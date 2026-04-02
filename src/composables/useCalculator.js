@@ -19,7 +19,7 @@ export function useCalculator() {
 
   // Tax rates
   const vatRate = ref(0.23)
-  const companyTax = ref(0.10)
+  const companyTax = computed(() => annualIncome.value > 100000 ? 0.21 : 0.10)
   const dividendTax = ref(0.07)
   const depreciationYears = ref(4)
 

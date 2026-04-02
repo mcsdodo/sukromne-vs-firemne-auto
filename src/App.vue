@@ -3,6 +3,12 @@
     <h1>Súkromné vs Firemné Auto</h1>
     <p class="subtitle">Porovnanie nákladov na auto z pohľadu majiteľa firmy</p>
 
+    <div class="share-bar">
+      <button class="share-btn" @click="shareUrl">
+        {{ showCopied ? 'Skopirované!' : 'Zdieľať nastavenia' }}
+      </button>
+    </div>
+
     <IncomeInput v-model="annualIncome" />
     <CarPriceInput v-model="carPrice" />
 
@@ -48,7 +54,7 @@
       v-model:fuelConsumption="fuelConsumption"
       v-model:consumptionAdjustment="consumptionAdjustment"
       v-model:vatRate="vatRate"
-      v-model:companyTax="companyTax"
+      :companyTax="companyTax"
       v-model:dividendTax="dividendTax"
       v-model:depreciationYears="depreciationYears"
     />
@@ -56,7 +62,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useCalculator } from './composables/useCalculator'
+import { useUrlSync } from './composables/useUrlSync'
 import IncomeInput from './components/IncomeInput.vue'
 import CarPriceInput from './components/CarPriceInput.vue'
 import KmSlider from './components/KmSlider.vue'
@@ -95,6 +103,15 @@ const {
   cheaperOption,
   yearlyData
 } = useCalculator()
+
+useUrlSync({ annualIncome, carPrice, businessUsagePercent, kmPerYear })
+
+const showCopied = ref(false)
+function shareUrl() {
+  navigator.clipboard.writeText(window.location.href)
+  showCopied.value = true
+  setTimeout(() => showCopied.value = false, 2000)
+}
 </script>
 
 <style>
@@ -134,6 +151,27 @@ h1 {
   h1 {
     font-size: 24px;
   }
+}
+
+.share-bar {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.share-btn {
+  padding: 8px 20px;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.share-btn:hover {
+  background: #374151;
+  color: #f1f5f9;
 }
 
 .usage-toggle {
