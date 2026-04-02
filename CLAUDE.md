@@ -41,14 +41,6 @@ Pushes to `master` auto-deploy to GitHub Pages via `.github/workflows/deploy.yml
 - VAT: 23%, Corporate tax: 10%, Dividend tax: 7%
 - Km rate: 0.313 EUR/km, Fuel consumption adjustment: +10%
 
-## Task Management
+## Task Planning
 
-**IMPORTANT**: When working on tasks defined in `TASK.md` files:
-
-1. **Keep task-related files with the task**: All planning documents, implementation notes, and task-specific markdown files should be stored in the same folder as `01-TASK.md`
-2. **Separate task files from documentation**: Task planning files (like `XX-PLAN.md`, `XX-IMPLEMENTATION-STATUS.md`, etc.) are NOT documentation
-3. **Documentation follows locality principle**: Code documentation follows the locality principle and should be stored alongside the code it documents, not in the task folder
-
-## Markdown File Naming
-
-**IMPORTANT**: When creating new files in `_tasks` directory and sub-directories, use XX-[FILE_NAME].md format (e.g. 01-TASK.md) for easy sorting. Increment XX as needed (per directory) to keep files organized.
+See `_tasks/CLAUDE.md` for full task workflow conventions (folder structure, numbering, status icons, workflow, tech debt).
