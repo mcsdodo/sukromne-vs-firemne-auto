@@ -35,6 +35,7 @@
       :annualWriteOff="annualWriteOff"
       :totalWriteOff="totalWriteOff"
       :netCarCost="netCarCost"
+      :vatRate="vatRate"
     />
 
     <CostChart :yearlyData="yearlyData" />

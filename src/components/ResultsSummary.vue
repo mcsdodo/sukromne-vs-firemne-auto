@@ -193,6 +193,14 @@
             <span>+ {{ formatCurrency(companyScenario.salePrice) }}</span>
           </div>
           <div class="row deduction">
+            <span>- DPH z predaja ({{ Math.round(vatRate * 100) }}%)</span>
+            <span>- {{ formatCurrency(companyScenario.saleVat) }}</span>
+          </div>
+          <div class="row subtotal">
+            <span>= Príjem bez DPH</span>
+            <span>{{ formatCurrency(companyScenario.salePriceAfterVat) }}</span>
+          </div>
+          <div class="row deduction">
             <span>- Daň z predaja ({{ Math.round(companyTaxRate * 100) }}%)</span>
             <span>- {{ formatCurrency(companyScenario.saleTax) }}</span>
           </div>
@@ -254,7 +262,8 @@ const props = defineProps({
   annualWriteOffBase: { type: Number, required: true },
   annualWriteOff: { type: Number, required: true },
   totalWriteOff: { type: Number, required: true },
-  netCarCost: { type: Number, required: true }
+  netCarCost: { type: Number, required: true },
+  vatRate: { type: Number, required: true }
 })
 
 const formatCurrency = (value) => {

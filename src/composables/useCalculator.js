@@ -177,10 +177,12 @@ export function useCalculator() {
     const totalMaintenance = maintenanceCost * years.value
     const totalFuel = fuelCostNoVat * years.value
 
-    // Sale calculations (tax on full sale price)
+    // Sale calculations (company must remit VAT on the sale)
     const companySalePrice = salePrice.value
-    const saleTax = companySalePrice * companyTax.value
-    const netSaleIncome = companySalePrice - saleTax
+    const saleVat = companySalePrice - withoutVat(companySalePrice)
+    const salePriceAfterVat = companySalePrice - saleVat
+    const saleTax = salePriceAfterVat * companyTax.value
+    const netSaleIncome = salePriceAfterVat - saleTax
     const saleIncomeAfterDividendTax = netSaleIncome * (1 - dividendTax.value)
 
     // At less than 100% business usage:
@@ -208,6 +210,8 @@ export function useCalculator() {
       netToOwner: netToOwnerWithSale,
       // Sale data
       salePrice: companySalePrice,
+      saleVat,
+      salePriceAfterVat,
       saleTax,
       netSaleIncome,
       saleIncomeAfterDividendTax,
