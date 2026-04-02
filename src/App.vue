@@ -108,7 +108,12 @@ const {
   yearlyData
 } = useCalculator()
 
-useUrlSync({ annualIncome, carPrice, businessUsagePercent, kmPerYear })
+useUrlSync({
+  annualIncome, carPrice, businessUsagePercent, kmPerYear, years,
+  kmRate, fuelPrice, insurance, maintenance, fuelConsumption,
+  consumptionAdjustment, vatRate, companyTaxLow, companyTaxHigh,
+  dividendTax, depreciationYears
+})
 
 const showCopied = ref(false)
 function shareUrl() {

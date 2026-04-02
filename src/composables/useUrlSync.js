@@ -4,7 +4,19 @@ const PARAMS = [
   { key: 'income', ref: 'annualIncome', default: 100000 },
   { key: 'car', ref: 'carPrice', default: 50000 },
   { key: 'usage', ref: 'businessUsagePercent', default: 1.0 },
-  { key: 'km', ref: 'kmPerYear', default: 25000 }
+  { key: 'km', ref: 'kmPerYear', default: 25000 },
+  { key: 'years', ref: 'years', default: 4 },
+  { key: 'kmrate', ref: 'kmRate', default: 0.313 },
+  { key: 'fuel', ref: 'fuelPrice', default: 1.5 },
+  { key: 'ins', ref: 'insurance', default: 1500 },
+  { key: 'maint', ref: 'maintenance', default: 600 },
+  { key: 'cons', ref: 'fuelConsumption', default: 5.1 },
+  { key: 'consadj', ref: 'consumptionAdjustment', default: 0.10 },
+  { key: 'vat', ref: 'vatRate', default: 0.23 },
+  { key: 'taxlow', ref: 'companyTaxLow', default: 0.10 },
+  { key: 'taxhigh', ref: 'companyTaxHigh', default: 0.21 },
+  { key: 'divtax', ref: 'dividendTax', default: 0.07 },
+  { key: 'depyrs', ref: 'depreciationYears', default: 4 }
 ]
 
 function parseHash() {
