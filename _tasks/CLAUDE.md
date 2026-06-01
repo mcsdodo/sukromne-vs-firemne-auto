@@ -56,7 +56,7 @@ Additional files (research, POC results, reviews) use higher numbers: `04-resear
 3. Design and plan (`02-design.md`, `03-plan.md`)
 4. **Commit planning docs before coding** — preserves design rationale in git
 5. Implement
-6. On completion: move folder to `_done/`, update `index.md`
+6. On completion: move folder to `_done/`, update `index.md`, commit
 
 ## Tech Debt
 
