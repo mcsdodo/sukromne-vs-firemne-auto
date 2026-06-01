@@ -3,7 +3,6 @@ import { watch } from 'vue'
 const PARAMS = [
   { key: 'income', ref: 'annualIncome', default: 100000 },
   { key: 'car', ref: 'carPrice', default: 50000 },
-  { key: 'usage', ref: 'businessUsagePercent', default: 1.0 },
   { key: 'km', ref: 'kmPerYear', default: 25000 },
   { key: 'years', ref: 'years', default: 4 },
   { key: 'kmrate', ref: 'kmRate', default: 0.313 },
