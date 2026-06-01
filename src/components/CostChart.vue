@@ -54,9 +54,14 @@ const chartData = computed(() => ({
       backgroundColor: '#94a3b8'
     },
     {
-      label: 'Firemné auto',
+      label: 'Firemné auto (100%)',
       data: props.yearlyData.map(d => d.companyNet),
       backgroundColor: '#10b981'
+    },
+    {
+      label: 'Paušál (50/80)',
+      data: props.yearlyData.map(d => d.pausalNet),
+      backgroundColor: '#f59e0b'
     }
   ]
 }))
