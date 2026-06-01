@@ -12,14 +12,6 @@
     <IncomeInput v-model="annualIncome" />
     <CarPriceInput v-model="carPrice" />
 
-    <div class="usage-toggle">
-      <span class="toggle-label">Podnikateľské využitie:</span>
-      <div class="toggle-buttons">
-        <button :class="{ active: businessUsagePercent === 1.0 }" @click="businessUsagePercent = 1.0">100%</button>
-        <button :class="{ active: businessUsagePercent === 0.5 }" @click="businessUsagePercent = 0.5">50%</button>
-      </div>
-    </div>
-
     <KmSlider v-model="kmPerYear" />
     <YearsInput v-model="years" />
     <DepreciationChart v-model="depreciationCurve" :years="years" />
@@ -28,19 +20,13 @@
       :annualIncome="annualIncome"
       :privateScenario="privateScenario"
       :companyScenario="companyScenario"
+      :pausalScenario="pausalScenario"
       :savings="savings"
-      :cheaperOption="cheaperOption"
+      :bestOption="bestOption"
       :years="years"
       :companyTaxRate="companyTax"
       :dividendTaxRate="dividendTax"
-      :businessUsagePercent="businessUsagePercent"
       :carPrice="carPrice"
-      :vatAmount="vatAmount"
-      :vatReclaim="vatReclaim"
-      :annualWriteOffBase="annualWriteOffBase"
-      :annualWriteOff="annualWriteOff"
-      :totalWriteOff="totalWriteOff"
-      :netCarCost="netCarCost"
       :vatRate="vatRate"
     />
 
@@ -94,22 +80,17 @@ const {
   dividendTax,
   depreciationYears,
   depreciationCurve,
-  businessUsagePercent,
   vatAmount,
-  vatReclaim,
-  annualWriteOffBase,
-  annualWriteOff,
-  totalWriteOff,
-  netCarCost,
   privateScenario,
   companyScenario,
+  pausalScenario,
   savings,
-  cheaperOption,
+  bestOption,
   yearlyData
 } = useCalculator()
 
 useUrlSync({
-  annualIncome, carPrice, businessUsagePercent, kmPerYear, years,
+  annualIncome, carPrice, kmPerYear, years,
   kmRate, fuelPrice, insurance, maintenance, fuelConsumption,
   consumptionAdjustment, vatRate, companyTaxLow, companyTaxHigh,
   dividendTax, depreciationYears
@@ -134,7 +115,7 @@ body {
 }
 
 .app {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   font-family: system-ui, -apple-system, sans-serif;
@@ -194,51 +175,5 @@ h1 {
     display: flex;
     margin: 8px auto 0;
   }
-}
-
-.usage-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #1f2937;
-  padding: 16px 20px;
-  border-radius: 12px;
-  border: 1px solid #374151;
-  margin-bottom: 16px;
-}
-
-.toggle-label {
-  font-size: 14px;
-  color: #cbd5e1;
-  font-weight: 500;
-}
-
-.toggle-buttons {
-  display: flex;
-  gap: 4px;
-  background: #111827;
-  padding: 4px;
-  border-radius: 8px;
-}
-
-.toggle-buttons button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #94a3b8;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.toggle-buttons button:hover {
-  color: #f1f5f9;
-}
-
-.toggle-buttons button.active {
-  background: #3b82f6;
-  color: white;
 }
 </style>
