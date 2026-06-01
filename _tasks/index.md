@@ -5,6 +5,7 @@
 | # | Task | Status |
 |---|------|--------|
 | 22 | [Car sale / ownership period analysis](22-car-sale-ownership-analysis/01-task.md) | 📋 Planning |
+| 23 | [Third scenario: paušalizácia výdavkov](23-pausal-scenario/01-task.md) | 📋 Planning |
 
 ## Completed Tasks
 
