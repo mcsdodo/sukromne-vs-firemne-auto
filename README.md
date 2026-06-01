@@ -6,12 +6,13 @@ Car cost comparison calculator for Slovak company owners comparing private vs co
 
 ## Overview
 
-This calculator helps Slovak company owners (VAT payers) determine whether it's more financially beneficial to:
+This calculator helps Slovak company owners (VAT payers) determine which of three options is most financially beneficial:
 
-1. **Buy a car privately** and receive reimbursements from the company for business use
-2. **Buy a car through the company** and deduct all costs as business expenses
+1. **Súkromné auto (private)** — buy a car privately and receive reimbursements from the company for business use
+2. **Firemné auto 100% (company, full)** — buy through the company with full VAT recovery and full cost deduction (requires a logbook proving exclusive business use)
+3. **Paušál 50/80** — buy through the company under *paušalizácia výdavkov*: **50% VAT** deductible and **80%** income-tax deductible on all expenses, with no logbook required
 
-The calculator computes the **net cash to owner** over a configurable ownership period (2-8 years), accounting for taxes, VAT recovery, depreciation, running costs, and eventual car sale.
+The calculator computes the **net cash to owner** over a configurable ownership period (2-8 years) for all three at once, accounting for taxes, VAT recovery, depreciation, running costs, and eventual car sale.
 
 ## Key Parameters
 
@@ -19,7 +20,6 @@ The calculator computes the **net cash to owner** over a configurable ownership 
 |-----------|---------|-------------|
 | Annual company income | 100,000 EUR | Gross revenue before any deductions |
 | Car price (with VAT) | 50,000 EUR | Purchase price including 23% VAT |
-| Business usage | 100% or 50% | Affects VAT recovery and write-off deductions |
 | Km per year | 25,000 km | Annual business mileage |
 | Ownership period | 4 years | How long you plan to keep the car |
 | Depreciation years | 4 years | Tax write-off period (2 years for EVs) |
@@ -74,19 +74,27 @@ NET TO OWNER = Total cash - Car purchase - Running costs + Sale income
 
 **Key point:** You pay VAT on everything but get tax-free reimbursements.
 
-### Company Car Scenario
+### Company Car Scenario (100% and Paušál share one engine)
 
-When the company buys the car:
+Both company-based options use the same calculation, parameterised by two deductibility rates — `vatPercent` (share of input VAT recoverable) and `taxPercent` (share of costs deductible from income tax):
+
+| Scenario | vatPercent | taxPercent |
+|----------|-----------|-----------|
+| Firemné 100% | 100% | 100% |
+| Paušál 50/80 | 50% | 80% |
 
 **VAT and Depreciation:**
 ```
 Car price (no VAT) = Car price ÷ 1.23
 VAT amount = Car price - Car price (no VAT)
-VAT reclaim = VAT amount × Business usage %
+VAT reclaim = VAT amount × vatPercent
 
-Annual write-off = Car price (no VAT) ÷ Depreciation years × Business usage %
+Write-off base = (Car price - VAT reclaim) ÷ Depreciation years   (non-recovered VAT is capitalised)
+Annual write-off = Write-off base × taxPercent
 Total write-off = Annual write-off × min(Ownership years, Depreciation years)
 ```
+
+Running costs follow the same pattern: VAT is recovered at `vatPercent`, and the cost borne is deductible at `taxPercent`. At 100%/100% this reduces exactly to recovering all VAT and deducting the net amount (the original company-car math).
 
 **Annual Cash Flow (per year):**
 ```
@@ -115,13 +123,18 @@ Sale calculations:
 - Net sale income = Sale price after VAT - Sale tax
 - After dividend tax = Net sale income × (1 - 7%)
 
-Non-deductible cost = (Car price - VAT reclaim) - Total write-off
-(Only relevant when business usage < 100%)
+§54 VAT refund (Paušál only) = VAT amount × (1 - vatPercent) × max(0, 5 - Ownership years) ÷ 5
+(On sale within the 5-year adjustment window, the undeducted half of the purchase VAT is
+ reclaimed pro-rata; this is 0 for the 100% scenario.)
 
-NET TO OWNER = Total dividends + Sale income after taxes - Non-deductible cost
+Non-deductible cost = (Car price - VAT reclaim - Total write-off)
+                    + Σ_years(running cost borne × (1 - taxPercent))
+(Both terms are 0 at 100%/100%.)
+
+NET TO OWNER = Total dividends + Sale income after taxes + §54 VAT refund - Non-deductible cost
 ```
 
-**Key point:** Company recovers VAT (except on insurance) and deducts all costs from taxable income.
+**Key point:** The company recovers VAT (except on insurance) and deducts costs from taxable income; the Paušál option does so at the reduced 50%/80% rates but recovers part of the unclaimed purchase VAT on sale.
 
 ## Car Depreciation Curve
 
@@ -140,15 +153,19 @@ The calculator uses a realistic market depreciation curve for residual car value
 
 This curve is **user-adjustable** via an interactive chart.
 
-## Business Usage: 100% vs 50%
+## Paušál Scenario (paušalizácia výdavkov, 50/80)
 
-Selecting **50% business usage** simulates declaring personal use of a company car:
+The Paušál column models a company car used **also for private purposes without a logbook**. Two
+distinct statutory flat rates apply:
 
-- VAT recovery reduced to 50%
-- Tax write-off deductions reduced to 50%
-- Non-deductible portion of car cost applies
+- **VAT: 50% deductible** on the purchase and all running costs — §49 ods. 5 / §85n zákona o DPH
+  (new from 1.1.2026 under an EU derogation, valid until 30.6.2028).
+- **Income tax: 80% deductible** on depreciation and running costs — §19 ods. 2 písm. t) + l)
+  zákona 595/2003 Z.z.
 
-This typically makes the company car option less favorable.
+Choosing the full **Firemné 100%** column instead requires keeping detailed electronic records
+proving exclusive business use. On sale within 5 years, the Paušál option additionally reclaims the
+undeducted half of the purchase VAT pro-rata (§54 oprava odpočítanej dane).
 
 ## When Each Option Wins
 
@@ -156,20 +173,23 @@ This typically makes the company car option less favorable.
 - High annual mileage (more reimbursements)
 - Lower car price
 - Short ownership period
-- 50% business usage declared
 
-### Company Car Wins When:
+### Firemné 100% Wins When:
 - Lower annual mileage
 - Expensive car (VAT recovery matters more)
 - Longer ownership period
 - Electric vehicle (2-year depreciation)
-- 100% business usage
+- A logbook proving exclusive business use is maintained
+
+### Paušál 50/80 Wins When:
+- A logbook is impractical but the car is still mostly business-used
+- It sits between private and full-company: less VAT/deduction up front than 100%, but no logbook burden and a partial VAT clawback on sale
 
 ## Features
 
 - **Real-time calculations** - All values update instantly as you adjust inputs
-- **Side-by-side comparison** - Clear breakdown of both scenarios
-- **Cumulative chart** - Visual comparison of net cash over time
+- **Three-way comparison** - Side-by-side breakdown of private, company 100%, and paušál 50/80
+- **Cumulative chart** - Visual comparison of net cash over time across all three
 - **Depreciation chart** - Interactive curve for car residual value
 - **Advanced settings** - Configure tax rates, fuel prices, consumption
 - **Shareable URLs** - All settings encoded in URL hash (`#income=80000&car=35000&...`), defaults omitted for clean links
@@ -189,7 +209,7 @@ This typically makes the company car option less favorable.
 ```
 src/
 ├── composables/
-│   ├── useCalculator.js      # Core calculation logic (reactive state + computeds)
+│   ├── useCalculator.js      # Core calculation logic; company-scenario factory drives both 100% and paušál
 │   └── useUrlSync.js         # Bidirectional URL hash ↔ reactive refs sync
 ├── components/
 │   ├── IncomeInput.vue       # Annual income slider
@@ -197,11 +217,14 @@ src/
 │   ├── KmSlider.vue          # Km/year slider
 │   ├── YearsInput.vue        # Ownership period slider
 │   ├── DepreciationChart.vue # Interactive depreciation curve
-│   ├── ResultsSummary.vue    # Side-by-side comparison cards
-│   ├── CostChart.vue         # Cumulative net cash chart
+│   ├── ResultsSummary.vue    # Three-way comparison (private card + two company-style cards)
+│   ├── CompanyStyleCard.vue  # Reusable card for a company-based scenario (100% or paušál)
+│   ├── CostChart.vue         # Cumulative net cash chart (3 series)
 │   └── AdvancedSettings.vue  # Configurable tax/cost parameters
-└── App.vue                   # Main layout + business usage toggle
+└── App.vue                   # Main layout
 ```
+
+Calculation logic is covered by unit tests (`src/composables/useCalculator.test.js`, run with `npm test`).
 
 ## Development
 
@@ -217,6 +240,9 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Run calculation unit tests
+npm test
 ```
 
 ## Deployment
