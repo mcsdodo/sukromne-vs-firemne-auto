@@ -209,6 +209,7 @@ export function useCalculator() {
         totalWriteOff,
         netCarCost,
         nonDeductibleCost,
+        nonDeductibleRunning,
         vatPercent,
         taxPercent,
         salePrice: companySalePrice,
@@ -261,19 +262,22 @@ export function useCalculator() {
       // Add sale income in final year
       if (y === years.value) privateCumulative += privateScenario.value.saleIncome
 
-      // Company: accumulate dividends
-      const companyYear = companyScenario.value.yearlyBreakdown[y - 1]
-      companyCumulative += companyYear.dividends
-      // Subtract non-deductible car+running cost in year 1
-      if (y === 1) companyCumulative -= companyScenario.value.nonDeductibleCost
+      // Company: accumulate dividends. Spread the non-deductible running portion per
+      // year and keep only the one-off purchase shortfall in year 1 (running portion is
+      // 0 for the 100% case, so this matches the original company curve exactly).
+      const companyScn = companyScenario.value
+      companyCumulative += companyScn.yearlyBreakdown[y - 1].dividends
+      companyCumulative -= companyScn.nonDeductibleRunning / years.value
+      if (y === 1) companyCumulative -= (companyScn.nonDeductibleCost - companyScn.nonDeductibleRunning)
       // Add sale income (+ §54 refund, 0 for company) in final year
-      if (y === years.value) companyCumulative += companyScenario.value.saleIncomeAfterDividendTax + companyScenario.value.saleVatRefund
+      if (y === years.value) companyCumulative += companyScn.saleIncomeAfterDividendTax + companyScn.saleVatRefund
 
       // Pausal: mirror company logic
-      const pausalYear = pausalScenario.value.yearlyBreakdown[y - 1]
-      pausalCumulative += pausalYear.dividends
-      if (y === 1) pausalCumulative -= pausalScenario.value.nonDeductibleCost
-      if (y === years.value) pausalCumulative += pausalScenario.value.saleIncomeAfterDividendTax + pausalScenario.value.saleVatRefund
+      const pausalScn = pausalScenario.value
+      pausalCumulative += pausalScn.yearlyBreakdown[y - 1].dividends
+      pausalCumulative -= pausalScn.nonDeductibleRunning / years.value
+      if (y === 1) pausalCumulative -= (pausalScn.nonDeductibleCost - pausalScn.nonDeductibleRunning)
+      if (y === years.value) pausalCumulative += pausalScn.saleIncomeAfterDividendTax + pausalScn.saleVatRefund
 
       data.push({
         year: y,

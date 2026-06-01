@@ -212,10 +212,6 @@ const bestLabel = computed(() => {
   padding: 20px;
 }
 
-.spacer {
-  flex: 1;
-}
-
 .card.winner {
   background: #1f2937;
   border: 2px solid #10b981;
@@ -316,17 +312,6 @@ const bestLabel = computed(() => {
 
 .verdict strong {
   color: #4ade80;
-}
-
-.note {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 400;
-}
-
-.row.subtle {
-  color: #94a3b8;
-  font-size: 13px;
 }
 
 .cost-breakdown {

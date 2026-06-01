@@ -59,4 +59,22 @@ describe('3-way comparison', () => {
     const c = setup()
     expect(['private', 'company', 'pausal']).toContain(c.bestOption.value)
   })
+
+  it('savings equals the gap between the winner and the runner-up', () => {
+    const c = setup()
+    const nets = Object.values(c.scenarioNets.value).sort((a, b) => b - a)
+    expect(c.savings.value).toBeCloseTo(nets[0] - nets[1], 6)
+  })
+})
+
+describe('yearlyData chart accumulation', () => {
+  // Guards the chart distribution: the final cumulative point of each series must
+  // equal that scenario's netToOwner (rounded), regardless of how costs are spread.
+  it('final-year cumulative matches each scenario netToOwner', () => {
+    const c = setup()
+    const last = c.yearlyData.value[c.yearlyData.value.length - 1]
+    expect(last.privateNet).toBe(Math.round(c.privateScenario.value.netToOwner))
+    expect(last.companyNet).toBe(Math.round(c.companyScenario.value.netToOwner))
+    expect(last.pausalNet).toBe(Math.round(c.pausalScenario.value.netToOwner))
+  })
 })

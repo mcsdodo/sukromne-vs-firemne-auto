@@ -80,7 +80,6 @@ const {
   dividendTax,
   depreciationYears,
   depreciationCurve,
-  vatAmount,
   privateScenario,
   companyScenario,
   pausalScenario,
