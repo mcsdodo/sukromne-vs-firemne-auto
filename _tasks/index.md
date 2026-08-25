@@ -5,6 +5,7 @@
 | # | Task | Status |
 |---|------|--------|
 | 22 | [Car sale / ownership period analysis](22-car-sale-ownership-analysis/01-task.md) | 📋 Planning |
+| 24 | [Nepeňažný príjem (1%) — Paušál 50/100+1% scenario](24-nepenazny-prijem-pausal/01-task.md) | 🟡 In Progress |
 
 ## Completed Tasks
 
