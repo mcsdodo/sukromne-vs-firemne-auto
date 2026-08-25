@@ -6,13 +6,14 @@ Car cost comparison calculator for Slovak company owners comparing private vs co
 
 ## Overview
 
-This calculator helps Slovak company owners (VAT payers) determine which of three options is most financially beneficial:
+This calculator helps Slovak company owners (VAT payers) determine which of four options is most financially beneficial:
 
 1. **Súkromné auto (private)** — buy a car privately and receive reimbursements from the company for business use
 2. **Firemné auto 100% (company, full)** — buy through the company with full VAT recovery and full cost deduction (requires a logbook proving exclusive business use)
 3. **Paušál 50/80** — buy through the company under *paušalizácia výdavkov*: **50% VAT** deductible and **80%** income-tax deductible on all expenses, with no logbook required
+4. **Paušál 50/100 + 1%** — the same 50% VAT, but the owner is personally taxed on private use (**nepeňažný príjem**, 1% rule) in exchange for **100%** income-tax deductibility instead of the 80% cap
 
-The calculator computes the **net cash to owner** over a configurable ownership period (2-8 years) for all three at once, accounting for taxes, VAT recovery, depreciation, running costs, and eventual car sale.
+The calculator computes the **net cash to owner** over a configurable ownership period (2-8 years) for all four at once, accounting for taxes, VAT recovery, depreciation, running costs, and eventual car sale.
 
 ## Key Parameters
 
@@ -23,6 +24,7 @@ The calculator computes the **net cash to owner** over a configurable ownership 
 | Km per year | 25,000 km | Annual business mileage |
 | Ownership period | 4 years | How long you plan to keep the car |
 | Depreciation years | 4 years | Tax write-off period (2 years for EVs) |
+| Personal income tax (nepeňažný príjem) | 19% | Owner's personal tax rate on the paušál 50/100+1% benefit |
 
 ### Tax Rates (Slovak Republic)
 
@@ -74,14 +76,18 @@ NET TO OWNER = Total cash - Car purchase - Running costs + Sale income
 
 **Key point:** You pay VAT on everything but get tax-free reimbursements.
 
-### Company Car Scenario (100% and Paušál share one engine)
+### Company Car Scenario (all three company-based options share one engine)
 
-Both company-based options use the same calculation, parameterised by two deductibility rates — `vatPercent` (share of input VAT recoverable) and `taxPercent` (share of costs deductible from income tax):
+All three company-based options use the same calculation, parameterised by two deductibility rates — `vatPercent` (share of input VAT recoverable) and `taxPercent` (share of costs deductible from income tax):
 
 | Scenario | vatPercent | taxPercent |
 |----------|-----------|-----------|
 | Firemné 100% | 100% | 100% |
 | Paušál 50/80 | 50% | 80% |
+| Paušál 50/100 + 1% | 50% | 100% |
+
+The 50/100+1% scenario additionally subtracts the owner's personal tax on the nepeňažný
+príjem (1% rule) from dividends — see [Nepeňažný Príjem (1%) Scenario](#nepeňažný-príjem-1-scenario-paušál-50100--1) below.
 
 **VAT and Depreciation:**
 ```
@@ -167,6 +173,38 @@ Choosing the full **Firemné 100%** column instead requires keeping detailed ele
 proving exclusive business use. On sale within 5 years, the Paušál option additionally reclaims the
 undeducted half of the purchase VAT pro-rata (§54 oprava odpočítanej dane).
 
+## Nepeňažný Príjem (1%) Scenario (Paušál 50/100 + 1%)
+
+Slovak income-tax law taxes private use of a company car separately from the VAT/deduction
+mechanics above: **§5 ods. 3 písm. a) zákona č. 595/2003 Z.z.** treats it as a non-cash
+benefit (**nepeňažný príjem**) to whoever drives it privately — **1% of the car's full
+VAT-inclusive price per started calendar month**, with the base shrinking **12.5% every 1
+January for 8 years**, then dropping to zero.
+
+The key finding (confirmed by financnasprava's own FAQ on §19 ods. 2 písm. t)): **taxing this
+benefit and the 80% flat-rate deduction cap are mutually exclusive, not additive.** If the
+owner is personally taxed on the benefit, the company may deduct **100%** of running costs and
+depreciation instead of the 80% cap used by the Paušál 50/80 column. This app models that
+choice as a 4th scenario rather than folding it into the existing Paušál column.
+
+**Scope: zero-salary owner only** (dividends only — the persona this app has always modeled).
+In that case the cost is personal income tax only, self-assessed via the owner's annual tax
+return at `personalIncomeTaxRate` (default 19%, the lowest 2026 Slovak PIT bracket) — **no
+odvody**, because a konateľ with no right to regular income isn't a "zamestnanec" for sociálne
+poistenie purposes. If the owner *also* draws a regular salary elsewhere, both employee-side
+(~14.4%) and employer-side (~36.2%, flowing through as reduced dividends) odvody would apply
+instead — not modeled here, since the app has no salary/payroll concept for its owner persona.
+
+**Verified result, at this app's own defaults (50k car, 4 years):** this alternative nets
+**~1,712 EUR less** than the Paušál 50/80 column, not more. The extra 20% deductibility it
+unlocks is worth only ~1,993 EUR (roughly corpTax + dividendTax ≈ 16.3% of the marginal
+deduction — this app's dividend accounting model doesn't pass the full deduction through to
+cash), while the personal tax on the benefit costs ~3,705 EUR at 19%. The trade only breaks
+even below a ~10.2% personal tax rate, which is below Slovakia's lowest PIT bracket — so it's
+a net loss in every realistic case, not just at these specific numbers. See
+[_tasks/_done/24-nepenazny-prijem-pausal/02-research.md](_tasks/_done/24-nepenazny-prijem-pausal/02-research.md)
+for full sourcing and the worked example.
+
 ## When Each Option Wins
 
 ### Private Car Wins When:
@@ -185,11 +223,20 @@ undeducted half of the purchase VAT pro-rata (§54 oprava odpočítanej dane).
 - A logbook is impractical but the car is still mostly business-used
 - It sits between private and full-company: less VAT/deduction up front than 100%, but no logbook burden and a partial VAT clawback on sale
 
+### Paušál 50/100 + 1% Rarely Wins:
+- The extra 20% deductibility it unlocks (over the 80% cap) is only worth its corporate-tax +
+  dividend-tax shield (~16.3% of the marginal amount), while the personal tax on the 1%
+  benefit hits a much larger base (12%/year of the full car price)
+- Breaks even only below a ~10.2% personal income tax rate — below Slovakia's lowest PIT
+  bracket (19%), so it loses to the 80% column in every realistic case for this app's
+  zero-salary-owner model
+- Shown anyway, for completeness and because the losing margin itself is useful information
+
 ## Features
 
 - **Real-time calculations** - All values update instantly as you adjust inputs
-- **Three-way comparison** - Side-by-side breakdown of private, company 100%, and paušál 50/80
-- **Cumulative chart** - Visual comparison of net cash over time across all three
+- **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%
+- **Cumulative chart** - Visual comparison of net cash over time across all four
 - **Depreciation chart** - Interactive curve for car residual value
 - **Advanced settings** - Configure tax rates, fuel prices, consumption
 - **Shareable URLs** - All settings encoded in URL hash (`#income=80000&car=35000&...`), defaults omitted for clean links
@@ -209,7 +256,7 @@ undeducted half of the purchase VAT pro-rata (§54 oprava odpočítanej dane).
 ```
 src/
 ├── composables/
-│   ├── useCalculator.js      # Core calculation logic; company-scenario factory drives both 100% and paušál
+│   ├── useCalculator.js      # Core calculation logic; company-scenario factory drives 100%, paušál, and paušál+1%
 │   └── useUrlSync.js         # Bidirectional URL hash ↔ reactive refs sync
 ├── components/
 │   ├── IncomeInput.vue       # Annual income slider
@@ -217,9 +264,9 @@ src/
 │   ├── KmSlider.vue          # Km/year slider
 │   ├── YearsInput.vue        # Ownership period slider
 │   ├── DepreciationChart.vue # Interactive depreciation curve
-│   ├── ResultsSummary.vue    # Three-way comparison (private card + two company-style cards)
-│   ├── CompanyStyleCard.vue  # Reusable card for a company-based scenario (100% or paušál)
-│   ├── CostChart.vue         # Cumulative net cash chart (3 series)
+│   ├── ResultsSummary.vue    # Four-way comparison (private card + three company-style cards)
+│   ├── CompanyStyleCard.vue  # Reusable card for a company-based scenario (100%, paušál, or paušál+1%)
+│   ├── CostChart.vue         # Cumulative net cash chart (4 series)
 │   └── AdvancedSettings.vue  # Configurable tax/cost parameters
 └── App.vue                   # Main layout
 ```

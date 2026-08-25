@@ -46,6 +46,46 @@ describe('pausalScenario', () => {
   })
 })
 
+describe('pausalTaxedScenario', () => {
+  it('is exposed and is an object with netToOwner', () => {
+    const c = setup()
+    expect(typeof c.pausalTaxedScenario.value.netToOwner).toBe('number')
+  })
+
+  it('gets 100% tax deductibility (bought back by taxing the 1% benefit) but still 50% VAT', () => {
+    const c = setup()
+    const vatAmount = 50000 - 50000 / 1.23
+    expect(c.pausalTaxedScenario.value.taxPercent).toBe(1.0)
+    expect(c.pausalTaxedScenario.value.vatReclaim).toBeCloseTo(vatAmount * 0.5, 2)
+    expect(c.pausalTaxedScenario.value.vatReclaim).toBeCloseTo(c.pausalScenario.value.vatReclaim, 2)
+  })
+
+  it('year-1 nepeňažný príjem is 12% (1% × 12 months) of the full carPrice', () => {
+    const c = setup()
+    expect(c.pausalTaxedScenario.value.yearlyBreakdown[0].nepenaznyPrijem).toBeCloseTo(50000 * 0.12, 2)
+  })
+
+  it('year-2 base is reduced 12.5%', () => {
+    const c = setup()
+    expect(c.pausalTaxedScenario.value.yearlyBreakdown[1].nepenaznyPrijem).toBeCloseTo(50000 * 0.875 * 0.12, 2)
+  })
+
+  it('year-1 owner personal tax is the benefit × personalIncomeTaxRate (default 19%)', () => {
+    const c = setup()
+    const b = c.pausalTaxedScenario.value
+    expect(b.ownerPersonalTaxYear1).toBeCloseTo(b.yearlyBreakdown[0].nepenaznyPrijem * 0.19, 2)
+  })
+
+  it('nets less than the 80%-capped pausal scenario at app defaults (the personal tax outweighs the extra 20% deduction)', () => {
+    // The extra 20% deductibility is worth only ~16.3% of its value (corpTax + dividendTax
+    // shield), a small gain on a small base (running costs + write-off) — while the personal
+    // tax hits a much larger base (12%/year of the full car price). At any realistic personal
+    // income tax rate (SK's minimum bracket is 19%), the trade is a net loss. See 02-research.md.
+    const c = setup()
+    expect(c.pausalTaxedScenario.value.netToOwner).toBeLessThan(c.pausalScenario.value.netToOwner)
+  })
+})
+
 describe('company 100% regression — unchanged by the refactor', () => {
   it('company netToOwner is unchanged and has zero §54 refund', () => {
     const c = setup()
@@ -55,9 +95,9 @@ describe('company 100% regression — unchanged by the refactor', () => {
 })
 
 describe('3-way comparison', () => {
-  it('bestOption is one of the three scenarios', () => {
+  it('bestOption is one of the four scenarios', () => {
     const c = setup()
-    expect(['private', 'company', 'pausal']).toContain(c.bestOption.value)
+    expect(['private', 'company', 'pausal', 'pausalTaxed']).toContain(c.bestOption.value)
   })
 
   it('savings equals the gap between the winner and the runner-up', () => {
@@ -76,5 +116,6 @@ describe('yearlyData chart accumulation', () => {
     expect(last.privateNet).toBe(Math.round(c.privateScenario.value.netToOwner))
     expect(last.companyNet).toBe(Math.round(c.companyScenario.value.netToOwner))
     expect(last.pausalNet).toBe(Math.round(c.pausalScenario.value.netToOwner))
+    expect(last.pausalTaxedNet).toBe(Math.round(c.pausalTaxedScenario.value.netToOwner))
   })
 })

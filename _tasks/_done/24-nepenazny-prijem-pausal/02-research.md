@@ -6,7 +6,7 @@
 
 Slovak income-tax law taxes private use of a company car as a non-cash employment-type
 benefit ("nepeňažný príjem zo závislej činnosti"), independent of and unaffected by the 2026
-VAT changes researched in [_done/23-pausal-scenario/02-research.md](../_done/23-pausal-scenario/02-research.md).
+VAT changes researched in [_done/23-pausal-scenario/02-research.md](../23-pausal-scenario/02-research.md).
 It is **1% of the car's full VAT-inclusive entry price per started calendar month**, for up to
 **8 years**, with the base **shrinking 12.5%/year**. It applies to employees **and** to a
 company executive (konateľ) who uses the car privately, even one who draws no salary at all —
@@ -116,10 +116,18 @@ Vstupná cena = 50 000 EUR (full price incl. VAT — unaffected by the paušál 
 | 4 | 31 250 (x 0.625) | 3 750.00 | 712.50 |
 | **Total (4y)** | | **19 500.00** | **3 705.00** |
 
-So on the app's own default numbers, the paušál column's `netToOwner` is currently
-**overstated by roughly 3 700 EUR over 4 years** (income tax only; +2 808 EUR more, ~6 500
-EUR total, if odvody at the 14.4% employee rate are also added — see open question above on
-whether that's actually owed in the app's default zero-salary persona).
+**This is a personal cost, not a missing cost on the existing paušál column** — see
+[03-design.md](./03-design.md): it only applies to the *alternative* regime (100% company
+deduction, owner self-taxed), which the existing 80%-capped paušál column deliberately avoids
+by design. On the app's own default numbers (verified against the actual implementation, see
+[useCalculator.test.js](../../../src/composables/useCalculator.test.js)), that alternative regime
+nets **1,712 EUR less** than the existing 80% paušál over 4 years: the extra 20%
+deductibility it unlocks is worth only ~1,993 EUR (the corporate-tax + dividend-tax "shield"
+on that marginal deduction, roughly 16.3% of its value — this app's dividend-then-catch-up
+accounting model does not pass the full deduction through to dividends), which the 3,705 EUR
+personal-tax cost outweighs. This holds at any personal income tax rate above roughly 10.2%
+(the breakeven point) — since Slovakia's lowest PIT bracket is 19%, the trade is a net loss
+in every realistic case, not just at these particular defaults.
 
 ## Sources
 

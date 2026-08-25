@@ -4,7 +4,7 @@
 
 ## Task 1: Core calculation in useCalculator.js
 
-**File:** [useCalculator.js](../../src/composables/useCalculator.js)
+**File:** [useCalculator.js](../../../src/composables/useCalculator.js)
 
 1. Add new input: `const personalIncomeTaxRate = ref(0.19)`
 2. Add constant near `VAT_ADJUSTMENT_YEARS`: `const NEPENAZNY_PRIJEM_YEARS = 8`
@@ -33,7 +33,7 @@
 
 ## Task 2: URL sync + Advanced Settings input
 
-**Files:** [useUrlSync.js](../../src/composables/useUrlSync.js), [AdvancedSettings.vue](../../src/components/AdvancedSettings.vue), [App.vue](../../src/App.vue)
+**Files:** [useUrlSync.js](../../../src/composables/useUrlSync.js), [AdvancedSettings.vue](../../../src/components/AdvancedSettings.vue), [App.vue](../../../src/App.vue)
 
 1. `useUrlSync.js`: add `{ key: 'pit', ref: 'personalIncomeTaxRate', default: 0.19 }` to `PARAMS`.
 2. `App.vue`: destructure `personalIncomeTaxRate` and `pausalTaxedScenario` from `useCalculator()`;
@@ -47,7 +47,7 @@
 
 ## Task 3: 4th card in ResultsSummary.vue
 
-**File:** [ResultsSummary.vue](../../src/components/ResultsSummary.vue)
+**File:** [ResultsSummary.vue](../../../src/components/ResultsSummary.vue)
 
 1. Add prop `pausalTaxedScenario: { type: Object, required: true }`.
 2. Add a 4th `<CompanyStyleCard>` after the paušál one:
@@ -61,7 +61,7 @@
 
 ## Task 4: Extend CompanyStyleCard.vue for the new fields
 
-**File:** [CompanyStyleCard.vue](../../src/components/CompanyStyleCard.vue)
+**File:** [CompanyStyleCard.vue](../../../src/components/CompanyStyleCard.vue)
 
 1. Change the `= Dividendy` row's value binding from `scenario.annualCash` to
    `scenario.dividends` (no-op for the two existing scenarios where the fields are identical;
@@ -82,7 +82,7 @@
 
 ## Task 5: Chart series in CostChart.vue
 
-**File:** [CostChart.vue](../../src/components/CostChart.vue)
+**File:** [CostChart.vue](../../../src/components/CostChart.vue)
 
 1. Add a 4th dataset to `chartData`:
    ```js
@@ -95,7 +95,7 @@
 
 ## Task 6: Tests
 
-**File:** [useCalculator.test.js](../../src/composables/useCalculator.test.js)
+**File:** [useCalculator.test.js](../../../src/composables/useCalculator.test.js)
 
 Add a `describe('pausalTaxedScenario', ...)` block mirroring the existing `pausalScenario`
 block:
@@ -106,9 +106,9 @@ block:
    year-2 = `carPrice × 0.875 × 0.12`.
 4. Year-1 owner personal tax = year-1 nepeňažný príjem × `personalIncomeTaxRate` (default 0.19).
 5. `netToOwner` equals `pausalTaxedBase`-equivalent minus `totalOwnerPersonalTax` — practically,
-   assert `pausalTaxedScenario.value.netToOwner` is *greater* than `pausalScenario.value.netToOwner`
-   for the default 50k/4-year setup (the concrete finding from research — confirms the new
-   scenario is genuinely more advantageous at these defaults, not a regression).
+   assert `pausalTaxedScenario.value.netToOwner` is *less* than `pausalScenario.value.netToOwner`
+   for the default 50k/4-year setup (verified finding from research: the extra 20% deduction
+   is worth ~1,993 EUR but the personal tax on the benefit costs ~3,705 EUR — a net loss).
 6. Extend the `yearlyData chart accumulation` test to also check
    `last.pausalTaxedNet === Math.round(c.pausalTaxedScenario.value.netToOwner)`.
 7. Extend the `bestOption` test's allowed set to include `'pausalTaxed'`.
@@ -123,7 +123,10 @@ block:
 3. Update "## Features" (three-way → four-way comparison, 3 → 4 chart series).
 4. Update "## Project Structure" description of `useCalculator.js` / `ResultsSummary.vue` /
    `CostChart.vue` to mention 4 scenarios / 4 series.
-5. Add a "### Paušál 50/100+1% Wins When" subsection under "## When Each Option Wins".
+5. Add a "### Paušál 50/100+1% Rarely Wins" subsection under "## When Each Option Wins",
+   explaining why (the ~16.3% tax-shield value of the extra 20% deduction is smaller than the
+   personal-tax cost at any realistic PIT rate) rather than listing win conditions that don't
+   really exist at typical parameter values.
 
 ## Verification
 
@@ -140,4 +143,4 @@ block:
 1. Commit planning docs (this + 01/02/03) before touching code — already done once these three
    files exist; commit again if anything changed during implementation review.
 2. After implementation + verification: move `_tasks/24-nepenazny-prijem-pausal/` to
-   `_tasks/_done/`, update [index.md](../index.md), commit.
+   `_tasks/_done/`, update [index.md](../../index.md), commit.

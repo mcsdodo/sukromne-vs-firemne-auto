@@ -24,8 +24,10 @@ export function useCalculator() {
   const companyTax = computed(() => annualIncome.value > 100000 ? companyTaxHigh.value : companyTaxLow.value)
   const dividendTax = ref(0.07)
   const depreciationYears = ref(4)
+  const personalIncomeTaxRate = ref(0.19)  // owner's personal income tax on nepeňažný príjem
 
   const VAT_ADJUSTMENT_YEARS = 5  // statutory §54 VAT-adjustment window
+  const NEPENAZNY_PRIJEM_YEARS = 8  // §5 ods. 3 písm. a): benefit runs 8 years, base -12.5%/yr
 
   // Helper: remove VAT
   const withoutVat = (amount) => amount / (1 + vatRate.value)
@@ -229,11 +231,48 @@ export function useCalculator() {
   const companyScenario = makeCompanyScenario(1.0, 1.0)
   const pausalScenario = makeCompanyScenario(0.5, 0.8)
 
+  // ============ PAUŠÁL 50/100 + 1% (owner personally taxed on private use) ============
+  // §5 ods. 3 písm. a) and §19 ods. 2 písm. t) are mutually exclusive: taxing the owner's
+  // 1% non-cash benefit buys back full (100%) income-tax deductibility instead of the 80%
+  // cap. VAT stays at the paušál 50% rate either way (unrelated statutory mechanism).
+  const nepenaznyPrijemBase = (y) => y > NEPENAZNY_PRIJEM_YEARS ? 0 : carPrice.value * (1 - 0.125 * (y - 1))
+  const nepenaznyPrijemAnnual = (y) => nepenaznyPrijemBase(y) * 0.12  // 1% × 12 months
+
+  const pausalTaxedBase = makeCompanyScenario(0.5, 1.0)
+  const pausalTaxedScenario = computed(() => {
+    const b = pausalTaxedBase.value
+
+    let totalOwnerPersonalTax = 0
+    let totalNepenaznyPrijem = 0
+    const yearlyBreakdown = b.yearlyBreakdown.map((entry, idx) => {
+      const y = idx + 1
+      const nepenaznyPrijem = nepenaznyPrijemAnnual(y)
+      const ownerPersonalTax = nepenaznyPrijem * personalIncomeTaxRate.value
+      totalOwnerPersonalTax += ownerPersonalTax
+      totalNepenaznyPrijem += nepenaznyPrijem
+      return { ...entry, nepenaznyPrijem, ownerPersonalTax, dividends: entry.dividends - ownerPersonalTax }
+    })
+
+    return {
+      ...b,
+      yearlyBreakdown,
+      dividends: b.yearlyBreakdown[0].dividends,       // gross company payout (unchanged)
+      annualCash: yearlyBreakdown[0].dividends,          // net, after owner's personal tax
+      ownerPersonalTaxYear1: yearlyBreakdown[0].ownerPersonalTax,
+      totalCashOverYears: yearlyBreakdown.reduce((sum, e) => sum + e.dividends, 0),
+      netToOwner: b.netToOwner - totalOwnerPersonalTax,
+      totalOwnerPersonalTax,
+      totalNepenaznyPrijem,
+      personalIncomeTaxRate: personalIncomeTaxRate.value
+    }
+  })
+
   // Summary comparisons
   const scenarioNets = computed(() => ({
     private: privateScenario.value.netToOwner,
     company: companyScenario.value.netToOwner,
-    pausal: pausalScenario.value.netToOwner
+    pausal: pausalScenario.value.netToOwner,
+    pausalTaxed: pausalTaxedScenario.value.netToOwner
   }))
   const bestOption = computed(() => {
     const n = scenarioNets.value
@@ -250,6 +289,7 @@ export function useCalculator() {
     let privateCumulative = 0
     let companyCumulative = 0
     let pausalCumulative = 0
+    let pausalTaxedCumulative = 0
 
     const privateAnnual = privateScenario.value.annualCash
     const privateCarCost = privateScenario.value.personalCarPurchase
@@ -279,11 +319,20 @@ export function useCalculator() {
       if (y === 1) pausalCumulative -= (pausalScn.nonDeductibleCost - pausalScn.nonDeductibleRunning)
       if (y === years.value) pausalCumulative += pausalScn.saleIncomeAfterDividendTax + pausalScn.saleVatRefund
 
+      // Paušál + 1%: mirrors pausal logic; yearlyBreakdown dividends are already net of
+      // the owner's personal tax on the nepeňažný príjem.
+      const pausalTaxedScn = pausalTaxedScenario.value
+      pausalTaxedCumulative += pausalTaxedScn.yearlyBreakdown[y - 1].dividends
+      pausalTaxedCumulative -= pausalTaxedScn.nonDeductibleRunning / years.value
+      if (y === 1) pausalTaxedCumulative -= (pausalTaxedScn.nonDeductibleCost - pausalTaxedScn.nonDeductibleRunning)
+      if (y === years.value) pausalTaxedCumulative += pausalTaxedScn.saleIncomeAfterDividendTax + pausalTaxedScn.saleVatRefund
+
       data.push({
         year: y,
         privateNet: Math.round(privateCumulative),
         companyNet: Math.round(companyCumulative),
-        pausalNet: Math.round(pausalCumulative)
+        pausalNet: Math.round(pausalCumulative),
+        pausalTaxedNet: Math.round(pausalTaxedCumulative)
       })
     }
 
@@ -309,12 +358,14 @@ export function useCalculator() {
     dividendTax,
     depreciationYears,
     depreciationCurve,
+    personalIncomeTaxRate,
     // VAT breakdown
     vatAmount,
     // Scenario outputs
     privateScenario,
     companyScenario,
     pausalScenario,
+    pausalTaxedScenario,
     // Summary
     savings,
     bestOption,

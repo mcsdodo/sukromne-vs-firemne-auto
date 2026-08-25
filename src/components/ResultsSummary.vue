@@ -133,6 +133,19 @@
         :vatRate="vatRate"
         :carPrice="carPrice"
       />
+
+      <!-- Paušál Card (50/100 + 1% zdanené) -->
+      <CompanyStyleCard
+        title="Paušál (50% DPH / 100% daň + 1%)"
+        :scenario="pausalTaxedScenario"
+        :winner="bestOption === 'pausalTaxed'"
+        :annualIncome="annualIncome"
+        :years="years"
+        :companyTaxRate="companyTaxRate"
+        :dividendTaxRate="dividendTaxRate"
+        :vatRate="vatRate"
+        :carPrice="carPrice"
+      />
     </div>
 
     <div class="verdict">
@@ -152,6 +165,7 @@ const props = defineProps({
   privateScenario: { type: Object, required: true },
   companyScenario: { type: Object, required: true },
   pausalScenario: { type: Object, required: true },
+  pausalTaxedScenario: { type: Object, required: true },
   savings: { type: Number, required: true },
   bestOption: { type: String, required: true },
   years: { type: Number, required: true },
@@ -179,7 +193,8 @@ const yearsLabel = computed(() => {
 const bestLabel = computed(() => {
   if (props.bestOption === 'private') return 'Súkromné auto'
   if (props.bestOption === 'company') return 'Firemné auto (100%)'
-  return 'Paušál (50/80)'
+  if (props.bestOption === 'pausal') return 'Paušál (50/80)'
+  return 'Paušál (50/100+1%)'
 })
 </script>
 
@@ -190,13 +205,19 @@ const bestLabel = computed(() => {
 
 .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
   align-items: start;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
   .cards {
     grid-template-columns: 1fr;
   }

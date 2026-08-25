@@ -15,7 +15,8 @@ const PARAMS = [
   { key: 'taxlow', ref: 'companyTaxLow', default: 0.10 },
   { key: 'taxhigh', ref: 'companyTaxHigh', default: 0.21 },
   { key: 'divtax', ref: 'dividendTax', default: 0.07 },
-  { key: 'depyrs', ref: 'depreciationYears', default: 4 }
+  { key: 'depyrs', ref: 'depreciationYears', default: 4 },
+  { key: 'pit', ref: 'personalIncomeTaxRate', default: 0.19 }
 ]
 
 function parseHash() {

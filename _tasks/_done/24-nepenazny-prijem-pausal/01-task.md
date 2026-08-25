@@ -4,10 +4,10 @@
 
 ## Problem
 
-The calculator's `pausalScenario` ([useCalculator.js](../../src/composables/useCalculator.js))
+The calculator's `pausalScenario` ([useCalculator.js](../../../src/composables/useCalculator.js))
 models "paušalizácia výdavkov" — a company car used **also for private purposes**, no logbook,
 50% VAT / 80% income-tax deduction on the company side (see
-[_done/23-pausal-scenario](../_done/23-pausal-scenario/)).
+[23-pausal-scenario](../23-pausal-scenario/)).
 
 That task only modeled the **company's** side of mixed use (VAT recovery, depreciation
 deductibility). It did **not** model the **owner's personal** side: Slovak tax law treats

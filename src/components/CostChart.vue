@@ -62,6 +62,11 @@ const chartData = computed(() => ({
       label: 'Paušál (50/80)',
       data: props.yearlyData.map(d => d.pausalNet),
       backgroundColor: '#f59e0b'
+    },
+    {
+      label: 'Paušál (50/100+1%)',
+      data: props.yearlyData.map(d => d.pausalTaxedNet),
+      backgroundColor: '#8b5cf6'
     }
   ]
 }))

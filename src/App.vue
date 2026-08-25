@@ -21,6 +21,7 @@
       :privateScenario="privateScenario"
       :companyScenario="companyScenario"
       :pausalScenario="pausalScenario"
+      :pausalTaxedScenario="pausalTaxedScenario"
       :savings="savings"
       :bestOption="bestOption"
       :years="years"
@@ -45,6 +46,7 @@
       :companyTax="companyTax"
       v-model:dividendTax="dividendTax"
       v-model:depreciationYears="depreciationYears"
+      v-model:personalIncomeTaxRate="personalIncomeTaxRate"
     />
   </div>
 </template>
@@ -80,9 +82,11 @@ const {
   dividendTax,
   depreciationYears,
   depreciationCurve,
+  personalIncomeTaxRate,
   privateScenario,
   companyScenario,
   pausalScenario,
+  pausalTaxedScenario,
   savings,
   bestOption,
   yearlyData
@@ -92,7 +96,7 @@ useUrlSync({
   annualIncome, carPrice, kmPerYear, years,
   kmRate, fuelPrice, insurance, maintenance, fuelConsumption,
   consumptionAdjustment, vatRate, companyTaxLow, companyTaxHigh,
-  dividendTax, depreciationYears
+  dividendTax, depreciationYears, personalIncomeTaxRate
 })
 
 const showCopied = ref(false)

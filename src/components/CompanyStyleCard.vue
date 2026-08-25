@@ -43,7 +43,14 @@
         </div>
         <div class="row subtotal">
           <span>= Dividendy</span>
-          <span>{{ formatCurrency(scenario.annualCash) }}</span>
+          <span>{{ formatCurrency(scenario.dividends) }}</span>
+        </div>
+        <div class="row deduction" v-if="scenario.ownerPersonalTaxYear1">
+          <span>- Nepeňažný príjem 1% (daň {{ Math.round(scenario.personalIncomeTaxRate * 100) }}%)</span>
+          <span>- {{ formatCurrency(scenario.ownerPersonalTaxYear1) }}</span>
+        </div>
+        <div class="cost-breakdown net-note" v-if="scenario.ownerPersonalTaxYear1">
+          <em>pozn.: predpoklad = žiadna mzda, len dividendy (inak by pribudli odvody, cca 14-36%)</em>
         </div>
         <div class="row addition placeholder">
           <span>+ Náhrady</span>
