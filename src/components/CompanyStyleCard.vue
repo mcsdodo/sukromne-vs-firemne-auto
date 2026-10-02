@@ -124,7 +124,7 @@
       <span>ČISTÝ VÝNOS</span>
       <span class="total-value">
         {{ formatCurrency(scenario.netToOwner) }}
-        <span class="delta" v-if="delta < 0">{{ formatDelta(delta) }}</span>
+        <span class="delta" v-if="delta < 0"><span>{{ formatDelta(delta) }}</span> / <span>{{ formatDeltaPerYear(delta) }}</span></span>
       </span>
     </div>
   </div>
@@ -155,7 +155,9 @@ const formatCurrency = (value) => {
   })
 }
 
+// Gap to the best card: over the chosen period, and per year
 const formatDelta = (value) => '-' + formatCurrency(Math.abs(value))
+const formatDeltaPerYear = (value) => '-' + formatCurrency(Math.abs(value) / props.years) + ' ročne'
 
 const yearsLabel = computed(() => {
   if (props.years === 1) return 'rok'
@@ -268,6 +270,10 @@ const yearsLabel = computed(() => {
   font-size: 12px;
   font-weight: 500;
   color: #f87171;
+}
+
+.delta span {
+  white-space: nowrap;
 }
 
 .cost-breakdown {

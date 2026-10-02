@@ -106,7 +106,7 @@
           <span>ČISTÝ VÝNOS</span>
           <span class="total-value">
             {{ formatCurrency(privateScenario.netToOwner) }}
-            <span class="delta" v-if="delta.private < 0">{{ formatDelta(delta.private) }}</span>
+            <span class="delta" v-if="delta.private < 0"><span>{{ formatDelta(delta.private) }}</span> / <span>{{ formatDeltaPerYear(delta.private) }}</span></span>
           </span>
         </div>
       </div>
@@ -216,7 +216,9 @@ const delta = computed(() => {
   return Object.fromEntries(sortedKeys.value.map(key => [key, nets.value[key] - best]))
 })
 
+// Gap to the best card: over the chosen period, and per year
 const formatDelta = (value) => '-' + formatCurrency(Math.abs(value))
+const formatDeltaPerYear = (value) => '-' + formatCurrency(Math.abs(value) / props.years) + ' ročne'
 
 const bestLabel = computed(() => {
   if (props.bestOption === 'private') return 'Súkromné auto'
@@ -358,6 +360,10 @@ const bestLabel = computed(() => {
   font-size: 12px;
   font-weight: 500;
   color: #f87171;
+}
+
+.delta span {
+  white-space: nowrap;
 }
 
 .verdict {
