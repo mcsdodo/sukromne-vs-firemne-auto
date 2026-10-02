@@ -11,7 +11,7 @@
           <label>Sadzba za km (EUR)</label>
           <input type="number" step="0.001" :value="kmRate" @input="emit('update:kmRate', Number($event.target.value))" />
         </div>
-        <div class="setting">
+        <div class="setting" v-if="!isEv">
           <label>Cena paliva (EUR/L)</label>
           <input type="number" step="0.01" :value="fuelPrice" @input="emit('update:fuelPrice', Number($event.target.value))" />
         </div>
@@ -27,7 +27,7 @@
           <label>Údržba s DPH (EUR/rok)</label>
           <input type="number" step="10" :value="maintenance" @input="emit('update:maintenance', Number($event.target.value))" />
         </div>
-        <div class="setting">
+        <div class="setting" v-if="!isEv">
           <label>Spotreba (L/100km)</label>
           <input type="number" step="0.1" :value="fuelConsumption" @input="emit('update:fuelConsumption', Number($event.target.value))" />
         </div>
@@ -89,7 +89,8 @@ defineProps({
   companyTax: Number,
   dividendTax: Number,
   depreciationYears: Number,
-  personalIncomeTaxRate: Number
+  personalIncomeTaxRate: Number,
+  isEv: Number
 })
 
 const emit = defineEmits([

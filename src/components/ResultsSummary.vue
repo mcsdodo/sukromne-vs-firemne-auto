@@ -16,7 +16,7 @@
             </div>
             <div class="cost-breakdown">
               <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
-              <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+              <span>{{ energyLabel }} {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
             </div>
             <div class="cost-breakdown placeholder">
               <span>poistenie 0 €</span>
@@ -52,7 +52,7 @@
             </div>
             <div class="cost-breakdown">
               <span>km {{ formatCurrency(privateScenario.kmReimbursement) }}</span>
-              <span>palivo {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
+              <span>{{ energyLabel }} {{ formatCurrency(privateScenario.fuelReimbursement) }}</span>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
             <span>cena auta {{ formatCurrency(privateScenario.costBreakdown.depreciation) }}</span>
             <span>poistenie {{ formatCurrency(privateScenario.costBreakdown.insurance) }}</span>
             <span>údržba {{ formatCurrency(privateScenario.costBreakdown.maintenance) }}</span>
-            <span>palivo {{ formatCurrency(privateScenario.costBreakdown.fuel) }}</span>
+            <span>{{ energyLabel }} {{ formatCurrency(privateScenario.costBreakdown.fuel) }}</span>
           </div>
         </div>
 
@@ -124,6 +124,8 @@
         :dividendTaxRate="dividendTaxRate"
         :vatRate="vatRate"
         :carPrice="carPrice"
+        :isEv="isEv"
+        :depreciationYears="depreciationYears"
       />
 
       <!-- Paušál Card (50/80) -->
@@ -139,11 +141,13 @@
         :dividendTaxRate="dividendTaxRate"
         :vatRate="vatRate"
         :carPrice="carPrice"
+        :isEv="isEv"
+        :depreciationYears="depreciationYears"
       />
 
       <!-- Paušál Card (50/100 + 1% zdanené) -->
       <CompanyStyleCard
-        title="Paušál (50% DPH / 100% daň + 1%)"
+        :title="taxedTitle"
         :scenario="pausalTaxedScenario"
         :winner="bestOption === 'pausalTaxed'"
         :style="{ order: rank.pausalTaxed }"
@@ -154,6 +158,8 @@
         :dividendTaxRate="dividendTaxRate"
         :vatRate="vatRate"
         :carPrice="carPrice"
+        :isEv="isEv"
+        :depreciationYears="depreciationYears"
       />
     </div>
 
@@ -181,8 +187,13 @@ const props = defineProps({
   companyTaxRate: { type: Number, required: true },
   dividendTaxRate: { type: Number, required: true },
   carPrice: { type: Number, required: true },
-  vatRate: { type: Number, required: true }
+  vatRate: { type: Number, required: true },
+  isEv: { type: Number, default: 0 },
+  depreciationYears: { type: Number, required: true }
 })
+
+const energyLabel = computed(() => props.isEv ? 'elektrina' : 'palivo')
+const taxedTitle = computed(() => props.isEv ? 'Paušál (50% DPH / 100% daň + 0,5%)' : 'Paušál (50% DPH / 100% daň + 1%)')
 
 const formatCurrency = (value) => {
   return value.toLocaleString('sk-SK', {
@@ -224,7 +235,7 @@ const bestLabel = computed(() => {
   if (props.bestOption === 'private') return 'Súkromné auto'
   if (props.bestOption === 'company') return 'Firemné auto (100%)'
   if (props.bestOption === 'pausal') return 'Paušál (50/80)'
-  return 'Paušál (50/100+1%)'
+  return props.isEv ? 'Paušál (50/100+0,5%)' : 'Paušál (50/100+1%)'
 })
 </script>
 

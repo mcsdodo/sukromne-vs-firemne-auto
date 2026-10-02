@@ -22,3 +22,4 @@
 | 21 | All settings in URL hash | [task](_done/21-url-all-settings/01-task.md) |
 | 23 | Third scenario: paušalizácia výdavkov (50/80) | [task](_done/23-pausal-scenario/01-task.md), [research](_done/23-pausal-scenario/02-research.md), [plan](_done/23-pausal-scenario/03-plan.md) |
 | 24 | Fourth scenario: nepeňažný príjem 1% (Paušál 50/100+1%) | [task](_done/24-nepenazny-prijem-pausal/01-task.md), [research](_done/24-nepenazny-prijem-pausal/02-research.md), [design](_done/24-nepenazny-prijem-pausal/03-design.md), [plan](_done/24-nepenazny-prijem-pausal/04-plan.md) |
+| 25 | EV mode (BEV) + Zdôvodnenie a zdroje section | [task](_done/25-ev-mode/01-task.md), [research](_done/25-ev-mode/02-research.md) |

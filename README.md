@@ -214,6 +214,34 @@ a net loss in every realistic case, not just at these specific numbers. See
 [_tasks/_done/24-nepenazny-prijem-pausal/02-research.md](_tasks/_done/24-nepenazny-prijem-pausal/02-research.md)
 for full sourcing and the worked example.
 
+## EV Mode (BEV)
+
+The switch **Typ pohonu: Spaľovací / Elektromobil** (under the top sliders) changes the rules for
+a battery electric car (BEV). PHEV is not modeled. In EV mode, four inputs replace the fuel inputs:
+consumption (kWh/100km, default 17), home charging price (0.17 EUR/kWh, the ŠÚ SR reference
+price), public charging price (0.55 EUR/kWh), and the home charging share (70%).
+
+```
+kWh per year = km / 100 x kWh/100km x (1 + 10%)        (§ 7 ods. 6 písm. e) 283/2002)
+Energy cost  = home kWh x home price + public kWh x public price
+```
+
+What changes in EV mode:
+- **Private column:** the reimbursement is 0.313 EUR/km + the energy cost, the same as for fuel.
+- **Company columns:** the company recovers VAT only on public charging. Home charging has no
+  company invoice (§ 51 ods. 1 písm. a) DPH), so the gross amount is the cost. It is still a tax
+  expense. Electricity is a pohonná látka (FS 13/PO/2022/IM), so the 80% PHL paušál applies.
+- **Depreciation:** the switch sets 2 years (odpisová skupina 0). You can change it afterwards.
+- **Nepeňažný príjem:** 0.5% instead of 1% for odpisová skupina 0.
+
+Sources, quotes and known limits: [_tasks/_done/25-ev-mode/](_tasks/_done/25-ev-mode/01-task.md).
+
+## Zdôvodnenie a zdroje (on the page)
+
+The bottom of the page explains each column in Slovak, with links to the laws (slov-lex) and the
+financnasprava guidance. The EV lines show only in EV mode. Source:
+[src/components/SourcesSection.vue](src/components/SourcesSection.vue).
+
 ## When Each Option Wins
 
 ### Private Car Wins When:
@@ -225,7 +253,7 @@ for full sourcing and the worked example.
 - Lower annual mileage
 - Expensive car (VAT recovery matters more)
 - Longer ownership period
-- Electric vehicle (2-year depreciation)
+- Electric vehicle (EV mode: 2-year depreciation, home charging)
 - A logbook proving exclusive business use is maintained
 
 ### Paušál 50/80 Wins When:
@@ -247,7 +275,9 @@ for full sourcing and the worked example.
 - **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%, sorted by net result (most economical on the left); each other card's ČISTÝ VÝNOS shows its gap to the best one (the baseline), over the chosen period and per year
 - **Cumulative chart** - Visual comparison of net cash over time across all four
 - **Depreciation chart** - Interactive curve for car residual value
+- **EV mode** - Switch between a combustion car and a BEV, with home/public charging prices
 - **Advanced settings** - Configure tax rates, fuel prices, consumption
+- **Zdôvodnenie a zdroje** - Per-column explanation with links to the laws and FS guidance
 - **Shareable URLs** - All settings encoded in URL hash (`#income=80000&car=35000&...`), defaults omitted for clean links
 - **Share button** - One-click copy of current calculation URL to clipboard
 - **Dark theme** - Easy on the eyes
@@ -272,11 +302,13 @@ src/
 │   ├── CarPriceInput.vue     # Car price slider
 │   ├── KmSlider.vue          # Km/year slider
 │   ├── YearsInput.vue        # Ownership period slider
+│   ├── VehicleTypeToggle.vue # Spaľovací / Elektromobil switch + EV charging inputs
 │   ├── DepreciationChart.vue # Interactive depreciation curve
 │   ├── ResultsSummary.vue    # Four-way comparison (private card + three company-style cards)
 │   ├── CompanyStyleCard.vue  # Reusable card for a company-based scenario (100%, paušál, or paušál+1%)
 │   ├── CostChart.vue         # Cumulative net cash chart (4 series)
-│   └── AdvancedSettings.vue  # Configurable tax/cost parameters
+│   ├── AdvancedSettings.vue  # Configurable tax/cost parameters
+│   └── SourcesSection.vue    # Zdôvodnenie a zdroje: per-column rules with law links
 └── App.vue                   # Main layout
 ```
 

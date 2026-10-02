@@ -16,7 +16,12 @@ const PARAMS = [
   { key: 'taxhigh', ref: 'companyTaxHigh', default: 0.21 },
   { key: 'divtax', ref: 'dividendTax', default: 0.07 },
   { key: 'depyrs', ref: 'depreciationYears', default: 4 },
-  { key: 'pit', ref: 'personalIncomeTaxRate', default: 0.19 }
+  { key: 'pit', ref: 'personalIncomeTaxRate', default: 0.19 },
+  { key: 'ev', ref: 'isEv', default: 0 },
+  { key: 'evcons', ref: 'evConsumption', default: 17 },
+  { key: 'homep', ref: 'homeChargePrice', default: 0.17 },
+  { key: 'pubp', ref: 'publicChargePrice', default: 0.55 },
+  { key: 'homesh', ref: 'homeChargeShare', default: 0.7 }
 ]
 
 function parseHash() {

@@ -9,11 +9,22 @@
       </button>
     </div>
 
-    <IncomeInput v-model="annualIncome" />
-    <CarPriceInput v-model="carPrice" />
+    <div class="top-sliders">
+      <IncomeInput v-model="annualIncome" />
+      <CarPriceInput v-model="carPrice" />
+      <KmSlider v-model="kmPerYear" />
+      <YearsInput v-model="years" />
+    </div>
 
-    <KmSlider v-model="kmPerYear" />
-    <YearsInput v-model="years" />
+    <VehicleTypeToggle
+      :isEv="isEv"
+      @update:isEv="setVehicle"
+      v-model:evConsumption="evConsumption"
+      v-model:homeChargePrice="homeChargePrice"
+      v-model:publicChargePrice="publicChargePrice"
+      v-model:homeChargeShare="homeChargeShare"
+      :consumptionAdjustment="consumptionAdjustment"
+    />
     <DepreciationChart v-model="depreciationCurve" :years="years" />
 
     <ResultsSummary
@@ -29,9 +40,11 @@
       :dividendTaxRate="dividendTax"
       :carPrice="carPrice"
       :vatRate="vatRate"
+      :isEv="isEv"
+      :depreciationYears="depreciationYears"
     />
 
-    <CostChart :yearlyData="yearlyData" />
+    <CostChart :yearlyData="yearlyData" :isEv="isEv" />
 
     <AdvancedSettings
       v-model:kmRate="kmRate"
@@ -47,7 +60,10 @@
       v-model:dividendTax="dividendTax"
       v-model:depreciationYears="depreciationYears"
       v-model:personalIncomeTaxRate="personalIncomeTaxRate"
+      :isEv="isEv"
     />
+
+    <SourcesSection :isEv="isEv" :kmRate="kmRate" :depreciationYears="depreciationYears" :dividendTax="dividendTax" />
   </div>
 </template>
 
@@ -63,6 +79,8 @@ import ResultsSummary from './components/ResultsSummary.vue'
 import CostChart from './components/CostChart.vue'
 import AdvancedSettings from './components/AdvancedSettings.vue'
 import DepreciationChart from './components/DepreciationChart.vue'
+import VehicleTypeToggle from './components/VehicleTypeToggle.vue'
+import SourcesSection from './components/SourcesSection.vue'
 
 const {
   annualIncome,
@@ -75,6 +93,11 @@ const {
   maintenance,
   fuelConsumption,
   consumptionAdjustment,
+  isEv,
+  evConsumption,
+  homeChargePrice,
+  publicChargePrice,
+  homeChargeShare,
   vatRate,
   companyTaxLow,
   companyTaxHigh,
@@ -96,8 +119,17 @@ useUrlSync({
   annualIncome, carPrice, kmPerYear, years,
   kmRate, fuelPrice, insurance, maintenance, fuelConsumption,
   consumptionAdjustment, vatRate, companyTaxLow, companyTaxHigh,
-  dividendTax, depreciationYears, personalIncomeTaxRate
+  dividendTax, depreciationYears, personalIncomeTaxRate,
+  isEv, evConsumption, homeChargePrice, publicChargePrice, homeChargeShare
 })
+
+// Switching the drive type also sets the default depreciation period: 2 years for
+// odpisová skupina 0 (BEV), 4 years otherwise. The user can still change it afterwards.
+// Done here, not in a watcher, so a shared URL keeps its own depreciation value.
+function setVehicle(ev) {
+  isEv.value = ev
+  depreciationYears.value = ev ? 2 : 4
+}
 
 const showCopied = ref(false)
 function shareUrl() {
@@ -122,6 +154,18 @@ body {
   margin: 0 auto;
   padding: 20px;
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+.top-sliders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+}
+
+@media (max-width: 800px) {
+  .top-sliders {
+    grid-template-columns: 1fr;
+  }
 }
 
 .header {

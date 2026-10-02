@@ -22,7 +22,8 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps({
-  yearlyData: { type: Array, required: true }
+  yearlyData: { type: Array, required: true },
+  isEv: { type: Number, default: 0 }
 })
 
 // Force chart re-render on window resize to fix Chart.js not growing issue
@@ -64,7 +65,7 @@ const chartData = computed(() => ({
       backgroundColor: '#f59e0b'
     },
     {
-      label: 'Paušál (50/100+1%)',
+      label: props.isEv ? 'Paušál (50/100+0,5%)' : 'Paušál (50/100+1%)',
       data: props.yearlyData.map(d => d.pausalTaxedNet),
       backgroundColor: '#8b5cf6'
     }

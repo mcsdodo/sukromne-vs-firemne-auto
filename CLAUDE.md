@@ -40,6 +40,8 @@ Pushes to `master` auto-deploy to GitHub Pages via `.github/workflows/deploy.yml
 
 - VAT: 23%, Corporate tax: 10%, Dividend tax: 7%
 - Km rate: 0.313 EUR/km, Fuel consumption adjustment: +10%
+- EV mode (`isEv`): 17 kWh/100km, home 0.17 / public 0.55 EUR/kWh, 70% home charging, 2-year depreciation (odpisová skupina 0), nepeňažný príjem 0.5%. Home charging has no company VAT recovery. See [_tasks/_done/25-ev-mode/01-task.md](_tasks/_done/25-ev-mode/01-task.md).
+- Legal sources for every column: [src/components/SourcesSection.vue](src/components/SourcesSection.vue) (shown on the page). Keep it in sync when a tax rule changes.
 
 ## Task Planning
 

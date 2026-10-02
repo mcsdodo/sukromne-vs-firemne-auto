@@ -144,3 +144,65 @@ describe('yearlyData chart accumulation', () => {
     expect(last.pausalTaxedNet).toBe(Math.round(c.pausalTaxedScenario.value.netToOwner))
   })
 })
+
+describe('EV mode (BEV)', () => {
+  function setupEv() {
+    const c = setup()
+    c.isEv.value = 1
+    c.evConsumption.value = 17
+    c.homeChargePrice.value = 0.17
+    c.publicChargePrice.value = 0.55
+    c.homeChargeShare.value = 0.7
+    return c
+  }
+  // kWh = km/100 x kWh/100km x (1 + 10%), § 7 ods. 6 písm. e) 283/2002
+  const kwh = 25000 / 100 * 17 * 1.1
+  const home = kwh * 0.7 * 0.17
+  const pub = kwh * 0.3 * 0.55
+
+  it('energy cost blends home and public charging', () => {
+    const c = setupEv()
+    expect(c.fuelCost.value).toBeCloseTo(home + pub, 6)
+  })
+
+  it('private scenario reimburses the energy cost and the owner pays it', () => {
+    const c = setupEv()
+    expect(c.privateScenario.value.fuelReimbursement).toBeCloseTo(home + pub, 6)
+    expect(c.privateScenario.value.costBreakdown.fuel).toBeCloseTo((home + pub) * 4, 6)
+  })
+
+  it('company recovers VAT only on public charging; home charging has no company invoice (§ 51 DPH)', () => {
+    const c = setupEv()
+    const comp = c.companyScenario.value
+    // 100%: public without VAT + home gross, all deductible
+    expect(comp.annualCostBreakdown.fuel).toBeCloseTo(pub / 1.23 + home, 6)
+    expect(comp.nonDeductibleRunning).toBeCloseTo(0, 6)
+  })
+
+  it('pausal columns cap electricity at 80% (electricity is a PHL, FS 13/PO/2022/IM)', () => {
+    const c = setupEv()
+    expect(c.pausalScenario.value.annualCostBreakdown.fuel).toBeCloseTo((pub / 1.23 + home) * 0.8, 6)
+    expect(c.pausalTaxedScenario.value.annualCostBreakdown.fuel).toBeCloseTo((pub / 1.23 + home) * 0.8, 6)
+  })
+
+  it('nepeňažný príjem uses 0.5% for odpisová skupina 0', () => {
+    const c = setupEv()
+    expect(c.pausalTaxedScenario.value.nepenaznyPrijemRate).toBe(0.005)
+    expect(c.pausalTaxedScenario.value.yearlyBreakdown[0].nepenaznyPrijem).toBeCloseTo(50000 * 0.005 * 12, 6)
+  })
+
+  it('ICE mode keeps 1% and fuel unchanged', () => {
+    const c = setup()
+    expect(c.pausalTaxedScenario.value.nepenaznyPrijemRate).toBe(0.01)
+    expect(c.fuelCost.value).toBeCloseTo(25000 / 100 * 5.1 * 1.1 * 1.5, 6)
+    expect(Math.round(c.companyScenario.value.netToOwner)).toBe(EXPECTED_COMPANY_NET)
+  })
+
+  it('chart final point still matches netToOwner in EV mode', () => {
+    const c = setupEv()
+    c.depreciationYears.value = 2
+    const last = c.yearlyData.value[c.yearlyData.value.length - 1]
+    expect(last.companyNet).toBe(Math.round(c.companyScenario.value.netToOwner))
+    expect(last.pausalTaxedNet).toBe(Math.round(c.pausalTaxedScenario.value.netToOwner))
+  })
+})

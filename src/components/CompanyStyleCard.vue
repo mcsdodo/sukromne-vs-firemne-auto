@@ -13,14 +13,14 @@
         </div>
         <div class="cost-breakdown">
           <span v-if="scenario.taxPercent < 1">
-            odpisy (({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r) × {{ Math.round(scenario.taxPercent*100) }}% = {{ formatCurrency(scenario.annualWriteOff) }}
+            odpisy (({{ formatCurrency(carPrice) }} − DPH) ÷ {{ depreciationYears }}r) × {{ Math.round(scenario.taxPercent*100) }}% = {{ formatCurrency(scenario.annualWriteOff) }}
           </span>
-          <span v-else>odpisy ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r = {{ formatCurrency(scenario.annualWriteOff) }}</span>
+          <span v-else>odpisy ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ depreciationYears }}r = {{ formatCurrency(scenario.annualWriteOff) }}</span>
         </div>
         <div class="cost-breakdown">
           <span>poistenie {{ formatCurrency(scenario.annualCostBreakdown.insurance) }}</span>
           <span>údržba {{ formatCurrency(scenario.annualCostBreakdown.maintenance) }}</span>
-          <span>palivo {{ formatCurrency(scenario.annualCostBreakdown.fuel) }}</span>
+          <span>{{ isEv ? 'elektrina' : 'palivo' }} {{ formatCurrency(scenario.annualCostBreakdown.fuel) }}</span>
         </div>
         <div class="cost-breakdown net-note">
           <em>pozn.: čistá cena auta po DPH a odpisoch: {{ formatCurrency(scenario.netCarCost) }}</em>
@@ -46,7 +46,7 @@
           <span>{{ formatCurrency(scenario.dividends) }}</span>
         </div>
         <div class="row deduction" v-if="scenario.ownerPersonalTaxYear1">
-          <span>- Nepeňažný príjem 1% (daň {{ Math.round(scenario.personalIncomeTaxRate * 100) }}%)</span>
+          <span>- Nepeňažný príjem {{ String(scenario.nepenaznyPrijemRate * 100).replace('.', ',') }}% (daň {{ Math.round(scenario.personalIncomeTaxRate * 100) }}%)</span>
           <span>- {{ formatCurrency(scenario.ownerPersonalTaxYear1) }}</span>
         </div>
         <div class="cost-breakdown net-note" v-if="scenario.ownerPersonalTaxYear1">
@@ -143,7 +143,9 @@ const props = defineProps({
   dividendTaxRate: { type: Number, required: true },
   vatRate: { type: Number, required: true },
   carPrice: { type: Number, required: true },
-  delta: { type: Number, required: true }  // gap to the best scenario (0 for the best, not shown)
+  delta: { type: Number, required: true },
+  isEv: { type: Number, default: 0 },
+  depreciationYears: { type: Number, required: true }  // gap to the best scenario (0 for the best, not shown)
 })
 
 const formatCurrency = (value) => {

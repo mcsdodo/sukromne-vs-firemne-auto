@@ -17,6 +17,13 @@ export function useCalculator() {
   const fuelConsumption = ref(5.1)
   const consumptionAdjustment = ref(0.10)
 
+  // EV mode (BEV, odpisová skupina 0). 0/1 instead of boolean: the URL sync stores numbers only.
+  const isEv = ref(0)
+  const evConsumption = ref(17)        // kWh/100km from the vehicle document (§ 7 ods. 6 písm. e) 283/2002)
+  const homeChargePrice = ref(0.17)    // EUR/kWh, ŠÚ SR home charging reference price (0.173, Q1 2026)
+  const publicChargePrice = ref(0.55)  // EUR/kWh, ŠÚ SR public charging prices (AC 0.41 to DC 0.69)
+  const homeChargeShare = ref(0.7)     // share of kWh charged at home
+
   // Tax rates
   const vatRate = ref(0.23)
   const companyTaxLow = ref(0.10)
@@ -55,12 +62,22 @@ export function useCalculator() {
   const carPriceNoVat = computed(() => withoutVat(carPrice.value))
   const vatAmount = computed(() => carPrice.value - carPriceNoVat.value)
 
-  // Helper: calculate fuel cost
-  const fuelCost = computed(() => {
-    const adjustedConsumption = fuelConsumption.value * (1 + consumptionAdjustment.value)
-    const litersUsed = (kmPerYear.value / 100) * adjustedConsumption
-    return litersUsed * fuelPrice.value
+  // Annual energy cost (fuel or electricity), split by VAT treatment for the company:
+  // - vatable: bought on a company invoice (fuel, public charging), input VAT recoverable
+  // - home: EV charged at the owner's home and reimbursed; the bill is not addressed to the
+  //   company, so no VAT deduction (§ 51 ods. 1 písm. a) DPH), the gross amount is the cost
+  const energyCost = computed(() => {
+    if (isEv.value) {
+      const kwh = (kmPerYear.value / 100) * evConsumption.value * (1 + consumptionAdjustment.value)
+      return {
+        vatable: kwh * (1 - homeChargeShare.value) * publicChargePrice.value,
+        home: kwh * homeChargeShare.value * homeChargePrice.value
+      }
+    }
+    const litersUsed = (kmPerYear.value / 100) * fuelConsumption.value * (1 + consumptionAdjustment.value)
+    return { vatable: litersUsed * fuelPrice.value, home: 0 }
   })
+  const fuelCost = computed(() => energyCost.value.vatable + energyCost.value.home)
 
   // ============ PRIVATE CAR SCENARIO ============
   const privateScenario = computed(() => {
@@ -148,11 +165,11 @@ export function useCalculator() {
       }
       const insuranceBorne = costBorne(insurance.value, false)   // no VAT on insurance
       const maintenanceBorne = costBorne(maintenance.value, true)
-      const fuelBorne = costBorne(fuelCost.value, true)
+      const fuelBorne = costBorne(energyCost.value.vatable, true) + energyCost.value.home
 
       const insuranceDeduct = insurance.value * taxPercent
       const maintenanceDeduct = withoutVat(maintenance.value) * taxPercent
-      const fuelDeduct = withoutVat(fuelCost.value) * fuelTaxPercent
+      const fuelDeduct = (withoutVat(energyCost.value.vatable) + energyCost.value.home) * fuelTaxPercent
 
       const annualDeductionsWithDep = annualWriteOff + insuranceDeduct + maintenanceDeduct + fuelDeduct
       const annualDeductionsNoDep = insuranceDeduct + maintenanceDeduct + fuelDeduct
@@ -244,8 +261,10 @@ export function useCalculator() {
   // cap. VAT stays at the paušál 50% rate either way (unrelated statutory mechanism).
   // Fuel is the exception: it stays at the §19 ods. 2 písm. l) 80% PHL paušál even when the
   // 1% benefit is taxed (financnasprava FAQ 523850, otázka č. 5). Assumes private use <= 20%.
+  // Monthly rate: 1%, or 0.5% for odpisová skupina 0 (BEV/PHEV) per § 5 ods. 3 písm. a)
+  const nepenaznyPrijemRate = computed(() => isEv.value ? 0.005 : 0.01)
   const nepenaznyPrijemBase = (y) => y > NEPENAZNY_PRIJEM_YEARS ? 0 : carPrice.value * (1 - 0.125 * (y - 1))
-  const nepenaznyPrijemAnnual = (y) => nepenaznyPrijemBase(y) * 0.12  // 1% × 12 months
+  const nepenaznyPrijemAnnual = (y) => nepenaznyPrijemBase(y) * nepenaznyPrijemRate.value * 12
 
   const pausalTaxedBase = makeCompanyScenario(0.5, 1.0, 0.8)
   const pausalTaxedScenario = computed(() => {
@@ -272,6 +291,7 @@ export function useCalculator() {
       netToOwner: b.netToOwner - totalOwnerPersonalTax,
       totalOwnerPersonalTax,
       totalNepenaznyPrijem,
+      nepenaznyPrijemRate: nepenaznyPrijemRate.value,
       personalIncomeTaxRate: personalIncomeTaxRate.value
     }
   })
@@ -360,6 +380,12 @@ export function useCalculator() {
     maintenance,
     fuelConsumption,
     consumptionAdjustment,
+    isEv,
+    evConsumption,
+    homeChargePrice,
+    publicChargePrice,
+    homeChargeShare,
+    fuelCost,
     vatRate,
     companyTaxLow,
     companyTaxHigh,
