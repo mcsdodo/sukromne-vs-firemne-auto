@@ -143,9 +143,9 @@ const props = defineProps({
   dividendTaxRate: { type: Number, required: true },
   vatRate: { type: Number, required: true },
   carPrice: { type: Number, required: true },
-  delta: { type: Number, required: true },
+  delta: { type: Number, required: true },  // gap to the best scenario (0 for the best, not shown)
   isEv: { type: Number, default: 0 },
-  depreciationYears: { type: Number, required: true }  // gap to the best scenario (0 for the best, not shown)
+  depreciationYears: { type: Number, required: true }
 })
 
 const formatCurrency = (value) => {

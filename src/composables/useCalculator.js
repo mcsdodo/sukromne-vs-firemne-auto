@@ -24,13 +24,16 @@ export function useCalculator() {
   const publicChargePrice = ref(0.55)  // EUR/kWh, ŠÚ SR public charging prices (AC 0.41 to DC 0.69)
   const homeChargeShare = ref(0.7)     // share of kWh charged at home
 
+  // Depreciation period comes from the vehicle type (príloha č. 1 ZDP): odpisová skupina 0
+  // (BEV/PHEV, item 0-1) = 2 years, skupina 1 (other passenger cars, item 1-24) = 4 years.
+  const depreciationYears = computed(() => isEv.value ? 2 : 4)
+
   // Tax rates
   const vatRate = ref(0.23)
   const companyTaxLow = ref(0.10)
   const companyTaxHigh = ref(0.21)
   const companyTax = computed(() => annualIncome.value > 100000 ? companyTaxHigh.value : companyTaxLow.value)
   const dividendTax = ref(0.07)
-  const depreciationYears = ref(4)
   const personalIncomeTaxRate = ref(0.19)  // owner's personal income tax on nepeňažný príjem
 
   const VAT_ADJUSTMENT_YEARS = 5  // statutory §54 VAT-adjustment window

@@ -17,14 +17,12 @@
     </div>
 
     <VehicleTypeToggle
-      :isEv="isEv"
-      @update:isEv="setVehicle"
+      v-model:isEv="isEv"
       v-model:evConsumption="evConsumption"
       v-model:homeChargePrice="homeChargePrice"
       v-model:publicChargePrice="publicChargePrice"
       v-model:homeChargeShare="homeChargeShare"
       :consumptionAdjustment="consumptionAdjustment"
-      :depreciationYears="depreciationYears"
     />
     <DepreciationChart v-model="depreciationCurve" :years="years" />
 
@@ -59,7 +57,6 @@
       v-model:companyTaxHigh="companyTaxHigh"
       :companyTax="companyTax"
       v-model:dividendTax="dividendTax"
-      v-model:depreciationYears="depreciationYears"
       v-model:personalIncomeTaxRate="personalIncomeTaxRate"
       :isEv="isEv"
     />
@@ -120,17 +117,9 @@ useUrlSync({
   annualIncome, carPrice, kmPerYear, years,
   kmRate, fuelPrice, insurance, maintenance, fuelConsumption,
   consumptionAdjustment, vatRate, companyTaxLow, companyTaxHigh,
-  dividendTax, depreciationYears, personalIncomeTaxRate,
+  dividendTax, personalIncomeTaxRate,
   isEv, evConsumption, homeChargePrice, publicChargePrice, homeChargeShare
 })
-
-// Switching the drive type also sets the default depreciation period: 2 years for
-// odpisová skupina 0 (BEV), 4 years otherwise. The user can still change it afterwards.
-// Done here, not in a watcher, so a shared URL keeps its own depreciation value.
-function setVehicle(ev) {
-  isEv.value = ev
-  depreciationYears.value = ev ? 2 : 4
-}
 
 const showCopied = ref(false)
 function shareUrl() {

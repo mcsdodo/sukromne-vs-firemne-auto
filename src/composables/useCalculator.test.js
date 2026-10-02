@@ -191,6 +191,14 @@ describe('EV mode (BEV)', () => {
     expect(c.pausalTaxedScenario.value.yearlyBreakdown[0].nepenaznyPrijem).toBeCloseTo(50000 * 0.005 * 12, 6)
   })
 
+  it('depreciation period follows the vehicle type: 2 years for skupina 0 (BEV), 4 for skupina 1', () => {
+    const c = setup()
+    expect(c.depreciationYears.value).toBe(4)
+    c.isEv.value = 1
+    expect(c.depreciationYears.value).toBe(2)
+    expect(c.companyScenario.value.annualWriteOff).toBeCloseTo(50000 / 1.23 / 2, 6)
+  })
+
   it('ICE mode keeps 1% and fuel unchanged', () => {
     const c = setup()
     expect(c.pausalTaxedScenario.value.nepenaznyPrijemRate).toBe(0.01)
@@ -200,7 +208,6 @@ describe('EV mode (BEV)', () => {
 
   it('chart final point still matches netToOwner in EV mode', () => {
     const c = setupEv()
-    c.depreciationYears.value = 2
     const last = c.yearlyData.value[c.yearlyData.value.length - 1]
     expect(last.companyNet).toBe(Math.round(c.companyScenario.value.netToOwner))
     expect(last.pausalTaxedNet).toBe(Math.round(c.pausalTaxedScenario.value.netToOwner))

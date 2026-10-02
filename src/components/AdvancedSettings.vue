@@ -59,13 +59,6 @@
           <label>Osobná daň z nepeňažného príjmu (%)</label>
           <input type="number" step="1" :value="Math.round(personalIncomeTaxRate * 100)" @input="emit('update:personalIncomeTaxRate', Number($event.target.value) / 100)" />
         </div>
-        <div class="setting">
-          <label>Odpisy (roky)</label>
-          <select :value="depreciationYears" @change="emit('update:depreciationYears', Number($event.target.value))">
-            <option :value="2">2 roky (EV)</option>
-            <option :value="4">4 roky (ICE)</option>
-          </select>
-        </div>
       </div>
     </div>
   </div>
@@ -88,7 +81,6 @@ defineProps({
   companyTaxHigh: Number,
   companyTax: Number,
   dividendTax: Number,
-  depreciationYears: Number,
   personalIncomeTaxRate: Number,
   isEv: Number
 })
@@ -104,7 +96,6 @@ const emit = defineEmits([
   'update:companyTaxLow',
   'update:companyTaxHigh',
   'update:dividendTax',
-  'update:depreciationYears',
   'update:personalIncomeTaxRate'
 ])
 </script>

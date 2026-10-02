@@ -42,7 +42,7 @@
           </li>
           <li>
             Odpisy z ceny bez DPH počas {{ depText }}
-            <span v-if="depreciationYears === 2">(odpisová skupina 0 pre BEV a PHEV)</span><span v-else-if="depreciationYears === 4">(odpisová skupina 1)</span>.
+            <span v-if="isEv">(odpisová skupina 0 pre BEV a PHEV)</span><span v-else>(odpisová skupina 1)</span>.
             <a :href="L.zdp">§ 26 a príloha č. 1 ZDP</a>
           </li>
           <li>Všetky náklady na auto sú daňový výdavok v plnej výške.</li>
@@ -164,7 +164,7 @@ const L = {
 
 const rateText = computed(() => props.isEv ? '0,5%' : '1%')
 const kmRateText = computed(() => String(props.kmRate).replace('.', ','))
-const depText = computed(() => props.depreciationYears === 2 ? '2 rokov' : `${props.depreciationYears} rokov`)
+const depText = computed(() => `${props.depreciationYears} rokov`)
 const divText = computed(() => `${Math.round(props.dividendTax * 100)}%`)
 </script>
 

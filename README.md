@@ -23,7 +23,7 @@ The calculator computes the **net cash to owner** over a configurable ownership 
 | Car price (with VAT) | 50,000 EUR | Purchase price including 23% VAT |
 | Km per year | 25,000 km | Annual business mileage |
 | Ownership period | 4 years | How long you plan to keep the car |
-| Depreciation years | 4 years | Tax write-off period (2 years for EVs) |
+| Depreciation years | 4 years | Set by the vehicle type, not editable: 4 years (odpisová skupina 1), 2 years in EV mode (skupina 0) |
 | Personal income tax (nepeňažný príjem) | 19% | Owner's personal tax rate on the paušál 50/100+1% benefit |
 
 ### Tax Rates (Slovak Republic)
@@ -231,7 +231,7 @@ What changes in EV mode:
 - **Company columns:** the company recovers VAT only on public charging. Home charging has no
   company invoice (§ 51 ods. 1 písm. a) DPH), so the gross amount is the cost. It is still a tax
   expense. Electricity is a pohonná látka (FS 13/PO/2022/IM), so the 80% PHL paušál applies.
-- **Depreciation:** the switch sets 2 years (odpisová skupina 0). You can change it afterwards.
+- **Depreciation:** 2 years (odpisová skupina 0) instead of 4 (skupina 1). The vehicle type sets it; there is no separate input, so the app cannot show a combination that the law does not allow.
 - **Nepeňažný príjem:** 0.5% instead of 1% for odpisová skupina 0.
 
 Sources, quotes and known limits: [_tasks/_done/25-ev-mode/](_tasks/_done/25-ev-mode/01-task.md).

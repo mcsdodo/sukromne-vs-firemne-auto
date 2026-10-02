@@ -33,7 +33,7 @@ All sources and verbatim quotes are in [02-research.md](./02-research.md).
 | Private column | Reimbursement = 0.313 EUR/km + energy cost (the same as fuel). The owner pays the energy cost |
 | Company VAT on energy | Public charging: VAT recovered at the column's `vatPercent`. Home charging: no VAT recovery, because the bill is not addressed to the company (§ 51 ods. 1 písm. a) DPH). The gross home amount is the cost |
 | Company deduction on energy | (public without VAT + home gross) x `fuelTaxPercent`. Electricity is a pohonná látka (FS 13/PO/2022/IM), so the 80% PHL paušál applies in both paušál columns |
-| Depreciation | The switch sets `depreciationYears` to 2 (odpisová skupina 0), and back to 4 for ICE. The user can change it afterwards. The switch handler does this, not a watcher, so a shared URL keeps its own value |
+| Depreciation | `depreciationYears` is computed from `isEv`: 2 years (odpisová skupina 0, item 0-1) or 4 years (skupina 1, item 1-24). The "Odpisy (roky)" select and the `depyrs` URL key were removed, because a free choice allowed invalid combinations (ICE + 2 years, BEV + 4 years). Old links with `depyrs` still load; the value is ignored |
 | Nepeňažný príjem | 0.5% instead of 1% (`nepenaznyPrijemRate`) |
 
 Code: `energyCost` in [useCalculator.js](../../../src/composables/useCalculator.js) returns
