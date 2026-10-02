@@ -24,6 +24,7 @@
       v-model:publicChargePrice="publicChargePrice"
       v-model:homeChargeShare="homeChargeShare"
       :consumptionAdjustment="consumptionAdjustment"
+      :depreciationYears="depreciationYears"
     />
     <DepreciationChart v-model="depreciationCurve" :years="years" />
 

@@ -42,7 +42,7 @@
           </li>
           <li>
             Odpisy z ceny bez DPH počas {{ depText }}
-            <span v-if="isEv">(odpisová skupina 0 pre BEV a PHEV)</span><span v-else>(odpisová skupina 1)</span>.
+            <span v-if="depreciationYears === 2">(odpisová skupina 0 pre BEV a PHEV)</span><span v-else-if="depreciationYears === 4">(odpisová skupina 1)</span>.
             <a :href="L.zdp">§ 26 a príloha č. 1 ZDP</a>
           </li>
           <li>Všetky náklady na auto sú daňový výdavok v plnej výške.</li>
@@ -116,9 +116,11 @@
             <a :href="L.fs573977">FS: poskytnutie vozidla, otázka 7</a>
           </li>
           <li>
-            Je to voľba firmy, nie povinnosť: bez zdanenia nepeňažného príjmu firma kráti výdavky podľa
+            Podľa praxe je to voľba firmy: bez zdanenia nepeňažného príjmu firma kráti výdavky podľa
             § 19 ods. 2 písm. t).
-            <a :href="L.podnikajte">Podnikajte.sk: konateľ a majetok firmy</a>
+            <a :href="L.podnikajte">Podnikajte.sk: konateľ a majetok firmy</a>.
+            FS formuluje nepeňažný príjem konateľa prísnejšie, preto kalkulačka ukazuje obe možnosti.
+            <a :href="L.fs573977">FS: poskytnutie vozidla, otázka 5</a>
           </li>
         </ul>
       </div>

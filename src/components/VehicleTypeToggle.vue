@@ -27,7 +27,7 @@
       </div>
       <p class="note">
         Spotreba z osvedčenia o evidencii (+{{ Math.round(consumptionAdjustment * 100) }}% podľa § 7 ods. 6 písm. e) zákona o cestovných náhradách).
-        Ceny s DPH. Odpisy 2 roky (odpisová skupina 0), nepeňažný príjem 0,5%.
+        Ceny s DPH. Odpisy {{ depreciationYears }} roky<span v-if="depreciationYears === 2"> (odpisová skupina 0)</span>, nepeňažný príjem 0,5%.
         Firma si DPH z domáceho nabíjania neodpočíta (faktúra nie je na firmu).
       </p>
     </div>
@@ -41,7 +41,8 @@ defineProps({
   homeChargePrice: { type: Number, required: true },
   publicChargePrice: { type: Number, required: true },
   homeChargeShare: { type: Number, required: true },
-  consumptionAdjustment: { type: Number, required: true }
+  consumptionAdjustment: { type: Number, required: true },
+  depreciationYears: { type: Number, required: true }
 })
 
 const emit = defineEmits([
