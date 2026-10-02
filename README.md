@@ -237,7 +237,7 @@ for full sourcing and the worked example.
 ## Features
 
 - **Real-time calculations** - All values update instantly as you adjust inputs
-- **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%, sorted by net result (most economical on the left); each ČISTÝ VÝNOS shows its gap to the best (the best card shows its lead over the second)
+- **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%, sorted by net result (most economical on the left); each other card's ČISTÝ VÝNOS shows its gap to the best one (the baseline)
 - **Cumulative chart** - Visual comparison of net cash over time across all four
 - **Depreciation chart** - Interactive curve for car residual value
 - **Advanced settings** - Configure tax rates, fuel prices, consumption

@@ -106,7 +106,7 @@
           <span>ČISTÝ VÝNOS</span>
           <span class="total-value">
             {{ formatCurrency(privateScenario.netToOwner) }}
-            <span class="delta" :class="{ negative: delta.private < 0 }">{{ formatDelta(delta.private) }}</span>
+            <span class="delta" v-if="delta.private < 0">{{ formatDelta(delta.private) }}</span>
           </span>
         </div>
       </div>
@@ -210,14 +210,13 @@ const sortedKeys = computed(() => Object.keys(nets.value).sort((a, b) => nets.va
 // Visual position of each card: most economical (highest netToOwner) first, left to right
 const rank = computed(() => Object.fromEntries(sortedKeys.value.map((key, i) => [key, i])))
 
-// ČISTÝ VÝNOS delta: best card shows its lead over the 2nd, the others their gap to the best
+// ČISTÝ VÝNOS delta: gap to the best card (the best card is the baseline, 0, not shown)
 const delta = computed(() => {
-  const [best, second] = sortedKeys.value
-  return Object.fromEntries(sortedKeys.value.map(key => [key,
-    key === best ? nets.value[best] - nets.value[second] : nets.value[key] - nets.value[best]]))
+  const best = nets.value[sortedKeys.value[0]]
+  return Object.fromEntries(sortedKeys.value.map(key => [key, nets.value[key] - best]))
 })
 
-const formatDelta = (value) => (value < 0 ? '-' : '+') + formatCurrency(Math.abs(value))
+const formatDelta = (value) => '-' + formatCurrency(Math.abs(value))
 
 const bestLabel = computed(() => {
   if (props.bestOption === 'private') return 'Súkromné auto'
@@ -358,9 +357,6 @@ const bestLabel = computed(() => {
   display: block;
   font-size: 12px;
   font-weight: 500;
-}
-
-.delta.negative {
   color: #f87171;
 }
 
