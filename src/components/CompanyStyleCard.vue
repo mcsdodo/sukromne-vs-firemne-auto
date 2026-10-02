@@ -122,7 +122,10 @@
 
     <div class="total">
       <span>ČISTÝ VÝNOS</span>
-      <span>{{ formatCurrency(scenario.netToOwner) }}</span>
+      <span class="total-value">
+        {{ formatCurrency(scenario.netToOwner) }}
+        <span class="delta" :class="{ negative: delta < 0 }">{{ formatDelta(delta) }}</span>
+      </span>
     </div>
   </div>
 </template>
@@ -139,7 +142,8 @@ const props = defineProps({
   companyTaxRate: { type: Number, required: true },
   dividendTaxRate: { type: Number, required: true },
   vatRate: { type: Number, required: true },
-  carPrice: { type: Number, required: true }
+  carPrice: { type: Number, required: true },
+  delta: { type: Number, required: true }  // vs the best scenario (best card: lead over the 2nd)
 })
 
 const formatCurrency = (value) => {
@@ -150,6 +154,8 @@ const formatCurrency = (value) => {
     maximumFractionDigits: 0
   })
 }
+
+const formatDelta = (value) => (value < 0 ? '-' : '+') + formatCurrency(Math.abs(value))
 
 const yearsLabel = computed(() => {
   if (props.years === 1) return 'rok'
@@ -251,6 +257,20 @@ const yearsLabel = computed(() => {
 .card.winner .total {
   background: #10b981;
   color: white;
+}
+
+.total-value {
+  text-align: right;
+}
+
+.delta {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.delta.negative {
+  color: #f87171;
 }
 
 .cost-breakdown {

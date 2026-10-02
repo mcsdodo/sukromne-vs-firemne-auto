@@ -2,7 +2,7 @@
   <div class="results-summary">
     <div class="cards">
       <!-- Private Car Card -->
-      <div class="card" :class="{ winner: bestOption === 'private' }">
+      <div class="card" :class="{ winner: bestOption === 'private' }" :style="{ order: rank.private }">
         <h3>Súkromné auto</h3>
         <div class="annual-section">
           <div class="breakdown">
@@ -104,7 +104,10 @@
 
         <div class="total">
           <span>ČISTÝ VÝNOS</span>
-          <span>{{ formatCurrency(privateScenario.netToOwner) }}</span>
+          <span class="total-value">
+            {{ formatCurrency(privateScenario.netToOwner) }}
+            <span class="delta" :class="{ negative: delta.private < 0 }">{{ formatDelta(delta.private) }}</span>
+          </span>
         </div>
       </div>
 
@@ -113,6 +116,8 @@
         title="Firemné auto (100%)"
         :scenario="companyScenario"
         :winner="bestOption === 'company'"
+        :style="{ order: rank.company }"
+        :delta="delta.company"
         :annualIncome="annualIncome"
         :years="years"
         :companyTaxRate="companyTaxRate"
@@ -126,6 +131,8 @@
         title="Paušál (50% DPH / 80% daň)"
         :scenario="pausalScenario"
         :winner="bestOption === 'pausal'"
+        :style="{ order: rank.pausal }"
+        :delta="delta.pausal"
         :annualIncome="annualIncome"
         :years="years"
         :companyTaxRate="companyTaxRate"
@@ -139,6 +146,8 @@
         title="Paušál (50% DPH / 100% daň + 1%)"
         :scenario="pausalTaxedScenario"
         :winner="bestOption === 'pausalTaxed'"
+        :style="{ order: rank.pausalTaxed }"
+        :delta="delta.pausalTaxed"
         :annualIncome="annualIncome"
         :years="years"
         :companyTaxRate="companyTaxRate"
@@ -189,6 +198,26 @@ const yearsLabel = computed(() => {
   if (props.years >= 2 && props.years <= 4) return 'roky'
   return 'rokov'
 })
+
+const nets = computed(() => ({
+  private: props.privateScenario.netToOwner,
+  company: props.companyScenario.netToOwner,
+  pausal: props.pausalScenario.netToOwner,
+  pausalTaxed: props.pausalTaxedScenario.netToOwner
+}))
+const sortedKeys = computed(() => Object.keys(nets.value).sort((a, b) => nets.value[b] - nets.value[a]))
+
+// Visual position of each card: most economical (highest netToOwner) first, left to right
+const rank = computed(() => Object.fromEntries(sortedKeys.value.map((key, i) => [key, i])))
+
+// ČISTÝ VÝNOS delta: best card shows its lead over the 2nd, the others their gap to the best
+const delta = computed(() => {
+  const [best, second] = sortedKeys.value
+  return Object.fromEntries(sortedKeys.value.map(key => [key,
+    key === best ? nets.value[best] - nets.value[second] : nets.value[key] - nets.value[best]]))
+})
+
+const formatDelta = (value) => (value < 0 ? '-' : '+') + formatCurrency(Math.abs(value))
 
 const bestLabel = computed(() => {
   if (props.bestOption === 'private') return 'Súkromné auto'
@@ -319,6 +348,20 @@ const bestLabel = computed(() => {
 .card.winner .total {
   background: #10b981;
   color: white;
+}
+
+.total-value {
+  text-align: right;
+}
+
+.delta {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.delta.negative {
+  color: #f87171;
 }
 
 .verdict {

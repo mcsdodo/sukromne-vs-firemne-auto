@@ -13,7 +13,7 @@ This is not "the same paušál plus a forgotten cost" — per [02-research.md](.
 the 1%-taxed treatment and the 80% flat-rate cap are **mutually exclusive** regimes under
 §19 ods. 2 písm. t) vs. §5 ods. 3 písm. a). It's a genuine 4th structuring choice, worth
 surfacing on its own rather than folding into the existing paušál column — even though, once
-modeled precisely, it turns out to be the *worse* choice at the app's defaults (nets ~1,712
+modeled precisely, it turns out to be the *worse* choice at the app's defaults (nets ~1,961
 EUR **less** than the 80% column over 4 years; see [02-research.md](./02-research.md)). That
 result is itself the useful finding: a company owner might assume "100% deduction beats an
 80% cap" and be wrong once the personal tax on the benefit is priced in — showing that
@@ -45,9 +45,15 @@ For ownership year y (1-indexed, y <= 8):
 For y > 8: base/annual/tax = 0
 ```
 
-Company-side deduction: `makeCompanyScenario(0.5, 1.0)` — same factory used for the other two
+Company-side deduction: `makeCompanyScenario(0.5, 1.0, 0.8)` — same factory used for the other two
 company scenarios, VAT at 50% (paušál, unaffected), tax deductibility at 100% (this is *why*
 100% is allowed — the benefit is taxed to the owner instead).
+
+Fuel is the exception (third argument, `fuelTaxPercent`). Fuel stays at the 80% PHL paušál
+under § 19 ods. 2 písm. l), also with the 1% regime (FS 523850, otázka č. 5, quoted in
+[02-research.md](./02-research.md)). The non-deductible 20% of fuel goes into
+`nonDeductibleRunning`, the same as in the Paušál 50/80 column. Added 2026-10-02; the first
+version deducted fuel at 100%.
 
 Owner-side: subtract `tax(y)` from that year's dividends. `netToOwner` = base scenario's
 `netToOwner` minus the sum of `tax(y)` across the ownership period. This only touches the
@@ -97,9 +103,11 @@ every realistic case here to stay in that bracket.
 
 **README section** (English prose matching existing section style): states the mutual
 exclusivity finding with its source (financnasprava FAQ), the zero-salary assumption and why
-odvody are 0 in that case, and the quantified "if also employed" caveat (net advantage shrinks
-from ~+1,400-1,850/year to roughly -1,264/+170/year across the 4-year default example) so a
-reader who *is* also drawing a salary knows the number shown doesn't apply to them as-is.
+odvody are 0 in that case, and the "if also employed" caveat (employee-side and employer-side
+odvody would apply), so a reader who *is* also drawing a salary knows the number shown doesn't
+apply to them as-is. (The draft figures "+1,400-1,850/year -> -1,264/+170/year" came from an
+earlier model and are stale: they predate the final result and the 2026-10-02 fuel fix. Do not
+reuse them.)
 
 ## Non-goals (reconfirmed)
 

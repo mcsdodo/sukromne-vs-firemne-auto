@@ -126,7 +126,8 @@ export function useCalculator() {
   // ============ COMPANY-STYLE SCENARIO FACTORY ============
   // vatPercent: share of input VAT recoverable (1.0 = full / logbook, 0.5 = paušál)
   // taxPercent: share of costs deductible from income tax (1.0 = full, 0.8 = paušál)
-  function makeCompanyScenario(vatPercent, taxPercent) {
+  // fuelTaxPercent: share of fuel deductible (defaults to taxPercent; see pausalTaxedBase)
+  function makeCompanyScenario(vatPercent, taxPercent, fuelTaxPercent = taxPercent) {
     return computed(() => {
       // --- Purchase: VAT recovery + write-off (non-recovered VAT is capitalised) ---
       const vatReclaim = vatAmount.value * vatPercent
@@ -146,7 +147,7 @@ export function useCalculator() {
 
       const insuranceDeduct = insuranceBorne * taxPercent
       const maintenanceDeduct = maintenanceBorne * taxPercent
-      const fuelDeduct = fuelBorne * taxPercent
+      const fuelDeduct = fuelBorne * fuelTaxPercent
 
       const annualDeductionsWithDep = annualWriteOff + insuranceDeduct + maintenanceDeduct + fuelDeduct
       const annualDeductionsNoDep = insuranceDeduct + maintenanceDeduct + fuelDeduct
@@ -187,7 +188,7 @@ export function useCalculator() {
 
       // --- Non-deductible cost: undeducted purchase + non-deductible running portion ---
       const netCarPurchase = carPrice.value - vatReclaim
-      const nonDeductibleRunning = (insuranceBorne + maintenanceBorne + fuelBorne) * (1 - taxPercent) * years.value
+      const nonDeductibleRunning = ((insuranceBorne + maintenanceBorne) * (1 - taxPercent) + fuelBorne * (1 - fuelTaxPercent)) * years.value
       const nonDeductibleCost = (netCarPurchase - totalWriteOff) + nonDeductibleRunning
 
       // Display: net cost of the car after VAT recovery & tax savings on write-off
@@ -214,6 +215,7 @@ export function useCalculator() {
         nonDeductibleRunning,
         vatPercent,
         taxPercent,
+        fuelTaxPercent,
         salePrice: companySalePrice,
         saleVat,
         salePriceAfterVat,
@@ -235,10 +237,12 @@ export function useCalculator() {
   // §5 ods. 3 písm. a) and §19 ods. 2 písm. t) are mutually exclusive: taxing the owner's
   // 1% non-cash benefit buys back full (100%) income-tax deductibility instead of the 80%
   // cap. VAT stays at the paušál 50% rate either way (unrelated statutory mechanism).
+  // Fuel is the exception: it stays at the §19 ods. 2 písm. l) 80% PHL paušál even when the
+  // 1% benefit is taxed (financnasprava FAQ 523850, otázka č. 5). Assumes private use <= 20%.
   const nepenaznyPrijemBase = (y) => y > NEPENAZNY_PRIJEM_YEARS ? 0 : carPrice.value * (1 - 0.125 * (y - 1))
   const nepenaznyPrijemAnnual = (y) => nepenaznyPrijemBase(y) * 0.12  // 1% × 12 months
 
-  const pausalTaxedBase = makeCompanyScenario(0.5, 1.0)
+  const pausalTaxedBase = makeCompanyScenario(0.5, 1.0, 0.8)
   const pausalTaxedScenario = computed(() => {
     const b = pausalTaxedBase.value
 

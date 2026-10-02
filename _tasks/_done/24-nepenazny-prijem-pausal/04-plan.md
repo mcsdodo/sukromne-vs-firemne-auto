@@ -2,6 +2,10 @@
 
 **For:** [03-design.md](./03-design.md)
 
+> Note 2026-10-02: this plan is the original record. Its figures (~1,993 / ~3,705 / ~16.3%)
+> predate the fuel fix. For the current numbers and the fuel rule, see
+> [02-research.md](./02-research.md), section "Review 2026-10-02".
+
 ## Task 1: Core calculation in useCalculator.js
 
 **File:** [useCalculator.js](../../../src/composables/useCalculator.js)

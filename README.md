@@ -183,8 +183,10 @@ January for 8 years**, then dropping to zero.
 
 The key finding (confirmed by financnasprava's own FAQ on §19 ods. 2 písm. t)): **taxing this
 benefit and the 80% flat-rate deduction cap are mutually exclusive, not additive.** If the
-owner is personally taxed on the benefit, the company may deduct **100%** of running costs and
-depreciation instead of the 80% cap used by the Paušál 50/80 column. This app models that
+owner is personally taxed on the benefit, the company may deduct **100%** of depreciation,
+insurance and maintenance instead of the 80% cap used by the Paušál 50/80 column. **Fuel is the
+exception:** it stays at the 80% PHL paušál (§19 ods. 2 písm. l)) also under the 1% regime, per
+financnasprava FAQ 523850, otázka č. 5. The app assumes private use <= 20% for both columns. This app models that
 choice as a 4th scenario rather than folding it into the existing Paušál column.
 
 **Scope: zero-salary owner only** (dividends only — the persona this app has always modeled).
@@ -196,11 +198,11 @@ poistenie purposes. If the owner *also* draws a regular salary elsewhere, both e
 instead — not modeled here, since the app has no salary/payroll concept for its owner persona.
 
 **Verified result, at this app's own defaults (50k car, 4 years):** this alternative nets
-**~1,712 EUR less** than the Paušál 50/80 column, not more. The extra 20% deductibility it
-unlocks is worth only ~1,993 EUR (roughly corpTax + dividendTax ≈ 16.3% of the marginal
+**~1,961 EUR less** than the Paušál 50/80 column, not more. The extra 20% deductibility it
+unlocks (fuel excluded) is worth only ~1,744 EUR (roughly corpTax + dividendTax ≈ 16.3% of the marginal
 deduction — this app's dividend accounting model doesn't pass the full deduction through to
 cash), while the personal tax on the benefit costs ~3,705 EUR at 19%. The trade only breaks
-even below a ~10.2% personal tax rate, which is below Slovakia's lowest PIT bracket — so it's
+even below a ~8.9% personal tax rate, which is below Slovakia's lowest PIT bracket — so it's
 a net loss in every realistic case, not just at these specific numbers. See
 [_tasks/_done/24-nepenazny-prijem-pausal/02-research.md](_tasks/_done/24-nepenazny-prijem-pausal/02-research.md)
 for full sourcing and the worked example.
@@ -227,7 +229,7 @@ for full sourcing and the worked example.
 - The extra 20% deductibility it unlocks (over the 80% cap) is only worth its corporate-tax +
   dividend-tax shield (~16.3% of the marginal amount), while the personal tax on the 1%
   benefit hits a much larger base (12%/year of the full car price)
-- Breaks even only below a ~10.2% personal income tax rate — below Slovakia's lowest PIT
+- Breaks even only below a ~8.9% personal income tax rate — below Slovakia's lowest PIT
   bracket (19%), so it loses to the 80% column in every realistic case for this app's
   zero-salary-owner model
 - Shown anyway, for completeness and because the losing margin itself is useful information
@@ -235,7 +237,7 @@ for full sourcing and the worked example.
 ## Features
 
 - **Real-time calculations** - All values update instantly as you adjust inputs
-- **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%
+- **Four-way comparison** - Side-by-side breakdown of private, company 100%, paušál 50/80, and paušál 50/100+1%, sorted by net result (most economical on the left); each ČISTÝ VÝNOS shows its gap to the best (the best card shows its lead over the second)
 - **Cumulative chart** - Visual comparison of net cash over time across all four
 - **Depreciation chart** - Interactive curve for car residual value
 - **Advanced settings** - Configure tax rates, fuel prices, consumption

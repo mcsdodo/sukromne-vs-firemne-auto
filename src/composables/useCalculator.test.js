@@ -77,12 +77,22 @@ describe('pausalTaxedScenario', () => {
   })
 
   it('nets less than the 80%-capped pausal scenario at app defaults (the personal tax outweighs the extra 20% deduction)', () => {
-    // The extra 20% deductibility is worth only ~16.3% of its value (corpTax + dividendTax
+    // The extra 20% deductibility (fuel excluded) is worth only ~16.3% of its value (corpTax + dividendTax
     // shield), a small gain on a small base (running costs + write-off) — while the personal
     // tax hits a much larger base (12%/year of the full car price). At any realistic personal
     // income tax rate (SK's minimum bracket is 19%), the trade is a net loss. See 02-research.md.
     const c = setup()
     expect(c.pausalTaxedScenario.value.netToOwner).toBeLessThan(c.pausalScenario.value.netToOwner)
+  })
+
+  it('keeps fuel at the 80% PHL paušál even though other costs are 100% (FS FAQ 523850, otázka č. 5)', () => {
+    const c = setup()
+    const t = c.pausalTaxedScenario.value
+    expect(t.fuelTaxPercent).toBe(0.8)
+    expect(t.annualCostBreakdown.fuel).toBeCloseTo(c.pausalScenario.value.annualCostBreakdown.fuel, 6)
+    expect(t.annualCostBreakdown.maintenance).toBeGreaterThan(c.pausalScenario.value.annualCostBreakdown.maintenance)
+    // The non-deductible 20% of fuel is still a cost to the owner
+    expect(t.nonDeductibleRunning).toBeCloseTo(c.pausalScenario.value.annualCostBreakdown.fuel / 0.8 * 0.2 * 4, 6)
   })
 })
 
