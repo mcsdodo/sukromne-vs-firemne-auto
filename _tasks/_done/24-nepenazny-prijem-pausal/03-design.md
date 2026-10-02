@@ -13,7 +13,7 @@ This is not "the same paušál plus a forgotten cost" — per [02-research.md](.
 the 1%-taxed treatment and the 80% flat-rate cap are **mutually exclusive** regimes under
 §19 ods. 2 písm. t) vs. §5 ods. 3 písm. a). It's a genuine 4th structuring choice, worth
 surfacing on its own rather than folding into the existing paušál column — even though, once
-modeled precisely, it turns out to be the *worse* choice at the app's defaults (nets ~1,961
+modeled precisely, it turns out to be the *worse* choice at the app's defaults (nets ~2,121
 EUR **less** than the 80% column over 4 years; see [02-research.md](./02-research.md)). That
 result is itself the useful finding: a company owner might assume "100% deduction beats an
 80% cap" and be wrong once the personal tax on the benefit is priced in — showing that

@@ -13,7 +13,7 @@
         </div>
         <div class="cost-breakdown">
           <span v-if="scenario.taxPercent < 1">
-            odpisy (({{ formatCurrency(carPrice) }} − {{ Math.round(scenario.vatPercent*100) }}% odpočet DPH) ÷ {{ Math.min(years, 4) }}r) × {{ Math.round(scenario.taxPercent*100) }}% = {{ formatCurrency(scenario.annualWriteOff) }}
+            odpisy (({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r) × {{ Math.round(scenario.taxPercent*100) }}% = {{ formatCurrency(scenario.annualWriteOff) }}
           </span>
           <span v-else>odpisy ({{ formatCurrency(carPrice) }} − DPH) ÷ {{ Math.min(years, 4) }}r = {{ formatCurrency(scenario.annualWriteOff) }}</span>
         </div>

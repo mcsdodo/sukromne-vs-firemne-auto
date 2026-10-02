@@ -129,14 +129,19 @@ export function useCalculator() {
   // fuelTaxPercent: share of fuel deductible (defaults to taxPercent; see pausalTaxedBase)
   function makeCompanyScenario(vatPercent, taxPercent, fuelTaxPercent = taxPercent) {
     return computed(() => {
-      // --- Purchase: VAT recovery + write-off (non-recovered VAT is capitalised) ---
+      // --- Purchase: VAT recovery + write-off ---
+      // § 52zzzk ZDP (from 2026): VAT not deductible under § 85n DPH is not part of the
+      // daňová vstupná cena, so tax depreciation starts from the price without VAT
+      // (FS 45/DZPaU/2025/MU, príklad č. 1). The undeducted VAT stays a non-deductible cost.
       const vatReclaim = vatAmount.value * vatPercent
-      const writeOffBase = (carPrice.value - vatReclaim) / depreciationYears.value
+      const writeOffBase = carPriceNoVat.value / depreciationYears.value
       const annualWriteOff = writeOffBase * taxPercent
       const depreciationYearsUsed = Math.min(years.value, depreciationYears.value)
       const totalWriteOff = annualWriteOff * depreciationYearsUsed
 
-      // --- Running costs: recover VAT at vatPercent, deduct at taxPercent ---
+      // --- Running costs: recover VAT at vatPercent, deduct the price without VAT at
+      // taxPercent (§ 52zzzk: the undeducted VAT is not a tax expense, FS 45/DZPaU/2025/MU
+      // príklad č. 3) ---
       const costBorne = (gross, hasVat) => {
         const recovered = hasVat ? (gross - withoutVat(gross)) * vatPercent : 0
         return gross - recovered
@@ -145,9 +150,9 @@ export function useCalculator() {
       const maintenanceBorne = costBorne(maintenance.value, true)
       const fuelBorne = costBorne(fuelCost.value, true)
 
-      const insuranceDeduct = insuranceBorne * taxPercent
-      const maintenanceDeduct = maintenanceBorne * taxPercent
-      const fuelDeduct = fuelBorne * fuelTaxPercent
+      const insuranceDeduct = insurance.value * taxPercent
+      const maintenanceDeduct = withoutVat(maintenance.value) * taxPercent
+      const fuelDeduct = withoutVat(fuelCost.value) * fuelTaxPercent
 
       const annualDeductionsWithDep = annualWriteOff + insuranceDeduct + maintenanceDeduct + fuelDeduct
       const annualDeductionsNoDep = insuranceDeduct + maintenanceDeduct + fuelDeduct
@@ -188,7 +193,7 @@ export function useCalculator() {
 
       // --- Non-deductible cost: undeducted purchase + non-deductible running portion ---
       const netCarPurchase = carPrice.value - vatReclaim
-      const nonDeductibleRunning = ((insuranceBorne + maintenanceBorne) * (1 - taxPercent) + fuelBorne * (1 - fuelTaxPercent)) * years.value
+      const nonDeductibleRunning = ((insuranceBorne + maintenanceBorne + fuelBorne) - (insuranceDeduct + maintenanceDeduct + fuelDeduct)) * years.value
       const nonDeductibleCost = (netCarPurchase - totalWriteOff) + nonDeductibleRunning
 
       // Display: net cost of the car after VAT recovery & tax savings on write-off

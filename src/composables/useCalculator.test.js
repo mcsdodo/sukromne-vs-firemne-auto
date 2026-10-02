@@ -26,11 +26,22 @@ describe('pausalScenario', () => {
     expect(c.pausalScenario.value.vatReclaim).toBeCloseTo(vatAmount * 0.5, 2)
   })
 
-  it('applies 80% of the write-off base (on the VAT-adjusted purchase price)', () => {
+  it('applies 80% of the write-off base on the price without VAT (§ 52zzzk: undeducted VAT is not in daňová vstupná cena)', () => {
     const c = setup()
-    const vatAmount = 50000 - 50000 / 1.23
-    const pausalBase = (50000 - vatAmount * 0.5) / 4
-    expect(c.pausalScenario.value.annualWriteOff).toBeCloseTo(pausalBase * 0.8, 2)
+    expect(c.pausalScenario.value.annualWriteOff).toBeCloseTo(50000 / 1.23 / 4 * 0.8, 2)
+  })
+
+  it('deducts 80% of running costs without VAT; the undeducted VAT is a cost but not a tax expense (§ 52zzzk)', () => {
+    const c = setup()
+    const p = c.pausalScenario.value
+    const fuelGross = (25000 / 100) * 5.1 * 1.1 * 1.5
+    expect(p.annualCostBreakdown.insurance).toBeCloseTo(1500 * 0.8, 6)       // no VAT on insurance
+    expect(p.annualCostBreakdown.maintenance).toBeCloseTo(600 / 1.23 * 0.8, 6)
+    expect(p.annualCostBreakdown.fuel).toBeCloseTo(fuelGross / 1.23 * 0.8, 6)
+    // Borne = gross - 50% of VAT; non-deductible = borne - deducted
+    const borne = (g) => g - (g - g / 1.23) * 0.5
+    const expected = (1500 * 0.2 + (borne(600) - 600 / 1.23 * 0.8) + (borne(fuelGross) - fuelGross / 1.23 * 0.8)) * 4
+    expect(p.nonDeductibleRunning).toBeCloseTo(expected, 6)
   })
 
   it('adds a §54 sale VAT refund of vat × 0.5 × (5−years)/5 when sold within 5 years', () => {
@@ -91,8 +102,12 @@ describe('pausalTaxedScenario', () => {
     expect(t.fuelTaxPercent).toBe(0.8)
     expect(t.annualCostBreakdown.fuel).toBeCloseTo(c.pausalScenario.value.annualCostBreakdown.fuel, 6)
     expect(t.annualCostBreakdown.maintenance).toBeGreaterThan(c.pausalScenario.value.annualCostBreakdown.maintenance)
-    // The non-deductible 20% of fuel is still a cost to the owner
-    expect(t.nonDeductibleRunning).toBeCloseTo(c.pausalScenario.value.annualCostBreakdown.fuel / 0.8 * 0.2 * 4, 6)
+    // Non-deductible: the undeducted 50% VAT on maintenance and fuel, plus 20% of fuel without VAT
+    const fuelGross = (25000 / 100) * 5.1 * 1.1 * 1.5
+    const vat = (g) => g - g / 1.23
+    const expected = (vat(600) * 0.5 + vat(fuelGross) * 0.5 + fuelGross / 1.23 * 0.2) * 4
+    expect(t.nonDeductibleRunning).toBeCloseTo(expected, 6)
+    expect(t.annualCostBreakdown.maintenance).toBeCloseTo(600 / 1.23, 6)
   })
 })
 

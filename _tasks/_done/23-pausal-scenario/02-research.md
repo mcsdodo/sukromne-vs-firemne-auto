@@ -87,7 +87,40 @@ refund term. The 100% column has no such adjustment (it already deducted everyth
 - Plus a §54 input-VAT refund of the undeducted purchase-VAT half, pro-rated over the
   remaining 5-year period. Model per the formula above.
 
+## Review 2026-10-02: undeducted VAT is not a tax expense (§ 52zzzk ZDP)
+
+The first implementation put the undeducted 50% VAT into the depreciation base, and deducted
+the undeducted VAT on running costs at 80%. From 1.1.2026 this is not correct.
+FS 45/DZPaU/2025/MU, verbatim:
+
+> Daň z pridanej hodnoty sa podľa § 52zzzk zákona o dani z príjmov nepovažuje za daňový výdavok, ak na jej odpočítanie nemá platiteľ dane z pridanej hodnoty nárok, pričom ak ide o daň z pridanej hodnoty vzťahujúcu sa na hmotný majetok vymedzený v § 85n zákona o dani z pridanej hodnoty, táto nie je súčasťou daňovej vstupnej ceny.
+
+Príklad č. 1 (car for 24 600 EUR incl. 4 600 EUR VAT, 50% deducted):
+
+> Daňovník pri výpočte daňových odpisov podľa § 19 ods. 3 písm. a) zákona o dani z príjmov vychádza z daňovej vstupnej ceny vo výške 20 000 eur.
+
+Príklad č. 3 (fuel for 12 300 EUR incl. 2 300 EUR VAT, no logbook, 80% PHL paušál):
+
+> Daňovník si uplatní daňové výdavky spôsobom podľa § 19 ods. 2 písm. l) tretí bod zákona o dani z príjmov a do daňových výdavkov zahrnie sumu 8 000 eur (80 % zo sumy 10 000 eur).
+
+The rule covers cars bought from 01.01.2026 to 30.06.2028 ("ak daňovník obstará v období od
+01.01.2026 do 30.06.2028 hmotný majetok podľa § 85n ods. 1"). For fuel, it also covers cars
+bought before 2026.
+
+Fix in the app: depreciation = price without VAT x taxPercent, running cost deduction = price
+without VAT x taxPercent. The undeducted VAT stays a cost (`nonDeductibleCost`,
+`nonDeductibleRunning`) but is not deducted.
+
+The 1% nepeňažný príjem base does not change: FS 573977 otázka č. 1 says "Akýkoľvek nepeňažný
+príjem zamestnanca (suma vo výške 1%, ...) sa vyčísľuje vždy s DPH."
+
+Effect at the app defaults (50k car, 4 years): Paušál 50/80 298,909 -> 298,167 EUR,
+Paušál 50/100 + 1% 296,948 -> 296,047 EUR. Firemné 100% does not change. Súkromné
+(298,459) now beats Paušál 50/80.
+
 ## Sources
+
+- [financnasprava.sk — Metodické usmernenie 45/DZPaU/2025/MU (§ 52zzzk, DPH podľa § 85n)](https://www.financnasprava.sk/_img/pfsedit/Dokumenty_PFS/Zverejnovanie_dok/Dane/Metodicke_usmernenia/Priame_dane/2025/2025.12.19_45_DZPaU_2025_MU.pdf)
 
 - [financnasprava.sk — Uplatňovanie paušálnych výdavkov na majetok osobnej potreby (80%, incl. depreciation)](https://podpora.financnasprava.sk/523850-Uplat%C5%88ovanie-pau%C5%A1%C3%A1lnych-v%C3%BDdavkov-na-majetok-osobnej-potreby)
 - [financnasprava.sk — PHL/spotreba (80% fuel, §19 ods 2 písm. l)](https://podpora.financnasprava.sk/481195-Spotreba-pohonn%C3%BDch-l%C3%A1tok-u-motorov%C3%A9ho-vozidla-zahrnut%C3%A9ho-do-obchodn%C3%A9ho-majetku)

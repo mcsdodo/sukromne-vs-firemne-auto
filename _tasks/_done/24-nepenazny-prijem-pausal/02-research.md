@@ -121,17 +121,21 @@ Vstupná cena = 50 000 EUR (full price incl. VAT — unaffected by the paušál 
 deduction, owner self-taxed), which the existing 80%-capped paušál column deliberately avoids
 by design. On the app's own default numbers (verified against the actual implementation, see
 [useCalculator.test.js](../../../src/composables/useCalculator.test.js)), that alternative regime
-nets **1,961 EUR less** than the existing 80% paušál over 4 years. The extra 20%
+nets **2,121 EUR less** than the existing 80% paušál over 4 years. The extra 20%
 deductibility it unlocks (on depreciation, insurance and maintenance -- not on fuel, see
-below) is worth only ~1,744 EUR: the corporate-tax + dividend-tax "shield" on that marginal
+below) is worth only ~1,584 EUR: the corporate-tax + dividend-tax "shield" on that marginal
 deduction, roughly 16.3% of its value. This app's dividend-then-catch-up accounting model does
 not pass the full deduction through to dividends. The 3,705 EUR personal-tax cost outweighs
-the shield. This holds at any personal income tax rate above roughly 8.9% (the breakeven
+the shield. This holds at any personal income tax rate above roughly 8.1% (the breakeven
 point). Slovakia's lowest PIT bracket is 19%, so the trade is a net loss in every realistic
 case, not just at these particular defaults.
 
 (History: the first version of this scenario deducted fuel at 100% and showed -1,712 EUR,
-shield ~1,993 EUR, breakeven ~10.2%. The 2026-10-02 review below corrected fuel to 80%.)
+shield ~1,993 EUR, breakeven ~10.2%. The 2026-10-02 review below corrected fuel to 80%
+(-1,961 EUR, shield ~1,744 EUR, breakeven ~8.9%). The same day, the § 52zzzk fix (undeducted
+VAT is not a tax expense, see
+[23-pausal-scenario/02-research.md](../23-pausal-scenario/02-research.md)) gave the current
+figures.)
 
 ## Review 2026-10-02: verification of a third-party summary
 
